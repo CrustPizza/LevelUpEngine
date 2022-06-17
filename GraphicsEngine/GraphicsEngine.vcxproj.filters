@@ -22,6 +22,7 @@
     <ClInclude Include="GraphicsEngine\EngineBase\GraphicsEngineBase.h">
       <Filter>GraphicsEngine\EngineBase</Filter>
     </ClInclude>
+    <ClInclude Include="TextureBase\TextureBase.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

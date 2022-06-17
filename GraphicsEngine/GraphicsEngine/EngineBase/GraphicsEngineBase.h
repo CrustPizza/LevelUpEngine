@@ -12,12 +12,6 @@
 
 namespace GraphicsEngineSpace
 {
-#ifdef GraphicsEngine_Export
-#define GraphicsEngineDeclSpec __declspec( dllexport )
-#else
-#define GraphicsEngineDeclSpec __declspec( dllimport )
-#endif
-
 	class GraphicsEngineBase
 	{
 	public:

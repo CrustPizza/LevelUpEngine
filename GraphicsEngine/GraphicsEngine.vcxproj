@@ -22,6 +22,7 @@
     <ClInclude Include="GraphicsEngine\GraphicsEngine.h" />
     <ClInclude Include="GraphicsEngineFramework.h" />
     <ClInclude Include="GraphicsEngine\EngineBase\GraphicsEngineBase.h" />
+    <ClInclude Include="TextureBase\TextureBase.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GraphicsEngine\GraphicsEngine.cpp" />
