@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="DirectX11">
+      <UniqueIdentifier>{daf7f208-b400-4b48-b2da-9effe7b86f5b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RenderTexture">
+      <UniqueIdentifier>{c66bb023-b6b1-4eec-aebd-556efddec1d6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DirectX11\DirectX11.h">
+      <Filter>DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectX11Framework.h" />
+    <ClInclude Include="RenderTexture\RenderTexture.h">
+      <Filter>RenderTexture</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DirectX11\DirectX11.cpp">
+      <Filter>DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectX11Main.cpp" />
+    <ClCompile Include="RenderTexture\RenderTexture.cpp">
+      <Filter>RenderTexture</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DirectX11.md" />
+  </ItemGroup>
+</Project>
