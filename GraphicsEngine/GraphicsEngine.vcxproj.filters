@@ -13,9 +13,6 @@
     <ClCompile Include="GraphicsEngine\GraphicsEngine.cpp">
       <Filter>GraphicsEngine</Filter>
     </ClCompile>
-    <ClCompile Include="GraphicsEngine\EngineBase\GraphicsEngineBase.cpp">
-      <Filter>GraphicsEngine\EngineBase</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GraphicsEngineFramework.h" />
@@ -27,6 +24,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="GraphicsEngine.md" />
+    <None Include="README.md" />
   </ItemGroup>
 </Project>

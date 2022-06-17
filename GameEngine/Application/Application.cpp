@@ -9,47 +9,50 @@
 #include "Application.h"
 #include "../../GraphicsEngine/GraphicsEngine/GraphicsEngine.h"
 
-Application::Application()
-	: app(nullptr)
-	, onResize(nullptr)
+namespace GameEngineSpace
 {
+	Application::Application()
+		: app(nullptr)
+		, onResize(nullptr)
+	{
 
-}
+	}
 
-Application::~Application()
-{
-	delete app;
-}
+	Application::~Application()
+	{
+		delete app;
+	}
 
-void Application::SetOnResizeFunc(std::function<void(UINT, UINT)> onResize)
-{
-	this->onResize = onResize;
-}
+	void Application::SetOnResizeFunc(std::function<void(UINT, UINT)> onResize)
+	{
+		this->onResize = onResize;
+	}
 
-UINT Application::GetWidth()
-{
-	return app->GetWidth();
-}
+	UINT Application::GetWidth()
+	{
+		return app->GetWidth();
+	}
 
-UINT Application::GetHeight()
-{
-	return app->GetHeight();
-}
+	UINT Application::GetHeight()
+	{
+		return app->GetHeight();
+	}
 
 #ifdef WINDOW_TEMP
-HWND Application::GetWndHandle()
-{
-	if (app == nullptr)
-		return nullptr;
+	HWND Application::GetWndHandle()
+	{
+		if (app == nullptr)
+			return nullptr;
 
-	return app->GetWndHandle();
-}
+		return app->GetWndHandle();
+	}
 
-void Application::OnResize(UINT width, UINT height)
-{
-	if (onResize == nullptr)
-		return;
+	void Application::OnResize(UINT width, UINT height)
+	{
+		if (onResize == nullptr)
+			return;
 
-	onResize(width, height);
-}
+		onResize(width, height);
+	}
 #endif
+}

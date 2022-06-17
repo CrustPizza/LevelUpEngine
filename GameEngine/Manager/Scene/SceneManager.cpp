@@ -8,60 +8,63 @@
 
 #include "SceneManager.h"
 
-SceneManager::SceneManager()
-	: currentScene(nullptr)
+namespace GameEngineSpace
 {
+	SceneManager::SceneManager()
+		: currentScene(nullptr)
+	{
 
-}
+	}
 
-SceneManager::~SceneManager()
-{
+	SceneManager::~SceneManager()
+	{
 
-}
+	}
 
-void SceneManager::AddScene(std::string sceneName, Scene* scene)
-{
+	void SceneManager::AddScene(std::string sceneName, Scene* scene)
+	{
 
-}
+	}
 
-bool SceneManager::SceneChange(std::string sceneName)
-{
-	return false;
-}
+	bool SceneManager::SceneChange(std::string sceneName)
+	{
+		return false;
+	}
 
-Scene* SceneManager::GetCurrentScene()
-{
-	return nullptr;
-}
+	Scene* SceneManager::GetCurrentScene()
+	{
+		return nullptr;
+	}
 
-void SceneManager::Init()
-{
-	if (currentScene == nullptr)
-		return;
+	void SceneManager::Init()
+	{
+		if (currentScene == nullptr)
+			return;
 
-	currentScene->Init();
-}
+		currentScene->Init();
+	}
 
-void SceneManager::Update()
-{
-	if (currentScene == nullptr)
-		return;
+	void SceneManager::Update()
+	{
+		if (currentScene == nullptr)
+			return;
 
-	currentScene->Update();
-}
+		currentScene->Update();
+	}
 
-void SceneManager::Render()
-{
-	if (currentScene == nullptr)
-		return;
+	void SceneManager::Render()
+	{
+		if (currentScene == nullptr)
+			return;
 
-	currentScene->Render();
-}
+		currentScene->Render();
+	}
 
-void SceneManager::Release()
-{
-	if (currentScene == nullptr)
-		return;
+	void SceneManager::Release()
+	{
+		if (currentScene == nullptr)
+			return;
 
-	currentScene->Release();
+		currentScene->Release();
+	}
 }

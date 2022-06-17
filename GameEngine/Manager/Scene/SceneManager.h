@@ -10,24 +10,27 @@
 #include <map>
 #include "Scene.h"
 
-class SceneManager
+namespace GameEngineSpace
 {
-	std::map<std::string, Scene*> sceneList;
+	class SceneManager
+	{
+		std::map<std::string, Scene*> sceneList;
 
-	Scene* currentScene;
+		Scene* currentScene;
 
-private:
-	SceneManager(); 
-	~SceneManager();
+	private:
+		SceneManager();
+		~SceneManager();
 
-public:
-	void AddScene(std::string sceneName, Scene* scene);
-	bool SceneChange(std::string sceneName);
+	public:
+		void AddScene(std::string sceneName, Scene* scene);
+		bool SceneChange(std::string sceneName);
 
-	Scene* GetCurrentScene();
+		Scene* GetCurrentScene();
 
-	void Init();
-	void Update();
-	void Render();
-	void Release();
-};
+		void Init();
+		void Update();
+		void Render();
+		void Release();
+	};
+}

@@ -10,17 +10,21 @@
 #include <string>
 #include <vector>
 
-class Scene
+namespace GameEngineSpace
 {
-	std::string name;
+	class Scene
+	{
+		std::string name;
+		//std::vector<ObjectBase*> objectList;
 
-public:
-	Scene(std::string name) : name(name) {}
-	Scene(const Scene& other) = delete;
-	Scene& operator =(const Scene& other) = delete;
+	public:
+		Scene(std::string name) : name(name) {}
+		Scene(const Scene& other) = delete;
+		Scene& operator =(const Scene& other) = delete;
 
-	virtual void Init() abstract;
-	virtual void Update() abstract;
-	virtual void Render() abstract;
-	virtual void Release() abstract;
-};
+		virtual void Init() abstract;
+		virtual void Update() abstract;
+		virtual void Render() abstract;
+		virtual void Release() abstract;
+	};
+}

@@ -26,10 +26,9 @@
   <ItemGroup>
     <ClCompile Include="GraphicsEngine\GraphicsEngine.cpp" />
     <ClCompile Include="GraphicsEngineMain.cpp" />
-    <ClCompile Include="GraphicsEngine\EngineBase\GraphicsEngineBase.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="GraphicsEngine.md" />
+    <None Include="README.md" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

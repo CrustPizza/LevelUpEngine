@@ -36,10 +36,12 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE prevInstance, LPTSTR cmdLine
 
 	OutputDebugString(_T("Load game engine dll success.\n"));
 
-	GameEngineConstructor gameConstructor = (GameEngineConstructor)GetProcAddress(hDll, "CreateGameEngine");
-	GameEngine* gameEngine = gameConstructor();
+	using GameEngineSpace::GameEngineConstructor;
 
-	gameEngine->CreateEngine(GameEngine::EngineType::DirectX, hInstance, { 0, 0, 1600, 900 });
+	GameEngineConstructor gameConstructor = (GameEngineConstructor)GetProcAddress(hDll, "CreateGameEngine");
+	GameEngineSpace::GameEngine* gameEngine = gameConstructor();
+
+	gameEngine->CreateEngine(GameEngineSpace::GameEngine::EngineType::DirectX, hInstance, { 0, 0, 1600, 900 });
 
 	gameEngine->Run();
 

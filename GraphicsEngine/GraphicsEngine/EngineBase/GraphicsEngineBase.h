@@ -10,23 +10,26 @@
 
 #include <Windows.h>
 
+namespace GraphicsEngineSpace
+{
 #ifdef GraphicsEngine_Export
 #define GraphicsEngineDeclSpec __declspec( dllexport )
 #else
 #define GraphicsEngineDeclSpec __declspec( dllimport )
 #endif
 
-class GraphicsEngineBase
-{
-public:
-	GraphicsEngineBase() = default;
-	virtual ~GraphicsEngineBase() = default;
+	class GraphicsEngineBase
+	{
+	public:
+		GraphicsEngineBase() = default;
+		virtual ~GraphicsEngineBase() = default;
 
-	virtual bool OnResize(UINT width, UINT height) abstract;
+		virtual bool OnResize(UINT width, UINT height) abstract;
 
-	virtual void BeginRender() abstract;
-	virtual void Render() abstract;
-	virtual void PostProcess() abstract;
-	virtual void EndRender() abstract;
-	virtual void Release() abstract;
-};
+		virtual void BeginRender() abstract;
+		virtual void Render() abstract;
+		virtual void PostProcess() abstract;
+		virtual void EndRender() abstract;
+		virtual void Release() abstract;
+	};
+}

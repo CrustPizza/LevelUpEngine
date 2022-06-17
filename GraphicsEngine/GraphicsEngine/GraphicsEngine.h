@@ -3,36 +3,45 @@
 *	Graphics Engine.h			*
 *								*
 *	Created : 2022/06/15		*
-*	Updated : 2022/06/15		*
+*	Updated : 2022/06/17		*
 *********************************/
 
 #pragma once
 
 #include "./EngineBase/GraphicsEngineBase.h"
 
-class GraphicsEngineDeclSpec GraphicsEngine : public GraphicsEngineBase
+namespace GraphicsEngineSpace
 {
-private:
-	HMODULE graphicsDLL;
-	GraphicsEngineBase* graphicsEngine;
+#ifdef GraphicsEngine_Export
+#define GraphicsEngineDeclSpec __declspec( dllexport )
+#else
+#define GraphicsEngineDeclSpec __declspec( dllimport )
+#endif
 
-public:
-	GraphicsEngine();
-	~GraphicsEngine() override;
+	class GraphicsEngineDeclSpec GraphicsEngine : public GraphicsEngineBase
+	{
+	private:
+		HMODULE graphicsDLL;
+		GraphicsEngineBase* graphicsEngine;
 
-	virtual bool CreateDirectXEngine(HWND hWnd, UINT width, UINT height);
+	public:
+		GraphicsEngine();
+		~GraphicsEngine() override;
 
-	bool OnResize(UINT width, UINT height) override;
+		virtual bool CreateDirectXEngine(HWND hWnd, UINT width, UINT height);
 
-	void BeginRender() override;
-	void Render() override;
-	void PostProcess() override;
-	void EndRender() override;
-	void Release() override;
-};
+		bool OnResize(UINT width, UINT height) override;
 
-extern "C"
-{
-	GraphicsEngineDeclSpec GraphicsEngine* CreateGraphicsEngine();
-	using GraphicsEngineConstructor = GraphicsEngine* (*)(void);
+		void BeginRender() override;
+		void Render() override;
+		void PostProcess() override;
+		void EndRender() override;
+		void Release() override;
+	};
+
+	extern "C"
+	{
+		GraphicsEngineDeclSpec GraphicsEngine* CreateGraphicsEngine();
+		using GraphicsEngineConstructor = GraphicsEngine * (*)(void);
+	}
 }

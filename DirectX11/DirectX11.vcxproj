@@ -156,15 +156,17 @@
   <ItemGroup>
     <ClInclude Include="DirectX11Framework.h" />
     <ClInclude Include="DirectX11\DirectX11.h" />
+    <ClInclude Include="Factory\Factory.h" />
     <ClInclude Include="RenderTexture\RenderTexture.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectX11Main.cpp" />
     <ClCompile Include="DirectX11\DirectX11.cpp" />
+    <ClCompile Include="Factory\Factory.cpp" />
     <ClCompile Include="RenderTexture\RenderTexture.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="DirectX11.md" />
+    <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -16,6 +16,7 @@
     <ClInclude Include="RenderTexture\RenderTexture.h">
       <Filter>RenderTexture</Filter>
     </ClInclude>
+    <ClInclude Include="Factory\Factory.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectX11\DirectX11.cpp">
@@ -25,8 +26,9 @@
     <ClCompile Include="RenderTexture\RenderTexture.cpp">
       <Filter>RenderTexture</Filter>
     </ClCompile>
+    <ClCompile Include="Factory\Factory.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="DirectX11.md" />
+    <None Include="README.md" />
   </ItemGroup>
 </Project>
