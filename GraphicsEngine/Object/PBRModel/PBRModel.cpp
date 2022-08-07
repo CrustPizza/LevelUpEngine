@@ -95,19 +95,11 @@ namespace GraphicsEngineSpace
 		PBR_PSParameter.roughness = roughness;
 	}
 
-	void PBRModel::Update(const Matrix& worldTransform, float tick)
+	void PBRModel::Render(GraphicsEngineBase* engine, const Matrix& worldTransform, float tick)
 	{
 		if (prefab == nullptr)
 			assert(0);
 
-		prefab->Update(worldTransform, tick);
-	}
-
-	void PBRModel::Render(GraphicsEngineBase* engine)
-	{
-		if (prefab == nullptr)
-			assert(0);
-
-		prefab->Render(engine);
+		prefab->Render(engine, worldTransform, tick);
 	}
 }

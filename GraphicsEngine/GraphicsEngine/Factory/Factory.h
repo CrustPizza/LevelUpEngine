@@ -48,6 +48,8 @@ namespace GraphicsEngineSpace
 		virtual PBRModel* CreateSkinningModel(const std::string& name, ModelBase* model, void* boneMatrixData);
 		virtual PBRModel* CreateSkinningAlbedoModel(const std::string& name, ModelBase* model, void* boneMatrixData);
 
+		virtual IBLTexture* CreateIBLTexture(const std::string& name, const std::string& radiancePath, const std::string& irradiancePath);
+
 	private:
 		bool InitFactory(FactoryBase* factory, ResourceManager* resourceManager);
 		void InitDefaultData();

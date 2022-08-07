@@ -26,7 +26,7 @@ namespace DX11
 		D3DTexture(ID3D11DeviceContext* deviceContext);
 		~D3DTexture() override;
 
-		int GetMipLevels() override;
+		unsigned int GetMipLevels() override;
 		Texture* GetTexture() override;
 
 		void SetTexture(ID3D11ShaderResourceView* texture);

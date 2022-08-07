@@ -3,8 +3,15 @@
 *	PBR Model Method.hlsli		*
 *								*
 *	Created : 2022/08/04		*
-*	Updated : 2022/08/04		*
+*	Updated : 2022/08/07		*
 *********************************/
+
+/* IBL Texture */
+TextureCube<float3> Radiance   : register(t4);
+TextureCube<float3> Irradiance : register(t5);
+
+/* Sampler */
+sampler   Sampler    : register(s0);
 
 /* Math Variable */
 static const float PI = 3.14159265f;
@@ -17,6 +24,12 @@ struct PixelLighting
 	float4 WorldPos;
 	float3 Normal;
 };
+
+// RadianceMipLevel
+cbuffer cbRadianceMipLevels : register(b3)
+{
+	int RadianceMipLevels;
+}
 
 /* Fresnel Shlick */
 float3 FresnelShlick(float3 f0, float3 f90, float x)
@@ -60,7 +73,7 @@ float3 SpecularBRDF(float alpha, float3 specularColor, float NDotV, float NDotL,
 }
 
 /* IBL */
-float3 DiffuseIBL(float3 Noraml)
+float3 DiffuseIBL(float3 Normal)
 {
 	return Irradiance.Sample( Sampler, Normal );
 }
@@ -75,7 +88,7 @@ float3 SpecularIBL(float3 Normal, float3 View, float lodBias)
 
 /* Light Surface */
 float3 LightSurface(
-	float3 ViewVector,
+	float3 View,
 	float3 Normal,
 	int lightsAmount,
 	float3 lightColor[3],
@@ -84,7 +97,7 @@ float3 LightSurface(
 {
 	static const float specularCoefficient = 0.04f;
 
-	const float NDotV = saturate( dot( Normal, ViewVector ) );
+	const float NDotV = saturate( dot( Normal, View) );
 
 	const float alpha = roughness * roughness;
 
@@ -97,7 +110,7 @@ float3 LightSurface(
 	{
 		const float3 L = normalize(-lightDirection[i]);
 
-		const float3 H = normalize(L + ViewVector);
+		const float3 H = normalize(L + View);
 
 		const float NDotL = saturate( dot( Normal, L ) );
 		const float LDotH = saturate( dot( L, H ) );

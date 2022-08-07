@@ -23,7 +23,7 @@ namespace GraphicsEngineSpace
 	using HeraclesMath::Matrix;
 	class Factory;
 
-	class SkyBoxBase : public ResourceBase
+	class SkyBoxBase : public ResourceBase<SkyBoxBase>
 	{
 		ShaderBase* vertexShader;
 		ShaderBase* pixelShader;

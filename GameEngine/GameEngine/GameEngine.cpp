@@ -168,6 +168,9 @@ namespace GameEngineSpace
 		cube = new Cube;
 		cube->Init(graphicsFactory, cubeModel, vertexShader, pixelShader, matrixBuffer);
 
+		pbrCube = new Cube;
+		pbrCube->Init(graphicsFactory, cubeModel);
+
 		vertexShader = resourceManager->GetShader("LegacyModelVS");
 		pixelShader = resourceManager->GetShader("LegacyModelPS");
 		BufferBase* materialBuffer = resourceManager->GetBuffer("LegacyMaterialCB");
@@ -196,6 +199,8 @@ namespace GameEngineSpace
 		dLight->SetBuffer(resourceManager->GetBuffer("DirectionalLightCB"));
 
 		graphicsFactory->CreateTexture("Bricks", "Resources/Texture/bricks.dds");
+
+		ibl = graphicsFactory->CreateIBLTexture("MSIBL", "Resources/Texture/SunSubMixer_diffuseIBL.dds", "Resources/Texture/SunSubMixer_specularIBL.dds");
 	}
 
 	void GameEngine::Update()
@@ -209,6 +214,7 @@ namespace GameEngineSpace
 		sceneManager->Update();
 
 		cube->Update(Time::instance.deltaTime);
+		pbrCube->Update(Time::instance.deltaTime);
 		genji->Update(Time::instance.deltaTime);
 
 		static float metallic = 0.5f;
@@ -282,6 +288,8 @@ namespace GameEngineSpace
 		GraphicsEngineSpace::ResourceManager* resourceManager = graphicsEngine->GetResourceManager();
 
 		using GraphicsEngineSpace::ShaderType;
+
+		float tick = Time::instance.deltaTime;
 		
 		/* Sky Box */
 		graphicsEngine->GraphicsDebugBeginEvent("SkyBox");
@@ -300,7 +308,7 @@ namespace GameEngineSpace
 
 		/* Cube */
 		graphicsEngine->GraphicsDebugBeginEvent("Cube");
-		cube->Render(graphicsEngine);
+		cube->Render(graphicsEngine, tick);
 		graphicsEngine->GraphicsDebugEndEvent();
 
 		/* Genji */
@@ -328,16 +336,24 @@ namespace GameEngineSpace
 		resourceManager->GetSampler("LinearSampler")->SetUpSampler(0, ShaderType::PIXEL);
 		graphicsEngine->GraphicsDebugEndEvent();
 
-		genji->Render(graphicsEngine);
+		/* IBL */
+		ibl->SetUpIBL(3, 4, 5, ShaderType::PIXEL);
+
+		genji->Render(graphicsEngine, tick);
 
 		graphicsEngine->GraphicsDebugEndEvent();
 
 		/* Pig */
 		graphicsEngine->GraphicsDebugBeginEvent("Pig");
-		pig->Render(graphicsEngine);
+		pig->Render(graphicsEngine, tick);
 		graphicsEngine->GraphicsDebugEndEvent();
 
 		graphicsEngine->Render();
+
+		/* PBR Cube */
+		graphicsEngine->GraphicsDebugBeginEvent("PBR Cube");
+		pbrCube->Render(graphicsEngine, tick);
+		graphicsEngine->GraphicsDebugEndEvent();
 
 		/* Post Process */
 		if (Input::GetInstance()->GetInputState(VK_TAB, KeyState::TOGGLE) == true)
@@ -358,8 +374,10 @@ namespace GameEngineSpace
 		graphicsEngine->Release();
 
 		delete cube;
+		delete pbrCube;
 		delete genji;
 		delete pig;
+		delete ibl;
 		
 		delete dLight;
 	}

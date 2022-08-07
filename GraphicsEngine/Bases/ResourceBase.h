@@ -12,6 +12,7 @@ namespace GraphicsEngineSpace
 {
 	class ResourceManager;
 
+	template <typename T>
 	class ResourceBase
 	{
 		int refCount;

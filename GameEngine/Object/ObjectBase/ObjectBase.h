@@ -25,7 +25,7 @@ namespace GameEngineSpace
 	public:
 
 		virtual void Update(float tick) abstract;
-		virtual void Render(GraphicsEngineSpace::GraphicsEngineBase* engine) abstract;
+		virtual void Render(GraphicsEngineSpace::GraphicsEngineBase* engine, float tick = 0.0f) abstract;
 
 		Transform& GetTransform();
 		ObjectBase* GetParent();

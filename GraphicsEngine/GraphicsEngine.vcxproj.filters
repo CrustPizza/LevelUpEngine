@@ -45,6 +45,7 @@
     </ClCompile>
     <ClCompile Include="Builder\PBRBuilder\PBRBuilder.cpp" />
     <ClCompile Include="Object\PBRModel\PBRModel.cpp" />
+    <ClCompile Include="Object\IBLTexture\IBLTexture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GraphicsEngineFramework.h" />
@@ -135,6 +136,7 @@
     <ClInclude Include="Bases\SkyBoxBase.h" />
     <ClInclude Include="Builder\PBRBuilder\PBRBuilder.h" />
     <ClInclude Include="Object\PBRModel\PBRModel.h" />
+    <ClInclude Include="Object\IBLTexture\IBLTexture.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

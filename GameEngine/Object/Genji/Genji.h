@@ -38,7 +38,7 @@ namespace GameEngineSpace
 		void Init(GraphicsEngineSpace::Factory* factory, ModelBase* model);
 		void Init(GraphicsEngineSpace::Factory* factory, ModelBase* model, ShaderBase* vertexShader, ShaderBase* pixelShader, BufferBase* matrixBuffer, BufferBase* materialBuffer);
 		void Update(float tick) override;
-		void Render(GraphicsEngineSpace::GraphicsEngineBase* engine) override;
+		void Render(GraphicsEngineSpace::GraphicsEngineBase* engine, float tick = 0.0f) override;
 
 		void SetMetallic(float metallic);
 		void SetRoughness(float roughness);

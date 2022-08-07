@@ -92,7 +92,6 @@ namespace GameEngineSpace
 		else
 			model->SetAnimationKey("Idle");
 
-		prefab->Update(transform.GetWorldTransform(), tick);
 		//pbrModel->Update(transform.GetWorldTransform(), tick);
 
 		auto bones = model->GetBones();
@@ -101,7 +100,7 @@ namespace GameEngineSpace
 			boneMatrix[i] = MatrixTranspose(bones[i]->GetBoneMatrix());
 	}
 
-	void Pig::Render(GraphicsEngineSpace::GraphicsEngineBase* engine)
+	void Pig::Render(GraphicsEngineSpace::GraphicsEngineBase* engine, float tick)
 	{
 		using namespace GraphicsEngineSpace;
 
@@ -134,7 +133,7 @@ namespace GameEngineSpace
 			break;
 		}
 
-		prefab->Render(engine);
+		prefab->Render(engine, transform.GetWorldTransform(), tick);
 		//pbrModel->Render(engine);
 	}
 

@@ -22,7 +22,7 @@ namespace GraphicsEngineSpace
 		Vector vec;
 	};
 
-	class AnimationBase : public ResourceBase
+	class AnimationBase : public ResourceBase<AnimationBase>
 	{
 		std::vector<AnimationData> positions;
 		std::vector<AnimationData> rotations;

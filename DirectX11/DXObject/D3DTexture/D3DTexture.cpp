@@ -23,7 +23,7 @@ namespace DX11
 			texture->Release();
 	}
 
-	int D3DTexture::GetMipLevels()
+	unsigned int D3DTexture::GetMipLevels()
 	{
 		D3D11_SHADER_RESOURCE_VIEW_DESC desc = {};
 

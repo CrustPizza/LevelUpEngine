@@ -18,6 +18,7 @@ namespace GameEngineSpace
 	using GraphicsEngineSpace::ModelBase;
 	using GraphicsEngineSpace::ShaderBase;
 	using GraphicsEngineSpace::BufferBase;
+	using GraphicsEngineSpace::PBRModel;
 
 	class Cube : public ObjectBase
 	{
@@ -27,14 +28,16 @@ namespace GameEngineSpace
 			HeraclesMath::Matrix worldInvMatrix;
 		};
 
+		PBRModel* pbrModel;
 		PrefabBase* prefab;
 		
 	public:
 		Cube();
 		~Cube();
 
+		void Init(GraphicsEngineSpace::Factory* factory, ModelBase* model);
 		void Init(GraphicsEngineSpace::Factory* factory, ModelBase* model, ShaderBase* vertexShader, ShaderBase* pixelShader, BufferBase* matrixBuffer);
 		void Update(float tick) override;
-		void Render(GraphicsEngineSpace::GraphicsEngineBase* engine) override;
+		void Render(GraphicsEngineSpace::GraphicsEngineBase* engine, float tick = 0.0f) override;
 	};
 }

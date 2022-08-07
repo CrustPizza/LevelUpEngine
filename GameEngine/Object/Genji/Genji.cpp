@@ -68,12 +68,10 @@ namespace GameEngineSpace
 	{
 		transform.UpdateWorldTransform();
 
-		prefab->Update(transform.GetWorldTransform(), tick);
-
 		//transform.position.x -= 0.01f;
 	}
 
-	void Genji::Render(GraphicsEngineSpace::GraphicsEngineBase* engine)
+	void Genji::Render(GraphicsEngineSpace::GraphicsEngineBase* engine, float tick)
 	{
 		using namespace GraphicsEngineSpace;
 
@@ -99,7 +97,7 @@ namespace GameEngineSpace
 			break;
 		}
 
-		prefab->Render(engine);
+		prefab->Render(engine, transform.GetWorldTransform(), tick);
 	}
 
 	void Genji::SetMetallic(float metallic)

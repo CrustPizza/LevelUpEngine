@@ -58,11 +58,9 @@ element->SetupAttachment(parent);
 
 		ObjectBase emptyObject;
 		std::string animationKey;
-		float totalAnimTime;
 
 	public:
-		ModelBase()
-			: totalAnimTime(0.0f) {}
+		ModelBase() = default;
 		virtual ~ModelBase()
 		{
 			RELEASE_VECTOR(meshes);
@@ -78,35 +76,29 @@ element->SetupAttachment(parent);
 				return;
 
 			this->animationKey = animationKey;
-			totalAnimTime = 0.0f;
 		}
 
-		void SetupData(const Matrix& worldTransform, float animTime = 0.0f)
+		bool PrepareRender(const Matrix& worldTransform, float animTime = 0.0f)
 		{
 			bool timeReset = true;
 
-			totalAnimTime += animTime;
-
 			for (auto iter : helpers)
 			{
-				if (iter->UpdateAnimation(animationKey, totalAnimTime) == true)
+				if (iter->UpdateAnimation(animationKey, animTime) == true)
 					timeReset = false;
 			}
 
 			for (auto iter : meshes)
 			{
-				if (iter->UpdateAnimation(animationKey, totalAnimTime) == true)
+				if (iter->UpdateAnimation(animationKey, animTime) == true)
 					timeReset = false;
 			}
 			
 			for (auto iter : bones)
 			{
-				if (iter->UpdateAnimation(animationKey, totalAnimTime) == true)
+				if (iter->UpdateAnimation(animationKey, animTime) == true)
 					timeReset = false;
 			}
-
-			if (timeReset == true)
-				totalAnimTime = 0.0f;
 
 			Transform* transform = &emptyObject.GetTransform();
 
@@ -114,6 +106,8 @@ element->SetupAttachment(parent);
 
 			for (auto* iter : emptyObject.GetChild())
 				iter->PrepareRender();
+
+			return timeReset;
 		}
 
 		const std::vector<MeshBase*>& GetMeshes() { return meshes; }

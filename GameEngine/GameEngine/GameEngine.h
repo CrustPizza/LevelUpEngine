@@ -54,11 +54,13 @@ namespace GameEngineSpace
 
 		// Test
 		Cube* cube;
+		Cube* pbrCube;
 		Genji* genji;
 		Pig* pig;
 
 		GraphicsEngineSpace::SkyBoxBase* skyBox;
 		GraphicsEngineSpace::DirectionalLightBase* dLight;
+		GraphicsEngineSpace::IBLTexture* ibl;
 
 	public:
 		GameEngine();

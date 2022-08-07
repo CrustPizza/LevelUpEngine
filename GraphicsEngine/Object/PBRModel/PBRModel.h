@@ -15,7 +15,7 @@ namespace GraphicsEngineSpace
 {
 	class PBRBuilder;
 
-	class PBRModel : public ResourceBase
+	class PBRModel : public ResourceBase<PBRModel>
 	{
 		struct PBR_VSParameterCB
 		{
@@ -50,8 +50,7 @@ namespace GraphicsEngineSpace
 		virtual void SetMetallic(float metallic);
 		virtual void SetRoughness(float roughness);
 
-		virtual void Update(const Matrix& worldTransform, float tick = 0.0f);
-		virtual void Render(GraphicsEngineBase* engine);
+		virtual void Render(GraphicsEngineBase* engine, const Matrix& worldTransform, float tick);
 
 		template <typename T>
 		void CreateVertexBuffer(FactoryBase* factory, std::function<T(const VertexData&)> vertexConstructor);

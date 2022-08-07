@@ -24,8 +24,7 @@ namespace GraphicsEngineSpace
 		TextureBase() = default;
 		virtual ~TextureBase() = default;
 
-		virtual int GetMipLevels() abstract;
-
+		virtual unsigned int GetMipLevels() abstract;
 		virtual Texture* GetTexture() abstract;
 		virtual bool SetUpTexture(unsigned int slot, ShaderType targetType) abstract;
 	};

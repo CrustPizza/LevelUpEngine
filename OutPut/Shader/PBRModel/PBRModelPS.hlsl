@@ -3,7 +3,7 @@
 *	PBR Model PS.hlsl			*
 *								*
 *	Created : 2022/08/04		*
-*	Updated : 2022/08/05		*
+*	Updated : 2022/08/07		*
 *********************************/
 
 #include "PBRModelTypes.hlsli"
@@ -12,13 +12,6 @@
 /* Texture Map */
 Texture2D DiffuseMap : register( t0 );
 Texture2D NormalMap  : register( t1 );
-
-/* IBL Texture */
-TextureCube<float3> Radiance   : register( t4 );
-TextureCube<float3> Irradiance : register( t5 );
-
-/* Sampler */
-sampler   Sampler    : register( s0 );
 
 /* View */
 cbuffer cbView : register( b0 )
@@ -45,11 +38,6 @@ cbuffer cbPBRParmeter : register( b2 )
 	float  Alpha;
 	float  Metallic;
 	float  Roughness;
-}
-
-cbuffer cbRadianceMipLevels : register( b3 )
-{
-	int RadianceMipLevels;
 }
 
 /* PS Main - Constant Value */

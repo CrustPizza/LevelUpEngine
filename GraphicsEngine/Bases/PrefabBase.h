@@ -29,7 +29,7 @@ namespace GraphicsEngineSpace
 		ShaderType type;
 	};
 
-	class PrefabBase : public ResourceBase
+	class PrefabBase : public ResourceBase<PrefabBase>
 	{
 		struct cbMatrix
 		{
@@ -38,6 +38,7 @@ namespace GraphicsEngineSpace
 		};
 
 		ModelBase* const model;
+		float totalAnimationTime;
 
 		ShaderBase* vertexShader;
 		ShaderBase* pixelShader;
@@ -50,6 +51,7 @@ namespace GraphicsEngineSpace
 	public:
 		PrefabBase(ModelBase* model, const ConstantBufferSetting& matrixBuffer)
 			: model(model)
+			, totalAnimationTime(0.0f)
 			, vertexShader(nullptr)
 			, pixelShader(nullptr)
 			, matrixBuffer(matrixBuffer)
@@ -57,14 +59,6 @@ namespace GraphicsEngineSpace
 		virtual ~PrefabBase() = default;
 
 		const std::map<int, MaterialBase*>& GetMaterials() { return model->GetMaterials(); }
-
-		void Update(const Matrix& worldTransform, float tick = 0.0f)
-		{
-			if (model == nullptr)
-				assert(0);
-
-			model->SetupData(worldTransform, tick);
-		}
 
 		void SetVertexShader(ShaderBase* shader) { this->vertexShader = shader; }
 		void SetPixelShader(ShaderBase* shader) { this->pixelShader = shader; }
@@ -74,10 +68,15 @@ namespace GraphicsEngineSpace
 		template <typename T>
 		void CreateVertexBuffer(FactoryBase* factory, std::function<T(const VertexData&)> vertexConstructor);
 
-		void Render(GraphicsEngineBase* engine)
+		void Render(GraphicsEngineBase* engine, const Matrix& worldTransform, float tick = 0.0f)
 		{
 			if (model == nullptr)
 				assert(0);
+
+			totalAnimationTime += tick;
+
+			if (model->PrepareRender(worldTransform, totalAnimationTime) == true)
+				totalAnimationTime = 0.0f;
 
 			if (vertexShader != nullptr)
 				vertexShader->SetUpShader();

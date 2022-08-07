@@ -15,12 +15,26 @@ namespace GameEngineSpace
 	Cube::Cube()
 		: prefab(nullptr)
 	{
-		transform.scale *= 0.1f;
+		transform.scale *= 2.0f;
 	}
 
 	Cube::~Cube()
 	{
 
+	}
+
+	void Cube::Init(GraphicsEngineSpace::Factory* factory, ModelBase* model)
+	{
+		pbrModel = factory->CreateNoneTextureModel("CubePBR", model);
+		pbrModel->SetAlpha(1.0f);
+		pbrModel->SetMetallic(1.0f);
+		pbrModel->SetRoughness(0.2f);
+
+		prefab = pbrModel->GetPrefab();
+
+		transform.position.y -= 5.0f;
+		transform.scale.x *= 10.0f;
+		transform.scale.z *= 10.0f;
 	}
 
 	void Cube::Init(GraphicsEngineSpace::Factory* factory, ModelBase* model, ShaderBase* vertexShader, ShaderBase* pixelShader, BufferBase* matrixBuffer)
@@ -48,13 +62,10 @@ namespace GameEngineSpace
 	void Cube::Update(float tick)
 	{
 		transform.UpdateWorldTransform();
-
-		prefab->Update(transform.GetWorldTransform(), tick);
 	}
 
-	void Cube::Render(GraphicsEngineSpace::GraphicsEngineBase* engine)
+	void Cube::Render(GraphicsEngineSpace::GraphicsEngineBase* engine, float tick)
 	{
-
-		prefab->Render(engine);
+		prefab->Render(engine, transform.GetWorldTransform(), tick);
 	}
 }

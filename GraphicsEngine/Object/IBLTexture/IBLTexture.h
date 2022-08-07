@@ -16,18 +16,24 @@ namespace GraphicsEngineSpace
 {
 	class IBLTexture : public ResourceBase<IBLTexture>
 	{
+
+		struct __declspec(align(16)) Parameter
+		{
+			int mipLevles;
+		};
+
 		BufferBase* mipLevelCB;
 		TextureBase* radiance;
 		TextureBase* irradiance;
 
-		int mipLevels;
+		Parameter param;
 
 	public:
 		IBLTexture();
 		~IBLTexture();
 
-		void SetIBLTexture(TextureBase* radiance, TextureBase* irradiance);
+		void SetIBLTexture(TextureBase* radiance, TextureBase* irradiance, BufferBase* mipLevelCB);
 
-		void SetUpIBL(unsigned int mipLevelSlot, unsigned int radianceSlot, unsigned int irradianceSlot, ShaderType type);
+		virtual void SetUpIBL(unsigned int mipLevelSlot, unsigned int radianceSlot, unsigned int irradianceSlot, ShaderType type);
 	};
 }

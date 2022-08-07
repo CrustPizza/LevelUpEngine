@@ -191,9 +191,13 @@ namespace GraphicsEngineSpace
 
 		if (resourceManager->AddBuffer(name, newBuffer) != true)
 		{
-			newBuffer->Release();
+			int count = 1;
 
-			return nullptr;
+			while (resourceManager->AddBuffer(name + std::to_string(count++), newBuffer) != true)
+			{
+				if (count >= 100)
+					return nullptr;
+			}
 		}
 
 		return resourceManager->GetBuffer(name);
@@ -547,6 +551,58 @@ namespace GraphicsEngineSpace
 		}
 
 		return resourceManager->GetPBRModel(name);
+	}
+
+	IBLTexture* Factory::CreateIBLTexture(const std::string& name, const std::string& radiancePath, const std::string& irradiancePath)
+	{
+		if (graphicsFactory == nullptr || resourceManager == nullptr)
+			return nullptr;
+
+		IBLTexture* newIBLTexture = new IBLTexture;
+
+		if (newIBLTexture == nullptr)
+			return nullptr;
+
+		if (resourceManager->AddIBLTexture(name, newIBLTexture) != true)
+		{
+			newIBLTexture->Release();
+
+			return nullptr;
+		}
+
+		TextureBase* radiance = CreateTexture(name + "_radiance", radiancePath);
+
+		if (radiance == nullptr)
+		{
+			delete newIBLTexture;
+
+			return nullptr;
+		}
+
+		TextureBase* irradiance = CreateTexture(name + "_irradiance", irradiancePath);
+
+		if (irradiance == nullptr)
+		{
+			delete newIBLTexture;
+			delete radiance;
+
+			return nullptr;
+		}
+
+		BufferBase* mipLevelCB = CreateConstantBuffer(name + "_CB", USAGE::DEFAULT, 0, sizeof(int) * 4);
+
+		if (mipLevelCB == nullptr)
+		{
+			delete newIBLTexture;
+			delete radiance;
+			delete irradiance;
+
+			return nullptr;
+		}
+
+		newIBLTexture->SetIBLTexture(radiance, irradiance, mipLevelCB);
+
+		return resourceManager->GetIBLTexture(name);
 	}
 
 	bool Factory::InitFactory(FactoryBase* factory, ResourceManager* resourceManager)

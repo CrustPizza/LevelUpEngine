@@ -28,281 +28,259 @@ namespace GraphicsEngineSpace
 		RELEASE_MAP(PBRModelList);
 	}
 
-	//bool ResourceManager::AddTexture(const std::string& name, TextureBase* textureObject)
-	//{
-	//	auto result = FindGraphicsResource(textureList, name);
-
-	//	if (result != nullptr)
-	//		return false;
-
-	//	textureList[name] = textureObject;
-
-	//	return true;
-	//}
-
-	//bool ResourceManager::AddShader(const std::string& name, ShaderBase* shader)
-	//{
-	//	auto result = FindGraphicsResource(shaderList, name);
-
-	//	if (result != nullptr)
-	//		return false;
-
-	//	shaderList[name] = shader;
-
-	//	return true;
-	//}
-
-	//bool ResourceManager::AddLayout(const std::string& name, LayoutBase* layout)
-	//{
-	//	auto result = FindGraphicsResource(layoutList, name);
-
-	//	if (result != nullptr)
-	//		return false;
-
-	//	layoutList[name] = layout;
-
-	//	return true;
-	//}
-
-	//bool ResourceManager::AddBuffer(const std::string& name, BufferBase* buffer)
-	//{
-	//	auto result = FindGraphicsResource(bufferList, name);
-
-	//	if (result != nullptr)
-	//		return false;
-
-	//	bufferList[name] = buffer;
-
-	//	return true;
-	//}
-
-	//bool ResourceManager::AddModel(const std::string& name, ModelBase* model)
-	//{
-	//	auto result = FindGraphicsResource(modelList, name);
-
-	//	if (result != nullptr)
-	//		return false;
-
-	//	modelList[name] = model;
-
-	//	return true;
-	//}
-
-	//bool ResourceManager::AddPrefab(const std::string& name, PrefabBase* prefab)
-	//{
-	//	auto result = FindGraphicsResource(prefabList, name);
-
-	//	if (result != nullptr)
-	//		return false;
-
-	//	prefabList[name] = prefab;
-
-	//	return true;
-	//}
-
-	//bool ResourceManager::AddSampler(const std::string& name, SamplerBase* sampler)
-	//{
-	//	auto result = FindGraphicsResource(samplerList, name);
-
-	//	if (result != nullptr)
-	//		return false;
-
-	//	samplerList[name] = sampler;
-
-	//	return true;
-	//}
-
-	//bool ResourceManager::AddSkyBox(const std::string& name, SkyBoxBase* skyBox)
-	//{
-	//	auto result = FindGraphicsResource(skyBoxList, name);
-
-	//	if (result != nullptr)
-	//		return false;
-
-	//	skyBoxList[name] = skyBox;
-
-	//	return true;
-	//}
-
-	//bool ResourceManager::AddPBRModel(const std::string& name, PBRModel* PBRModel)
-	//{
-	//	auto result = FindGraphicsResource(PBRModelList, name);
-
-	//	if (result != nullptr)
-	//		return false;
-
-	//	PBRModelList[name] = PBRModel;
-
-	//	return true;
-	//}
-
-	//bool ResourceManager::AddIBLTexture(const std::string& name, IBLTexture* IBLTexture)
-	//{
-	//	auto result = FindGraphicsResource(IBLTextureList, name);
-
-	//	if (result != nullptr)
-	//		return false;
-
-	//	IBLTextureList[name] = IBLTexture;
-
-	//	return true;
-	//}
-
-	//bool ResourceManager::SubLayout(const std::string& name)
-	//{
-	//	for (auto iter = layoutList.begin(); iter != layoutList.end(); iter++)
-	//	{
-	//		if (iter->first == name)
-	//		{
-	//			delete iter->second;
-	//			layoutList.erase(iter);
-
-	//			return true;
-	//		}
-	//	}
-
-	//	return false;
-	//}
-
-	//TextureBase* const ResourceManager::GetTexture(const std::string& name)
-	//{
-	//	auto result = FindGraphicsResource(textureList, name);
-
-	//	if (result == nullptr)
-	//		return nullptr;
-
-	//	result->GetRefCount()++;
-
-	//	return dynamic_cast<TextureBase*>(result);
-	//}
-
-	//ShaderBase* const ResourceManager::GetShader(const std::string& name)
-	//{
-	//	auto result = FindGraphicsResource(shaderList, name);
-
-	//	if (result == nullptr)
-	//		return nullptr;
-
-	//	result->GetRefCount()++;
-
-	//	return dynamic_cast<ShaderBase*>(result);
-	//}
-
-	//LayoutBase* const ResourceManager::GetLayout(const std::string& name)
-	//{
-	//	auto result = FindGraphicsResource(layoutList, name);
-
-	//	if (result == nullptr)
-	//		return nullptr;
-
-	//	result->GetRefCount()++;
-
-	//	return dynamic_cast<LayoutBase*>(result);
-	//}
-
-	//BufferBase* const ResourceManager::GetBuffer(const std::string& name)
-	//{
-	//	auto result = FindGraphicsResource(bufferList, name);
-
-	//	if (result == nullptr)
-	//		return nullptr;
-
-	//	result->GetRefCount()++;
-
-	//	return dynamic_cast<BufferBase*>(result);
-	//}
-
-	//ModelBase* const ResourceManager::GetModel(const std::string& name)
-	//{
-	//	auto result = FindGraphicsResource(modelList, name);
-
-	//	if (result == nullptr)
-	//		return nullptr;
-
-	//	result->GetRefCount()++;
-
-	//	return dynamic_cast<ModelBase*>(result);
-	//}
-
-	//PrefabBase* const ResourceManager::GetPrefab(const std::string& name)
-	//{
-	//	auto result = FindGraphicsResource(prefabList, name);
-
-	//	if (result == nullptr)
-	//		return nullptr;
-
-	//	result->GetRefCount()++;
-
-	//	return dynamic_cast<PrefabBase*>(result);
-	//}
-
-	//SamplerBase* const ResourceManager::GetSampler(const std::string& name)
-	//{
-	//	auto result = FindGraphicsResource(samplerList, name);
-
-	//	if (result == nullptr)
-	//		return nullptr;
-
-	//	result->GetRefCount()++;
-
-	//	return dynamic_cast<SamplerBase*>(result);
-	//}
-
-	//SkyBoxBase* const ResourceManager::GetSkyBox(const std::string& name)
-	//{
-	//	auto result = FindGraphicsResource(skyBoxList, name);
-
-	//	if (result == nullptr)
-	//		return nullptr;
-
-	//	result->GetRefCount()++;
-
-	//	return dynamic_cast<SkyBoxBase*>(result);
-	//}
-
-	//PBRModel* const ResourceManager::GetPBRModel(const std::string& name)
-	//{
-	//	auto result = FindGraphicsResource(PBRModelList, name);
-
-	//	if (result == nullptr)
-	//		return nullptr;
-
-	//	result->GetRefCount()++;
-
-	//	return dynamic_cast<PBRModel*>(result);
-	//}
-
-	//IBLTexture* const ResourceManager::GetIBLTexture(const std::string& name)
-	//{
-	//	auto result = FindGraphicsResource(IBLTextureList, name);
-
-	//	if (result == nullptr)
-	//		return nullptr;
-
-	//	result->GetRefCount()++;
-
-bool ResourceManager::ResourceContainer::AddResource(const std::string& name, ResourceBase* resource)
-{
-	auto& result = resourceList[name];
-
-	if (result != nullptr)
-		return false;
-
-	result = resource;
-
-	return true;
-}
-
-ResourceBase* ResourceManager::ResourceContainer::GetResource(const std::string& name)
+	bool ResourceManager::AddTexture(const std::string& name, TextureBase* textureObject)
 	{
-		auto result = resourceList.find(name);
+		auto result = FindGraphicsResource(textureList, name);
 
-		if (result == resourceList.end())
-			return nullptr;
+		if (result != nullptr)
+			return false;
 
-		return result->second;
+		textureList[name] = textureObject;
+
+		return true;
 	}
 
-	//	return dynamic_cast<IBLTexture*>(result);
-		//}
+	bool ResourceManager::AddShader(const std::string& name, ShaderBase* shader)
+	{
+		auto result = FindGraphicsResource(shaderList, name);
+
+		if (result != nullptr)
+			return false;
+
+		shaderList[name] = shader;
+
+		return true;
+	}
+
+	bool ResourceManager::AddLayout(const std::string& name, LayoutBase* layout)
+	{
+		auto result = FindGraphicsResource(layoutList, name);
+
+		if (result != nullptr)
+			return false;
+
+		layoutList[name] = layout;
+
+		return true;
+	}
+
+	bool ResourceManager::AddBuffer(const std::string& name, BufferBase* buffer)
+	{
+		auto result = FindGraphicsResource(bufferList, name);
+
+		if (result != nullptr)
+			return false;
+
+		bufferList[name] = buffer;
+
+		return true;
+	}
+
+	bool ResourceManager::AddModel(const std::string& name, ModelBase* model)
+	{
+		auto result = FindGraphicsResource(modelList, name);
+
+		if (result != nullptr)
+			return false;
+
+		modelList[name] = model;
+
+		return true;
+	}
+
+	bool ResourceManager::AddPrefab(const std::string& name, PrefabBase* prefab)
+	{
+		auto result = FindGraphicsResource(prefabList, name);
+
+		if (result != nullptr)
+			return false;
+
+		prefabList[name] = prefab;
+
+		return true;
+	}
+
+	bool ResourceManager::AddSampler(const std::string& name, SamplerBase* sampler)
+	{
+		auto result = FindGraphicsResource(samplerList, name);
+
+		if (result != nullptr)
+			return false;
+
+		samplerList[name] = sampler;
+
+		return true;
+	}
+
+	bool ResourceManager::AddSkyBox(const std::string& name, SkyBoxBase* skyBox)
+	{
+		auto result = FindGraphicsResource(skyBoxList, name);
+
+		if (result != nullptr)
+			return false;
+
+		skyBoxList[name] = skyBox;
+
+		return true;
+	}
+
+	bool ResourceManager::AddPBRModel(const std::string& name, PBRModel* PBRModel)
+	{
+		auto result = FindGraphicsResource(PBRModelList, name);
+
+		if (result != nullptr)
+			return false;
+
+		PBRModelList[name] = PBRModel;
+
+		return true;
+	}
+
+	bool ResourceManager::AddIBLTexture(const std::string& name, IBLTexture* IBLTexture)
+	{
+		auto result = FindGraphicsResource(IBLTextureList, name);
+
+		if (result != nullptr)
+			return false;
+
+		IBLTextureList[name] = IBLTexture;
+
+		return true;
+	}
+
+	bool ResourceManager::SubLayout(const std::string& name)
+	{
+		for (auto iter = layoutList.begin(); iter != layoutList.end(); iter++)
+		{
+			if (iter->first == name)
+			{
+				delete iter->second;
+				layoutList.erase(iter);
+
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	TextureBase* const ResourceManager::GetTexture(const std::string& name)
+	{
+		auto result = FindGraphicsResource(textureList, name);
+
+		if (result == nullptr)
+			return nullptr;
+
+		result->GetRefCount()++;
+
+		return dynamic_cast<TextureBase*>(result);
+	}
+
+	ShaderBase* const ResourceManager::GetShader(const std::string& name)
+	{
+		auto result = FindGraphicsResource(shaderList, name);
+
+		if (result == nullptr)
+			return nullptr;
+
+		result->GetRefCount()++;
+
+		return dynamic_cast<ShaderBase*>(result);
+	}
+
+	LayoutBase* const ResourceManager::GetLayout(const std::string& name)
+	{
+		auto result = FindGraphicsResource(layoutList, name);
+
+		if (result == nullptr)
+			return nullptr;
+
+		result->GetRefCount()++;
+
+		return dynamic_cast<LayoutBase*>(result);
+	}
+
+	BufferBase* const ResourceManager::GetBuffer(const std::string& name)
+	{
+		auto result = FindGraphicsResource(bufferList, name);
+
+		if (result == nullptr)
+			return nullptr;
+
+		result->GetRefCount()++;
+
+		return dynamic_cast<BufferBase*>(result);
+	}
+
+	ModelBase* const ResourceManager::GetModel(const std::string& name)
+	{
+		auto result = FindGraphicsResource(modelList, name);
+
+		if (result == nullptr)
+			return nullptr;
+
+		result->GetRefCount()++;
+
+		return dynamic_cast<ModelBase*>(result);
+	}
+
+	PrefabBase* const ResourceManager::GetPrefab(const std::string& name)
+	{
+		auto result = FindGraphicsResource(prefabList, name);
+
+		if (result == nullptr)
+			return nullptr;
+
+		result->GetRefCount()++;
+
+		return dynamic_cast<PrefabBase*>(result);
+	}
+
+	SamplerBase* const ResourceManager::GetSampler(const std::string& name)
+	{
+		auto result = FindGraphicsResource(samplerList, name);
+
+		if (result == nullptr)
+			return nullptr;
+
+		result->GetRefCount()++;
+
+		return dynamic_cast<SamplerBase*>(result);
+	}
+
+	SkyBoxBase* const ResourceManager::GetSkyBox(const std::string& name)
+	{
+		auto result = FindGraphicsResource(skyBoxList, name);
+
+		if (result == nullptr)
+			return nullptr;
+
+		result->GetRefCount()++;
+
+		return dynamic_cast<SkyBoxBase*>(result);
+	}
+
+	PBRModel* const ResourceManager::GetPBRModel(const std::string& name)
+	{
+		auto result = FindGraphicsResource(PBRModelList, name);
+
+		if (result == nullptr)
+			return nullptr;
+
+		result->GetRefCount()++;
+
+		return dynamic_cast<PBRModel*>(result);
+	}
+
+	IBLTexture* const ResourceManager::GetIBLTexture(const std::string& name)
+	{
+		auto result = FindGraphicsResource(IBLTextureList, name);
+
+		if (result == nullptr)
+			return nullptr;
+
+		result->GetRefCount()++;
+
+		return dynamic_cast<IBLTexture*>(result);
+	}
 }
