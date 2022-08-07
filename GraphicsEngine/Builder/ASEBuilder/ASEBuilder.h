@@ -79,5 +79,7 @@ namespace GraphicsEngineSpace
 		HelperBase* CreateHelper(const HelperInfo& helper);
 		MaterialBase* CreateMaterial(Factory* const factory, const MaterialInfo& material);
 		AnimationBase* CreateAnimation(const AnimationInfo& animation, const SceneInfo& sceneInfo);
+
+		void SetOriginalLocation(ModelBase* model);
 	};
 }

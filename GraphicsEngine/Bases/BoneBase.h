@@ -39,9 +39,9 @@ namespace GraphicsEngineSpace
 			if (result == animations.end())
 				return false;
 
-			bool temp = result->second->UpdateAnimation(&GetTransform(), tick);
+			GetTransform().ResetLocation();
 
-			return temp;
+			return result->second->UpdateAnimation(&GetTransform(), tick);
 		}
 
 		void SetOffSet(const Matrix& offset)

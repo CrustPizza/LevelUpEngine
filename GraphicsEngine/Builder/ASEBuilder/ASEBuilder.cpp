@@ -200,11 +200,13 @@ namespace GraphicsEngineSpace
 
 			newModel->meshes.clear();
 			newModel->meshes.push_back(skin);
+			newModel->boneMatrix = new Matrix[64];
 
 			break;
 		}
 
 		newModel->SetHierarchy();
+		SetOriginalLocation(newModel);
 
 		return newModel;
 	}
@@ -835,5 +837,28 @@ namespace GraphicsEngineSpace
 		}
 
 		return newAnimation;
+	}
+
+	void ASEBuilder::SetOriginalLocation(ModelBase* model)
+	{
+		for (auto* mesh : model->meshes)
+		{
+			mesh->GetTransform().SetOriginal();
+		}
+
+		for (auto* shape : model->shapes)
+		{
+			shape->GetTransform().SetOriginal();
+		}
+
+		for (auto* helper : model->helpers)
+		{
+			helper->GetTransform().SetOriginal();
+		}
+
+		for (auto* bone : model->bones)
+		{
+			bone->GetTransform().SetOriginal();
+		}
 	}
 }

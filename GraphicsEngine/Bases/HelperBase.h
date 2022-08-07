@@ -41,6 +41,8 @@ namespace GraphicsEngineSpace
 			if (result == animations.end())
 				return false;
 
+			GetTransform().ResetLocation();
+
 			bool temp = result->second->UpdateAnimation(&GetTransform(), tick);
 
 			return temp;

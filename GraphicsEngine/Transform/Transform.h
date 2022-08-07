@@ -60,10 +60,14 @@ namespace GraphicsEngineSpace
 		void DecomposeWorldTransform(const Matrix& matrix);
 		void DecomposeLocalTransform(Matrix local);
 
+		void SetOriginal();
+		virtual void ResetLocation();
+
 	private:
 		void UpdateLocalTransform();
 		void DecomposeWorldTransform();
 
 		void DecomposeMatrix(Vector& scale, Vector& rotation, Vector& translation, Matrix matrix);
+
 	};
 }

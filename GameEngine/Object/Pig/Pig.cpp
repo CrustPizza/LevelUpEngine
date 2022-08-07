@@ -15,7 +15,6 @@ namespace GameEngineSpace
 		: pbrModel(nullptr)
 		, prefab(nullptr)
 		, model(nullptr)
-		, boneMatrix{}
 	{
 
 	}
@@ -27,7 +26,9 @@ namespace GameEngineSpace
 
 	void Pig::Init(GraphicsEngineSpace::Factory* factory, ModelBase* model)
 	{
-		pbrModel = factory->CreateSkinningAlbedoModel("PigPBR", model, boneMatrix);
+		static int ID = 0;
+
+		pbrModel = factory->CreateSkinningAlbedoModel("PigPBR_" + std::to_string(ID++), model);
 		pbrModel->SetAlpha(1.0f);
 		pbrModel->SetMetallic(0.5f);
 		pbrModel->SetRoughness(0.5f);
@@ -51,7 +52,7 @@ namespace GameEngineSpace
 
 		GraphicsEngineSpace::ConstantBufferSetting boneMatrixElements;
 		boneMatrixElements.buffer = boneBuffer;
-		boneMatrixElements.data = boneMatrix;
+		boneMatrixElements.data = model->GetBoneMatrix();
 		boneMatrixElements.slot = 2;
 		boneMatrixElements.type = GraphicsEngineSpace::ShaderType::VERTEX;
 		prefab->AddOnceBuffer(boneMatrixElements);
@@ -88,16 +89,9 @@ namespace GameEngineSpace
 		transform.UpdateWorldTransform();
 
 		if (Move() == true)
-			model->SetAnimationKey("Walk");
+			animSwitch = true;
 		else
-			model->SetAnimationKey("Idle");
-
-		//pbrModel->Update(transform.GetWorldTransform(), tick);
-
-		auto bones = model->GetBones();
-
-		for (int i = 0; i < bones.size(); i++)
-			boneMatrix[i] = MatrixTranspose(bones[i]->GetBoneMatrix());
+			animSwitch = false;
 	}
 
 	void Pig::Render(GraphicsEngineSpace::GraphicsEngineBase* engine, float tick)
@@ -132,6 +126,11 @@ namespace GameEngineSpace
 
 			break;
 		}
+
+		//if (animSwitch == true)
+		//	prefab->SetAnimationKey("Walk");
+		//else
+		//	prefab->SetAnimationKey("Idle");
 
 		prefab->Render(engine, transform.GetWorldTransform(), tick);
 		//pbrModel->Render(engine);

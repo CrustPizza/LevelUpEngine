@@ -59,8 +59,11 @@ element->SetupAttachment(parent);
 		ObjectBase emptyObject;
 		std::string animationKey;
 
+		Matrix* boneMatrix;
+
 	public:
-		ModelBase() = default;
+		ModelBase()
+			: boneMatrix(nullptr) {}
 		virtual ~ModelBase()
 		{
 			RELEASE_VECTOR(meshes);
@@ -68,14 +71,19 @@ element->SetupAttachment(parent);
 			RELEASE_VECTOR(shapes);
 			RELEASE_VECTOR(helpers);
 			RELEASE_MAP(materials);
+
+			if (boneMatrix != nullptr)
+				delete boneMatrix;
 		}
 
-		void SetAnimationKey(const std::string& animationKey)
+		bool SetAnimationKey(const std::string& animationKey)
 		{
 			if (this->animationKey.compare(animationKey) == 0)
-				return;
+				return false;
 
 			this->animationKey = animationKey;
+
+			return true;
 		}
 
 		bool PrepareRender(const Matrix& worldTransform, float animTime = 0.0f)
@@ -107,12 +115,19 @@ element->SetupAttachment(parent);
 			for (auto* iter : emptyObject.GetChild())
 				iter->PrepareRender();
 
+			if (boneMatrix != nullptr)
+			{
+				for (int i = 0; i < bones.size() && i < 64; i++)
+					boneMatrix[i] = MatrixTranspose(bones[i]->GetBoneMatrix());
+			}
+
 			return timeReset;
 		}
 
 		const std::vector<MeshBase*>& GetMeshes() { return meshes; }
 		const std::vector<BoneBase*>& GetBones() { return bones; }
 		const std::map<int, MaterialBase*>& GetMaterials() { return materials; }
+		Matrix* GetBoneMatrix() { return boneMatrix; }
 
 	private:
 		void SetHierarchy()

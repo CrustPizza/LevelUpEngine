@@ -158,7 +158,7 @@ namespace GraphicsEngineSpace
 		return newPBRModel;
 	}
 
-	PBRModel* PBRBuilder::CreateSkinningModel(const std::string& name, Factory* factory, ModelBase* model, void* boneMatrixData)
+	PBRModel* PBRBuilder::CreateSkinningModel(const std::string& name, Factory* factory, ModelBase* model)
 	{
 		PBRModel* newPBRModel = SetStandard(name, factory, model);
 
@@ -201,7 +201,7 @@ namespace GraphicsEngineSpace
 		boneMatrixElements.buffer = boneBuffer;
 		boneMatrixElements.slot = 3;
 		boneMatrixElements.type = ShaderType::VERTEX;
-		boneMatrixElements.data = boneMatrixData;
+		boneMatrixElements.data = model->GetBoneMatrix();
 
 		newPBRModel->GetPrefab()->SetVertexShader(vertexShader);
 		newPBRModel->GetPrefab()->SetPixelShader(pixelShader);
@@ -215,7 +215,7 @@ namespace GraphicsEngineSpace
 		return newPBRModel;
 	}
 
-	PBRModel* PBRBuilder::CreateSkinningAlbedoModel(const std::string& name, Factory* factory, ModelBase* model, void* boneMatrixData)
+	PBRModel* PBRBuilder::CreateSkinningAlbedoModel(const std::string& name, Factory* factory, ModelBase* model)
 	{
 		PBRModel* newPBRModel = SetStandard(name, factory, model);
 
@@ -258,7 +258,7 @@ namespace GraphicsEngineSpace
 		boneMatrixElements.buffer = boneBuffer;
 		boneMatrixElements.slot = 3;
 		boneMatrixElements.type = ShaderType::VERTEX;
-		boneMatrixElements.data = boneMatrixData;
+		boneMatrixElements.data = model->GetBoneMatrix();
 
 		newPBRModel->GetPrefab()->SetVertexShader(vertexShader);
 		newPBRModel->GetPrefab()->SetPixelShader(pixelShader);

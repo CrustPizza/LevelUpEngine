@@ -184,12 +184,20 @@ namespace GameEngineSpace
 		vertexShader = resourceManager->GetShader("SkinningModelVS");
 		BufferBase* boneBuffer = resourceManager->GetBuffer("BoneMatrixCB");
 
-		ModelBase* pigModel = graphicsFactory->CreateModelFromASEFile("ASEPig", "Resources/Model/babypig_walk_6x.ASE", "Walk");
-		ModelBase* pigIdleAnimation = graphicsFactory->CreateAnimationFromASEFile("ASEPig", "Resources/Model/babypig_idle_6x.ASE", "Idle");
+		ModelBase* pigModel = graphicsFactory->CreateModelFromASEFile("ASEPig", "Resources/Model/babypig_idle_6x.ASE", "Idle");
+		//ModelBase* pigIdleAnimation = graphicsFactory->CreateAnimationFromASEFile("ASEPig", "Resources/Model/babypig_walk_6x.ASE", "Walk");
 
 		pig = new Pig;
 		//pig->Init(graphicsFactory, pigModel, vertexShdaer, pixelShader, matrixBuffer, boneBuffer, materialBuffer);
 		pig->Init(graphicsFactory, pigModel);
+		pig->AddForce(Vector::UnitY * VectorReplicate(5));
+
+		for (int i = 0; i < 10; i++)
+		{
+			pigs[i] = new Pig;
+			pigs[i]->Init(graphicsFactory, pigModel);
+			pigs[i]->AddForce(Vector::UnitX * VectorReplicate(i * 5));
+		}
 
 		skyBox = graphicsFactory->CreateSkyBox("SkyBox");
 		skyBox->SetTexture(graphicsFactory->CreateTexture("LobbyCubeMap", "Resources/Texture/lobbycube.dds"));
@@ -270,6 +278,9 @@ namespace GameEngineSpace
 		else
 			pig->Update(Time::instance.deltaTime);
 
+		for (int i = 0; i < 10; i++)
+			pigs[i]->Update(Time::instance.deltaTime);
+
 		dLight->rotation.y += 1.0f * Time::instance.deltaTime;
 
 		//pig->LookAt(-camera.GetWorldPosition());
@@ -290,7 +301,7 @@ namespace GameEngineSpace
 		using GraphicsEngineSpace::ShaderType;
 
 		float tick = Time::instance.deltaTime;
-		
+
 		/* Sky Box */
 		graphicsEngine->GraphicsDebugBeginEvent("SkyBox");
 		Matrix viewMatrix = camera.GetView();
@@ -346,6 +357,12 @@ namespace GameEngineSpace
 		/* Pig */
 		graphicsEngine->GraphicsDebugBeginEvent("Pig");
 		pig->Render(graphicsEngine, tick);
+
+		for (int i = 0; i < 10; i++)
+		{
+			pigs[i]->Render(graphicsEngine, tick* i);
+		}
+
 		graphicsEngine->GraphicsDebugEndEvent();
 
 		graphicsEngine->Render();
@@ -378,6 +395,9 @@ namespace GameEngineSpace
 		delete genji;
 		delete pig;
 		delete ibl;
+
+		for (int i = 0; i < 10; i++)
+			delete pigs[i];
 		
 		delete dLight;
 	}

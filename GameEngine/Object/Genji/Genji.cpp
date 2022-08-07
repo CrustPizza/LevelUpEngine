@@ -19,7 +19,7 @@ namespace GameEngineSpace
 		{ 1.0f, 1.0f, 1.0f, 0.0f },
 	}
 	{
-		transform.position.x += 14.0f;
+		transform.position.x -= 14.0f;
 		transform.scale *= 2.0f;
 	}
 

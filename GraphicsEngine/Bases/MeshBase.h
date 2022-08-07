@@ -61,6 +61,8 @@ namespace GraphicsEngineSpace
 			if (result == animations.end())
 				return false;
 
+			GetTransform().ResetLocation();
+
 			return result->second->UpdateAnimation(&GetTransform(), tick);
 		}
 

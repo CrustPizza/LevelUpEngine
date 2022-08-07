@@ -23,8 +23,8 @@ namespace GraphicsEngineSpace
 		PBRModel* CreateNoneTextureModel(const std::string& name, Factory* factory, ModelBase* model);
 		PBRModel* CreateAlbedoModel(const std::string& name, Factory* factory, ModelBase* model);
 		PBRModel* CreateAlbedoNormalModel(const std::string& name, Factory* factory, ModelBase* model);
-		PBRModel* CreateSkinningModel(const std::string& name, Factory* factory, ModelBase* model, void* boneMatrixData);
-		PBRModel* CreateSkinningAlbedoModel(const std::string& name, Factory* factory, ModelBase* model, void* boneMatrixData);
+		PBRModel* CreateSkinningModel(const std::string& name, Factory* factory, ModelBase* model);
+		PBRModel* CreateSkinningAlbedoModel(const std::string& name, Factory* factory, ModelBase* model);
 
 	private:
 		PBRModel* SetStandard(const std::string& name, Factory* factory, ModelBase* model);

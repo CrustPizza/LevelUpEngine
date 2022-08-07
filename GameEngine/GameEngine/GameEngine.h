@@ -57,6 +57,7 @@ namespace GameEngineSpace
 		Cube* pbrCube;
 		Genji* genji;
 		Pig* pig;
+		Pig* pigs[10];
 
 		GraphicsEngineSpace::SkyBoxBase* skyBox;
 		GraphicsEngineSpace::DirectionalLightBase* dLight;

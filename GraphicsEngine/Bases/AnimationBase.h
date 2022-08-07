@@ -10,11 +10,14 @@
 
 #include <vector>
 #include "Bases/ResourceBase.h"
+#include "Transform/Transform.h"
 #include "../HeraclesMath/HeraclesMath.h"
 
 namespace GraphicsEngineSpace
 {
 	class ASEBuilder;
+
+	using HeraclesMath::Vector;
 
 	struct AnimationData
 	{

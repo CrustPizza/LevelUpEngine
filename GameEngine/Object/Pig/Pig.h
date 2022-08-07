@@ -32,9 +32,8 @@ namespace GameEngineSpace
 		PrefabBase* prefab;
 		ModelBase* model;
 
-		Matrix boneMatrix[64];
-
 		Vector velocity;
+		bool animSwitch;
 
 	public:
 		Pig();

@@ -509,14 +509,14 @@ namespace GraphicsEngineSpace
 		return resourceManager->GetPBRModel(name);
 	}
 
-	PBRModel* Factory::CreateSkinningModel(const std::string& name, ModelBase* model, void* boneMatrixData)
+	PBRModel* Factory::CreateSkinningModel(const std::string& name, ModelBase* model)
 	{
-		if (graphicsFactory == nullptr || resourceManager == nullptr || model == nullptr || boneMatrixData == nullptr)
+		if (graphicsFactory == nullptr || resourceManager == nullptr || model == nullptr)
 			return nullptr;
 
 		PBRBuilder builder;
 
-		PBRModel* newPBRModel = builder.CreateSkinningModel(name, this, model, boneMatrixData);
+		PBRModel* newPBRModel = builder.CreateSkinningModel(name, this, model);
 
 		if (newPBRModel == nullptr)
 			return nullptr;
@@ -531,14 +531,14 @@ namespace GraphicsEngineSpace
 		return resourceManager->GetPBRModel(name);
 	}
 
-	PBRModel* Factory::CreateSkinningAlbedoModel(const std::string& name, ModelBase* model, void* boneMatrixData)
+	PBRModel* Factory::CreateSkinningAlbedoModel(const std::string& name, ModelBase* model)
 	{
-		if (graphicsFactory == nullptr || resourceManager == nullptr || model == nullptr || boneMatrixData == nullptr)
+		if (graphicsFactory == nullptr || resourceManager == nullptr || model == nullptr)
 			return nullptr;
 
 		PBRBuilder builder;
 
-		PBRModel* newPBRModel = builder.CreateSkinningAlbedoModel(name, this, model, boneMatrixData);
+		PBRModel* newPBRModel = builder.CreateSkinningAlbedoModel(name, this, model);
 
 		if (newPBRModel == nullptr)
 			return nullptr;

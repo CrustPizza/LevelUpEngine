@@ -65,6 +65,15 @@ namespace GraphicsEngineSpace
 		void AddOnceBuffer(const ConstantBufferSetting& buffer) { onceBuffer.push_back(buffer); }
 		void SetMaterialBuffer(const ConstantBufferSetting& materialBuffer) { this->materialBuffer = materialBuffer; }
 
+		void SetAnimationKey(const std::string& animationKey)
+		{
+			if (model == nullptr)
+				return;
+
+			if (model->SetAnimationKey(animationKey) == true)
+				totalAnimationTime = 0.0f;
+		}
+
 		template <typename T>
 		void CreateVertexBuffer(FactoryBase* factory, std::function<T(const VertexData&)> vertexConstructor);
 

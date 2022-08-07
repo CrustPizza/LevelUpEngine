@@ -77,6 +77,20 @@ namespace GraphicsEngineSpace
 		UpdateLocalTransform();
 	}
 
+	void Transform::SetOriginal()
+	{
+		originalPosition = position;
+		originalRotation = rotation;
+		originalScale = scale;
+	}
+
+	void Transform::ResetLocation()
+	{
+		position = originalPosition;
+		rotation = originalRotation;
+		scale = originalScale;
+	}
+
 	void Transform::UpdateLocalTransform()
 	{
 		Vector rad =
