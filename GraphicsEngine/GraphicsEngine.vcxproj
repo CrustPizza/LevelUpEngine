@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -19,14 +19,50 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bases\DirectionalLightBase.h" />
+    <ClInclude Include="Bases\PointLightBase.h" />
+    <ClInclude Include="Bases\PrefabBase.h" />
+    <ClInclude Include="Bases\SamplerBase.h" />
+    <ClInclude Include="Bases\ShapeBase.h" />
+    <ClInclude Include="Bases\SkyBoxBase.h" />
+    <ClInclude Include="Bases\SpotLightBase.h" />
+    <ClInclude Include="Builder\ASEBuilder\ASEBuilder.h" />
+    <ClInclude Include="Bases\AnimationBase.h" />
+    <ClInclude Include="Bases\BoneBase.h" />
+    <ClInclude Include="Bases\FactoryBase.h" />
+    <ClInclude Include="Bases\BufferBase.h" />
+    <ClInclude Include="Bases\MaterialBase.h" />
+    <ClInclude Include="Bases\MeshBase.h" />
+    <ClInclude Include="Bases\ModelBase.h" />
+    <ClInclude Include="Define\GraphicsFilterOption.h" />
+    <ClInclude Include="Define\GraphicsFormat.h" />
+    <ClInclude Include="Define\GraphicsUsage.h" />
+    <ClInclude Include="GraphicsEngine\Factory\Factory.h" />
     <ClInclude Include="GraphicsEngine\GraphicsEngine.h" />
     <ClInclude Include="GraphicsEngineFramework.h" />
-    <ClInclude Include="GraphicsEngine\EngineBase\GraphicsEngineBase.h" />
-    <ClInclude Include="TextureBase\TextureBase.h" />
+    <ClInclude Include="Bases\GraphicsEngineBase.h" />
+    <ClInclude Include="Bases\ObjectBase.h" />
+    <ClInclude Include="Bases\LayoutBase.h" />
+    <ClInclude Include="Bases\ResourceBase.h" />
+    <ClInclude Include="Bases\HelperBase.h" />
+    <ClInclude Include="Builder\PBRBuilder\PBRBuilder.h" />
+    <ClInclude Include="Object\IBLTexture\IBLTexture.h" />
+    <ClInclude Include="Object\PBRModel\PBRModel.h" />
+    <ClInclude Include="ResourceManager\ResourceManager.h" />
+    <ClInclude Include="Bases\TextureBase.h" />
+    <ClInclude Include="Bases\ShaderBase.h" />
+    <ClInclude Include="Transform\Transform.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Builder\ASEBuilder\ASEBuilder.cpp" />
+    <ClCompile Include="GraphicsEngine\Factory\Factory.cpp" />
     <ClCompile Include="GraphicsEngine\GraphicsEngine.cpp" />
     <ClCompile Include="GraphicsEngineMain.cpp" />
+    <ClCompile Include="Builder\PBRBuilder\PBRBuilder.cpp" />
+    <ClCompile Include="Object\IBLTexture\IBLTexture.cpp" />
+    <ClCompile Include="Object\PBRModel\PBRModel.cpp" />
+    <ClCompile Include="ResourceManager\ResourceManager.cpp" />
+    <ClCompile Include="Transform\Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
@@ -91,23 +127,27 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)OutPut\DLL\</OutDir>
     <TargetName>$(ProjectName)_$(Configuration)_$(LibrariesArchitecture)</TargetName>
+    <IncludePath>$(SolutionDir)ASEParser;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)OutPut\DLL\</OutDir>
     <TargetName>$(ProjectName)_$(Configuration)_$(LibrariesArchitecture)</TargetName>
+    <IncludePath>$(SolutionDir)ASEParser;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>$(SolutionDir)OutPut\DLL\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)_$(LibrariesArchitecture)</TargetName>
+    <IncludePath>$(SolutionDir)ASEParser;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)OutPut\DLL\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)_$(LibrariesArchitecture)</TargetName>
+    <IncludePath>$(SolutionDir)ASEParser;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -115,6 +155,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GraphicsEngine_Export;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)GameEngine</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -129,6 +170,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GraphicsEngine_Export;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)GameEngine</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -143,6 +185,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GraphicsEngine_Export;x64;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)GameEngine</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -157,6 +200,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>GraphicsEngine_Export;x64;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)GameEngine</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

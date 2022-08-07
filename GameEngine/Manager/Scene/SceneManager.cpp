@@ -7,6 +7,7 @@
 *********************************/
 
 #include "SceneManager.h"
+#include "Scene.h"
 
 namespace GameEngineSpace
 {
@@ -18,22 +19,64 @@ namespace GameEngineSpace
 
 	SceneManager::~SceneManager()
 	{
-
+		for (auto iter = sceneList.begin(); iter != sceneList.end(); iter++)
+		{
+			if (iter->second != nullptr)
+			{
+				iter->second->Release();
+				delete iter->second;
+			}
+		}
 	}
 
-	void SceneManager::AddScene(std::string sceneName, Scene* scene)
+	bool SceneManager::AddScene(std::string sceneName, Scene* scene)
 	{
+		Scene* result = FindScene(sceneName);
 
+		// 이미 등록된 Scene이 있다.
+		if (result != nullptr)
+			return false;
+
+		sceneList[sceneName] = scene;
+
+		if (currentScene == nullptr)
+			currentScene = scene;
+
+		return true;
 	}
 
-	bool SceneManager::SceneChange(std::string sceneName)
+	Scene* SceneManager::FindScene(std::string sceneName)
 	{
-		return false;
+		auto result = sceneList.find(sceneName);
+
+		// Scene이 없다면 nullptr
+		if (result == sceneList.end())
+			return nullptr;
+
+		return result->second;
+	}
+
+	bool SceneManager::ChangeScene(std::string sceneName)
+	{
+		Scene* result = FindScene(sceneName);
+
+		// Scene이 없다면 false
+		if (result == nullptr)
+			return false;
+
+		// 현재 Scene이라면
+		if (result == currentScene)
+			return false;
+
+		currentScene = result;
+		currentScene->Init();
+
+		return true;
 	}
 
 	Scene* SceneManager::GetCurrentScene()
 	{
-		return nullptr;
+		return currentScene;
 	}
 
 	void SceneManager::Init()
@@ -49,6 +92,7 @@ namespace GameEngineSpace
 		if (currentScene == nullptr)
 			return;
 
+		currentScene->PrepareUpdate();
 		currentScene->Update();
 	}
 
@@ -66,5 +110,12 @@ namespace GameEngineSpace
 			return;
 
 		currentScene->Release();
+	}
+
+	SceneManager* SceneManager::GetInstance()
+	{
+		static SceneManager instance;
+
+		return &instance;
 	}
 }

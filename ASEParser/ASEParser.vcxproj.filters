@@ -1,0 +1,215 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="ASEParserMain.cpp" />
+    <ClCompile Include="Token\TokenList.cpp">
+      <Filter>Token</Filter>
+    </ClCompile>
+    <ClCompile Include="AseParser\AseParser.cpp">
+      <Filter>AseParser</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\AnimationInfo\AnimationInfo.cpp">
+      <Filter>Info\AnimationInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\BoneListInfo\BoneListInfo.cpp">
+      <Filter>Info\BoneListInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\BoneListInfo\BoneInfo\BoneInfo.cpp">
+      <Filter>Info\BoneListInfo\BoneInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\GeometryInfo\MeshInfo\ColorInfo\ColorInfo.cpp">
+      <Filter>Info\GeometryInfo\MeshInfo\ColorInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\FileInfo\FileInfo.cpp">
+      <Filter>Info\FileInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\GeometryInfo\MeshInfo\FaceInfo\FaceInfo.cpp">
+      <Filter>Info\GeometryInfo\MeshInfo\FaceInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\AnimationInfo\ControlInfo\ControlInfo.cpp">
+      <Filter>Info\AnimationInfo\ControlInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\GeometryInfo\GeometryInfo.cpp">
+      <Filter>Info\GeometryInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\HelperInfo\HelperInfo.cpp">
+      <Filter>Info\HelperInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\MaterialListInfo\MaterialInfo\MapInfo\MapInfo.cpp">
+      <Filter>Info\MaterialListInfo\MaterialInfo\MapInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\MaterialListInfo\MaterialInfo\MaterialInfo.cpp">
+      <Filter>Info\MaterialListInfo\MaterialInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\MaterialListInfo\MaterialListInfo.cpp">
+      <Filter>Info\MaterialListInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\GeometryInfo\MeshInfo\MeshInfo.cpp">
+      <Filter>Info\GeometryInfo\MeshInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\GeometryInfo\NodeInfo\NodeInfo.cpp">
+      <Filter>Info\GeometryInfo\NodeInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\GeometryInfo\MeshInfo\NormalInfo\NormalInfo.cpp">
+      <Filter>Info\GeometryInfo\MeshInfo\NormalInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\SceneInfo\SceneInfo.cpp">
+      <Filter>Info\SceneInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\ShapeInfo\ShapeInfo.cpp">
+      <Filter>Info\ShapeInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\GeometryInfo\MeshInfo\TextureInfo\TextureInfo.cpp">
+      <Filter>Info\GeometryInfo\MeshInfo\TextureInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\GeometryInfo\MeshInfo\VertexInfo\VertexInfo.cpp">
+      <Filter>Info\GeometryInfo\MeshInfo\VertexInfo</Filter>
+    </ClCompile>
+    <ClCompile Include="Info\BoneListInfo\WeightInfo\WeightInfo.cpp">
+      <Filter>Info\BoneListInfo\WeightInfo</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ASEParserFramework.h" />
+    <ClInclude Include="Token\TokenList.h">
+      <Filter>Token</Filter>
+    </ClInclude>
+    <ClInclude Include="AseParser\AseParser.h">
+      <Filter>AseParser</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\AnimationInfo\AnimationInfo.h">
+      <Filter>Info\AnimationInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\BoneListInfo\BoneListInfo.h">
+      <Filter>Info\BoneListInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\BoneListInfo\BoneInfo\BoneInfo.h">
+      <Filter>Info\BoneListInfo\BoneInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\GeometryInfo\MeshInfo\ColorInfo\ColorInfo.h">
+      <Filter>Info\GeometryInfo\MeshInfo\ColorInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\FileInfo\FileInfo.h">
+      <Filter>Info\FileInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\GeometryInfo\MeshInfo\FaceInfo\FaceInfo.h">
+      <Filter>Info\GeometryInfo\MeshInfo\FaceInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\AnimationInfo\ControlInfo\ControlInfo.h">
+      <Filter>Info\AnimationInfo\ControlInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\GeometryInfo\GeometryInfo.h">
+      <Filter>Info\GeometryInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\HelperInfo\HelperInfo.h">
+      <Filter>Info\HelperInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\MaterialListInfo\MaterialInfo\MapInfo\MapInfo.h">
+      <Filter>Info\MaterialListInfo\MaterialInfo\MapInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\MaterialListInfo\MaterialInfo\MaterialInfo.h">
+      <Filter>Info\MaterialListInfo\MaterialInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\MaterialListInfo\MaterialListInfo.h">
+      <Filter>Info\MaterialListInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\GeometryInfo\MeshInfo\MeshInfo.h">
+      <Filter>Info\GeometryInfo\MeshInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\GeometryInfo\NodeInfo\NodeInfo.h">
+      <Filter>Info\GeometryInfo\NodeInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\GeometryInfo\MeshInfo\NormalInfo\NormalInfo.h">
+      <Filter>Info\GeometryInfo\MeshInfo\NormalInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\SceneInfo\SceneInfo.h">
+      <Filter>Info\SceneInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\ShapeInfo\ShapeInfo.h">
+      <Filter>Info\ShapeInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\GeometryInfo\MeshInfo\TextureInfo\TextureInfo.h">
+      <Filter>Info\GeometryInfo\MeshInfo\TextureInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\GeometryInfo\MeshInfo\VertexInfo\VertexInfo.h">
+      <Filter>Info\GeometryInfo\MeshInfo\VertexInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Info\BoneListInfo\WeightInfo\WeightInfo.h">
+      <Filter>Info\BoneListInfo\WeightInfo</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Token">
+      <UniqueIdentifier>{3052e85e-58d2-4826-8547-1cdec5ee3dbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AseParser">
+      <UniqueIdentifier>{38b02d31-c414-429f-a9fd-5865a191ecaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Info">
+      <UniqueIdentifier>{9ef8521b-6e87-4267-9306-c3101806e4e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Info\AnimationInfo">
+      <UniqueIdentifier>{ddba0e50-27a1-4d39-9be8-f9bb5f1ecf10}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Info\BoneListInfo">
+      <UniqueIdentifier>{7acec599-6429-44f9-818f-0602a0befc52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Info\FileInfo">
+      <UniqueIdentifier>{1e7d2cc0-86e4-497a-8db1-5485271fddb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Info\GeometryInfo">
+      <UniqueIdentifier>{49e93baf-baca-4e50-b196-393ed70234dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Info\HelperInfo">
+      <UniqueIdentifier>{8371e674-3335-4b2d-92ff-c3ee9dedf4be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Info\MaterialListInfo">
+      <UniqueIdentifier>{8296d670-6df3-4682-bdc1-2593d364add4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Info\SceneInfo">
+      <UniqueIdentifier>{cd63016a-b3e9-4c8c-9eb2-9791d8cb53ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Info\ShapeInfo">
+      <UniqueIdentifier>{0b7faedb-85bc-481e-9de2-8a8bbd2b5e33}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Info\AnimationInfo\ControlInfo">
+      <UniqueIdentifier>{a388d14f-eaa6-4b10-bbf3-04dcfe350a6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Info\BoneListInfo\BoneInfo">
+      <UniqueIdentifier>{e725e276-756c-4377-a537-cfa2b67f9236}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Info\BoneListInfo\WeightInfo">
+      <UniqueIdentifier>{9402f02c-6f6d-475b-a5ba-56cde4f8e6a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Info\GeometryInfo\MeshInfo">
+      <UniqueIdentifier>{a4db578b-f19c-4797-b25d-e5b333af941a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Info\GeometryInfo\NodeInfo">
+      <UniqueIdentifier>{b12082ac-7caf-428e-a677-055fb3228f1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Info\GeometryInfo\MeshInfo\ColorInfo">
+      <UniqueIdentifier>{f57e199a-b4a4-4d04-a518-0c66deb4108e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Info\GeometryInfo\MeshInfo\FaceInfo">
+      <UniqueIdentifier>{aa3018d6-ed86-43f0-a5e2-072c156c3f73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Info\GeometryInfo\MeshInfo\NormalInfo">
+      <UniqueIdentifier>{5712d54c-fc38-4cac-b7e7-3b0172d37221}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Info\GeometryInfo\MeshInfo\TextureInfo">
+      <UniqueIdentifier>{51d764d8-1e09-41e2-b398-e3d277bc4629}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Info\GeometryInfo\MeshInfo\VertexInfo">
+      <UniqueIdentifier>{5daea616-c214-460d-baf4-73fda2b4b8d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Info\MaterialListInfo\MaterialInfo">
+      <UniqueIdentifier>{a5352f2a-670d-4ac3-a769-fc034536f4c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Info\MaterialListInfo\MaterialInfo\MapInfo">
+      <UniqueIdentifier>{5451c67a-75d2-4dac-9cb1-c20ec7dfa2bc}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
+  </ItemGroup>
+</Project>

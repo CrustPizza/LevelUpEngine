@@ -3,7 +3,7 @@
 *	Application.h				*
 *								*
 *	Created : 2022/06/10		*
-*	Updated : 2022/06/15		*
+*	Updated : 2022/07/20		*
 *********************************/
 
 #pragma once
@@ -26,8 +26,6 @@ namespace GameEngineSpace
 
 		Platform* app;
 
-		std::function<void(UINT, UINT)> onResize;
-
 	public:
 		Application();
 		~Application();
@@ -36,13 +34,13 @@ namespace GameEngineSpace
 		bool CreateApp(Types... args);
 
 		void SetOnResizeFunc(std::function<void(UINT, UINT)> onResize);
+		void SetOnMouseMove(std::function<void(float, float)> mouseMove);
 
 		UINT GetWidth();
 		UINT GetHeight();
 
 #ifdef WINDOW_TEMP
 		HWND GetWndHandle();
-		void OnResize(UINT width, UINT height);
 #else
 
 #endif
@@ -55,11 +53,6 @@ namespace GameEngineSpace
 
 		if (app == nullptr)
 			return false;
-
-		app->SetOnResizeFunc([this](UINT width, UINT height)
-			{
-				this->OnResize(width, height);
-			});
 
 		app->OnResize();
 

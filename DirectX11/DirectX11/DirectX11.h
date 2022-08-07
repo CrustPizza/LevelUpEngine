@@ -3,15 +3,22 @@
 *	DirectX11.h					*
 *								*
 *	Created : 2022/06/11		*
-*	Updated : 2022/06/17		*
+*	Updated : 2022/07/25		*
 *********************************/
 
 #pragma once
 
-#include "../../GraphicsEngine/GraphicsEngine/EngineBase/GraphicsEngineBase.h"
-#include "../RenderTexture/RenderTexture.h"
-#include "../Inc/SpriteBatch.h"
-#include "../Inc/SpriteFont.h"
+#include "../GraphicsEngine/Bases/GraphicsEngineBase.h"
+#include "DXObject/RenderTexture/RenderTexture.h"
+#include "DXObject/D3DTexture/D3DTexture.h"
+#include "Inc/SpriteBatch.h"
+#include "Inc/SpriteFont.h"
+#include "Factory/Factory.h"
+
+#include "PostProcess/Blur/Blur.h"
+#include "PostProcess/Bloom/Bloom.h"
+#include "PostProcess/Combine/Combine.h"
+#include "PostProcess/DownSampling/DownSampling.h"
 
 namespace DX11
 {
@@ -22,6 +29,7 @@ namespace DX11
 #endif
 
 	using GraphicsEngineSpace::GraphicsEngineBase;
+	using GraphicsEngineSpace::MeshBase;
 
 	/// <summary>
 	/// DirectX11 그래픽스 엔진
@@ -36,26 +44,27 @@ namespace DX11
 		// DirectX 관련 변수
 
 		// D3D Object
-		ID3D11Device* d3dDevice;		// 몸체 (생성, 제거 기능 등)
-		ID3D11DeviceContext* deviceContext;	// 흐름 (그리기, 상태변환 등)
-		IDXGISwapChain* swapChain;		// 스크린 버퍼
-		ID3DUserDefinedAnnotation* annotation;		// 그래픽 디버그 헬퍼
+		ID3D11Device*				d3dDevice;		// 몸체 (생성, 제거 기능 등)
+		ID3D11DeviceContext*		deviceContext;	// 흐름 (그리기, 상태변환 등)
+		IDXGISwapChain*				swapChain;		// 스크린 버퍼
+		ID3DUserDefinedAnnotation*	annotation;		// 그래픽 디버그 헬퍼
+		unsigned int				annotationCount;
 
 		// Render Object
-		ID3D11Texture2D* renderTarget;
-		ID3D11RenderTargetView* renderTargetView;
+		ID3D11Texture2D*		renderTarget;
+		ID3D11RenderTargetView*	renderTargetView;
 
-		ID3D11Texture2D* depth;			// 뎁스 텍스쳐
-		ID3D11DepthStencilView* depthView;		// 뎁스 뷰
+		ID3D11Texture2D*		depth;			// 뎁스 텍스쳐
+		ID3D11DepthStencilView*	depthView;		// 뎁스 뷰
 
-		ID3D11BlendState* blendState;
-		ID3D11DepthStencilState* depthState;
+		ID3D11BlendState*			blendState;
+		ID3D11DepthStencilState*	depthState;
 
-		D3D11_VIEWPORT				viewPort;
+		D3D11_VIEWPORT viewPort;
 
 		// Sprite
-		DirectX::SpriteBatch* spriteBatch;
-		DirectX::SpriteFont* spriteFont;
+		DirectX::SpriteBatch*	spriteBatch;
+		DirectX::SpriteFont*	spriteFont;
 
 		// Properties
 		DXGI_FORMAT			backBufferFormat;
@@ -63,18 +72,39 @@ namespace DX11
 		D3D_DRIVER_TYPE		driverType;			// GPU 지원 타입
 		D3D_FEATURE_LEVEL	featureLevel;		// DirectX 버전 지원 수준
 
-		// MRT
+		// Back
 		RenderTexture* backScreen;
-		RenderTexture* rt1;
-		RenderTexture* rt2;
-		RenderTexture* rt3;
+
+		// Factory
+		Factory* factory;
+
+		// Post Process
+		Bloom*			bloom;
+
+		// Test
+		Blur* blur;
+		DownSampling* downSampler;
+		Combine* combine;
 
 	public:
 		DirectX11();
 		~DirectX11();
 
 		virtual bool InitDevice(HWND hWnd, UINT width, UINT height);
-		virtual bool OnResize(UINT width, UINT height);
+
+		virtual FactoryBase* const CreateFactory() override;
+		virtual bool OnResize(UINT width, UINT height) override;
+
+		virtual bool DrawSprite(Texture* texture, long posX, long posY, long width, long height, float z) override;
+		bool DrawSprite(ID3D11ShaderResourceView* texture, long posX, long posY, long width, long height, float z);
+
+		bool DrawMesh(BufferBase* vertices, BufferBase* indices) override;
+		bool DrawTextColor(std::string& text, HeraclesMath::Vector color, HeraclesMath::Vector position, float rotation, HeraclesMath::Vector scale) override;
+
+		bool SetUpShader(ShaderBase* shader) override;
+
+		bool GraphicsDebugBeginEvent(const std::string& name) override;
+		bool GraphicsDebugEndEvent() override;
 
 	private:
 		bool CreateBackScreen();
@@ -90,6 +120,6 @@ namespace DX11
 	extern "C"
 	{
 		DirectX11DeclSpec DirectX11* CreateDirectX11();
-		using DirectX11Constructor = DirectX11 * (*)(void);
+		using DirectX11Constructor = DirectX11* (*)(void);
 	}
 }

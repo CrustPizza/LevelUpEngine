@@ -7,12 +7,21 @@
 *********************************/
 
 #pragma once
+
 #include <map>
-#include "Scene.h"
+#include <string>
 
 namespace GameEngineSpace
 {
-	class SceneManager
+#ifdef GameEngine_Export
+#define GameEngineDeclSpec __declspec( dllexport )
+#else
+#define GameEngineDeclSpec __declspec( dllimport )
+#endif
+
+	class Scene;
+
+	class GameEngineDeclSpec SceneManager
 	{
 		std::map<std::string, Scene*> sceneList;
 
@@ -20,11 +29,14 @@ namespace GameEngineSpace
 
 	private:
 		SceneManager();
+		SceneManager(const SceneManager& other) = delete;
+		SceneManager& operator =(const SceneManager& other) = delete;
 		~SceneManager();
 
 	public:
-		void AddScene(std::string sceneName, Scene* scene);
-		bool SceneChange(std::string sceneName);
+		virtual bool AddScene(std::string sceneName, Scene* scene);
+		virtual Scene* FindScene(std::string sceneName);
+		virtual bool ChangeScene(std::string sceneName);
 
 		Scene* GetCurrentScene();
 
@@ -32,5 +44,7 @@ namespace GameEngineSpace
 		void Update();
 		void Render();
 		void Release();
+
+		static SceneManager* GetInstance();
 	};
 }

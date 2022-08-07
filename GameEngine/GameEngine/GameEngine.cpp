@@ -3,10 +3,11 @@
 *	Game Engine.cpp				*
 *								*
 *	Created : 2022/06/11		*
-*	Updated : 2022/06/15		*
+*	Updated : 2022/07/20		*
 *********************************/
 
 #include "GameEngine.h"
+#include "Manager/Time/Time.h"
 
 namespace GameEngineSpace
 {
@@ -14,6 +15,10 @@ namespace GameEngineSpace
 		: app(nullptr)
 		, graphicsEngine(nullptr)
 		, graphicsDLL(nullptr)
+		, factory(nullptr)
+		, graphicsFactory(nullptr)
+		, sceneManager(SceneManager::GetInstance())
+		, inputManager(Input::GetInstance())
 	{
 
 	}
@@ -22,12 +27,14 @@ namespace GameEngineSpace
 	{
 		delete app;
 		delete graphicsEngine;
+		delete factory;
 		if (graphicsDLL != nullptr)
 			FreeLibrary(graphicsDLL);
 	}
 
 	bool GameEngine::CreateEngine(EngineType engineType, HINSTANCE hInstance, RECT wndSize)
 	{
+
 		switch (engineType)
 		{
 
@@ -80,6 +87,12 @@ namespace GameEngineSpace
 			app->SetOnResizeFunc([&](UINT width, UINT height)
 				{
 					graphicsEngine->OnResize(width, height);
+					camera.UpdateProjectionMatrix(width, height);
+				});
+
+			app->SetOnMouseMove([&](float x, float y)
+				{
+					Input::GetInstance()->SetMousePos(x, y);
 				});
 
 			return true;
@@ -90,12 +103,26 @@ namespace GameEngineSpace
 		return false;
 	}
 
+	Factory* const GameEngine::CreateFactory()
+	{
+		if (factory != nullptr)
+			return factory;
+
+		factory = new Factory;
+		factory->sceneManager = sceneManager;
+		factory->inputManager = inputManager;
+
+		return factory;
+	}
+
 	int GameEngine::Run()
 	{
 		if (graphicsEngine == nullptr)
 			return -1;
 
 		MSG msg = {};
+
+		Init();
 
 		while (msg.message != WM_QUIT)
 		{
@@ -106,16 +133,235 @@ namespace GameEngineSpace
 			}
 			else
 			{
-				graphicsEngine->BeginRender();
-				graphicsEngine->Render();
-				graphicsEngine->PostProcess();
-				graphicsEngine->EndRender();
+				Update();
+				Render();
 			}
 		}
 
-		graphicsEngine->Release();
+		Release();
 
 		return static_cast<int>(msg.lParam);
+	}
+
+	bool GameEngine::SetEntryScene(std::string name)
+	{
+		return sceneManager->ChangeScene(name);
+	}
+
+	void GameEngine::Init()
+	{
+		using namespace GraphicsEngineSpace;
+
+		graphicsFactory = graphicsEngine->CreateFactory();
+
+		camera.UpdateProjectionMatrix(app->GetWidth(), app->GetHeight());
+		camera.UpdateViewMatrix();
+
+		GraphicsEngineSpace::ResourceManager* resourceManager = graphicsEngine->GetResourceManager();
+
+		ShaderBase* vertexShader = resourceManager->GetShader("BasicModelVS");
+		ShaderBase* pixelShader = resourceManager->GetShader("BasicModelPS");
+		BufferBase* matrixBuffer = resourceManager->GetBuffer("MatrixCB");
+
+		ModelBase* cubeModel = graphicsFactory->CreateModelFromASEFile("ASECube", "Resources/Model/Cube.ase");
+
+		cube = new Cube;
+		cube->Init(graphicsFactory, cubeModel, vertexShader, pixelShader, matrixBuffer);
+
+		vertexShader = resourceManager->GetShader("LegacyModelVS");
+		pixelShader = resourceManager->GetShader("LegacyModelPS");
+		BufferBase* materialBuffer = resourceManager->GetBuffer("LegacyMaterialCB");
+
+		ModelBase* genjiModel = graphicsFactory->CreateModelFromASEFile("ASEGenji", "Resources/Model/genji_max.ase");
+		
+		genji = new Genji;
+		//genji->Init(graphicsFactory, genjiModel, vertexShdaer, pixelShader, matrixBuffer, materialBuffer);
+		genji->Init(graphicsFactory, genjiModel);
+
+		vertexShader = resourceManager->GetShader("SkinningModelVS");
+		BufferBase* boneBuffer = resourceManager->GetBuffer("BoneMatrixCB");
+
+		ModelBase* pigModel = graphicsFactory->CreateModelFromASEFile("ASEPig", "Resources/Model/babypig_walk_6x.ASE", "Walk");
+		ModelBase* pigIdleAnimation = graphicsFactory->CreateAnimationFromASEFile("ASEPig", "Resources/Model/babypig_idle_6x.ASE", "Idle");
+
+		pig = new Pig;
+		//pig->Init(graphicsFactory, pigModel, vertexShdaer, pixelShader, matrixBuffer, boneBuffer, materialBuffer);
+		pig->Init(graphicsFactory, pigModel);
+
+		skyBox = graphicsFactory->CreateSkyBox("SkyBox");
+		skyBox->SetTexture(graphicsFactory->CreateTexture("LobbyCubeMap", "Resources/Texture/lobbycube.dds"));
+
+		dLight = new DirectionalLightBase;
+		dLight->rotation.x += 45.0f;
+		dLight->SetBuffer(resourceManager->GetBuffer("DirectionalLightCB"));
+
+		graphicsFactory->CreateTexture("Bricks", "Resources/Texture/bricks.dds");
+	}
+
+	void GameEngine::Update()
+	{
+		Time::instance.Update();
+		inputManager->Update();
+		camera.CameraMove(Time::instance.deltaTime);
+		camera.CameraRotation();
+		//camera.LookAt(pig->GetTransform().position);
+
+		sceneManager->Update();
+
+		cube->Update(Time::instance.deltaTime);
+		genji->Update(Time::instance.deltaTime);
+
+		static float metallic = 0.5f;
+
+		if (Input::GetInstance()->GetInputState('R', KeyState::STAY) == true)
+		{
+			metallic += 0.5f * Time::instance.deltaTime;
+
+			if (metallic > 1.0f)
+				metallic = 1.0f;
+
+			genji->SetMetallic(metallic);
+		}
+		else if (Input::GetInstance()->GetInputState('F', KeyState::STAY) == true)
+		{
+			metallic -= 0.5f * Time::instance.deltaTime;
+
+			if (metallic < 0.0f)
+				metallic = 0.0f;
+
+			genji->SetMetallic(metallic);
+		}
+
+		static float roughness = 0.5f;
+
+		if (Input::GetInstance()->GetInputState('T', KeyState::STAY) == true)
+		{
+			roughness += 0.5f * Time::instance.deltaTime;
+
+			if (roughness > 1.0f)
+				roughness = 1.0f;
+
+			genji->SetRoughness(roughness);
+		}
+		else if (Input::GetInstance()->GetInputState('G', KeyState::STAY) == true)
+		{
+			roughness -= 0.5f * Time::instance.deltaTime;
+
+			if (roughness < 0.0f)
+				roughness = 0.0f;
+
+			genji->SetRoughness(roughness);
+		}
+
+		if (Input::GetInstance()->GetInputState(VK_RIGHT, KeyState::DOWN) == true)
+			pig->AddForce(Vector::UnitX * VectorReplicate(5.0f));
+		
+		if (Input::GetInstance()->GetInputState(VK_LEFT, KeyState::DOWN) == true)
+			pig->AddForce(-Vector::UnitX * VectorReplicate(5.0f));
+		
+		if (Input::GetInstance()->GetInputState(VK_SPACE, KeyState::TOGGLE) == true)
+			pig->Update(0.0f);
+		else
+			pig->Update(Time::instance.deltaTime);
+
+		dLight->rotation.y += 1.0f * Time::instance.deltaTime;
+
+		//pig->LookAt(-camera.GetWorldPosition());
+
+		pig->SetLight(Vector::UnitZ * MatrixRotationFromVector(dLight->rotation), dLight->color, 0);
+		genji->SetLight(Vector::UnitZ * MatrixRotationFromVector(dLight->rotation), dLight->color, 0);
+
+		inputManager->LateUpdate();
+	}
+
+	void GameEngine::Render()
+	{
+		sceneManager->Render();
+		graphicsEngine->BeginRender();
+
+		GraphicsEngineSpace::ResourceManager* resourceManager = graphicsEngine->GetResourceManager();
+
+		using GraphicsEngineSpace::ShaderType;
+		
+		/* Sky Box */
+		graphicsEngine->GraphicsDebugBeginEvent("SkyBox");
+		Matrix viewMatrix = camera.GetView();
+		viewMatrix.r[3] = { 0.0f, 0.0f, 0.0f, 1.0f };
+		const Matrix& projMatix = camera.GetProjection();
+		Matrix viewProjection = MatrixTranspose(viewMatrix * projMatix);
+		skyBox->Render(graphicsEngine, viewProjection);
+		graphicsEngine->GraphicsDebugEndEvent();
+
+		/* View Projection */
+		graphicsEngine->GraphicsDebugBeginEvent("ViewProjection");
+		viewProjection = MatrixTranspose(camera.GetView() * projMatix);
+		resourceManager->GetBuffer("ViewProjectionCB")->SetUpBuffer(1, &viewProjection, ShaderType::VERTEX);
+		graphicsEngine->GraphicsDebugEndEvent();
+
+		/* Cube */
+		graphicsEngine->GraphicsDebugBeginEvent("Cube");
+		cube->Render(graphicsEngine);
+		graphicsEngine->GraphicsDebugEndEvent();
+
+		/* Genji */
+		graphicsEngine->GraphicsDebugBeginEvent("Genji");
+
+		/* View world*/
+		graphicsEngine->GraphicsDebugBeginEvent("ViewWorldPosition");
+		struct viewPos
+		{
+			Vector viewPosition;
+		} cbViewPos;
+
+		cbViewPos.viewPosition = camera.GetWorldPosition();
+
+		resourceManager->GetBuffer("ViewWorldPosCB")->SetUpBuffer(0, &cbViewPos, ShaderType::PIXEL);
+		graphicsEngine->GraphicsDebugEndEvent();
+
+		/* Directional Light */
+		graphicsEngine->GraphicsDebugBeginEvent("Directional Light");
+		dLight->SetUpBuffer(1);
+		graphicsEngine->GraphicsDebugEndEvent();
+
+		/* Sampler */
+		graphicsEngine->GraphicsDebugBeginEvent("LinearSampler");
+		resourceManager->GetSampler("LinearSampler")->SetUpSampler(0, ShaderType::PIXEL);
+		graphicsEngine->GraphicsDebugEndEvent();
+
+		genji->Render(graphicsEngine);
+
+		graphicsEngine->GraphicsDebugEndEvent();
+
+		/* Pig */
+		graphicsEngine->GraphicsDebugBeginEvent("Pig");
+		pig->Render(graphicsEngine);
+		graphicsEngine->GraphicsDebugEndEvent();
+
+		graphicsEngine->Render();
+
+		/* Post Process */
+		if (Input::GetInstance()->GetInputState(VK_TAB, KeyState::TOGGLE) == true)
+			graphicsEngine->PostProcess();
+
+		/* Texture test */
+		graphicsEngine->GraphicsDebugBeginEvent("Bricks");
+		graphicsEngine->DrawSprite(resourceManager->GetTexture("Bricks")->GetTexture(), 5, 5, 300, 100, 10);
+		graphicsEngine->GraphicsDebugEndEvent();
+
+		graphicsEngine->DebugRender(Time::instance.GetFPS(), Time::instance.deltaTime);
+
+		graphicsEngine->EndRender();
+	}
+
+	void GameEngine::Release()
+	{
+		graphicsEngine->Release();
+
+		delete cube;
+		delete genji;
+		delete pig;
+		
+		delete dLight;
 	}
 
 	GameEngineDeclSpec GameEngine* CreateGameEngine()

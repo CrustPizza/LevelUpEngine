@@ -3,11 +3,11 @@
 *	Window Constructor.cpp		*
 *								*
 *	Created : 2022/06/10		*
-*	Updated : 2022/06/15		*
+*	Updated : 2022/07/20		*
 *********************************/
 
 #include "WindowConstructor.h"
-#include "../Application.h"
+#include "Application/Application.h"
 
 GameEngineSpace::WindowConstructor* thisWindow = nullptr;
 
@@ -28,6 +28,7 @@ namespace GameEngineSpace
 		, appName(appName)
 		, wndSize(wndSize)
 		, onResize(nullptr)
+		, onMouseMove(nullptr)
 	{
 		thisWindow = this;
 		RegistWindowClass();
@@ -55,9 +56,22 @@ namespace GameEngineSpace
 		onResize(GetWidth(), GetHeight());
 	}
 
+	void WindowConstructor::OnMouseMove(LPARAM lParam)
+	{
+		if (onMouseMove == nullptr)
+			return;
+
+		onMouseMove(static_cast<float>(lParam & 0xffff), static_cast<float>((lParam >> (sizeof(WORD) * 8)) & 0xffff));
+	}
+
 	void WindowConstructor::SetOnResizeFunc(std::function<void(UINT, UINT)> onResize)
 	{
 		this->onResize = onResize;
+	}
+
+	void WindowConstructor::SetOnMouseMove(std::function<void(float, float)> onMouseMove)
+	{
+		this->onMouseMove = onMouseMove;
 	}
 
 	const RECT& WindowConstructor::GetWndSize()
@@ -103,7 +117,7 @@ namespace GameEngineSpace
 
 	bool WindowConstructor::CreateWnd(DWORD style, int showOpt)
 	{
-		if (AdjustWindowRect(&wndSize, style, FALSE) == FALSE)
+		if (AdjustWindowRect(&wndSize, style, FALSE) != TRUE)
 			return false;
 
 		hWnd = CreateWindow(
@@ -151,6 +165,13 @@ namespace GameEngineSpace
 		case WM_DESTROY:
 		{
 			PostQuitMessage(0);
+
+			break;
+		}
+
+		case WM_MOUSEMOVE:
+		{
+			thisWindow->OnMouseMove(lParam);
 
 			break;
 		}

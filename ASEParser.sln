@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32602.291
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ASEParser", "ASEParser\ASEParser.vcxproj", "{93DF731B-E154-4465-9FB0-B9E0C9A3FFCD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{93DF731B-E154-4465-9FB0-B9E0C9A3FFCD}.Debug|x64.ActiveCfg = Debug|x64
+		{93DF731B-E154-4465-9FB0-B9E0C9A3FFCD}.Debug|x64.Build.0 = Debug|x64
+		{93DF731B-E154-4465-9FB0-B9E0C9A3FFCD}.Debug|x86.ActiveCfg = Debug|Win32
+		{93DF731B-E154-4465-9FB0-B9E0C9A3FFCD}.Debug|x86.Build.0 = Debug|Win32
+		{93DF731B-E154-4465-9FB0-B9E0C9A3FFCD}.Release|x64.ActiveCfg = Release|x64
+		{93DF731B-E154-4465-9FB0-B9E0C9A3FFCD}.Release|x64.Build.0 = Release|x64
+		{93DF731B-E154-4465-9FB0-B9E0C9A3FFCD}.Release|x86.ActiveCfg = Release|Win32
+		{93DF731B-E154-4465-9FB0-B9E0C9A3FFCD}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {026C7D54-CC9B-4FAA-9E30-4592F484DF8B}
+	EndGlobalSection
+EndGlobal

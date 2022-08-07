@@ -3,12 +3,17 @@
 *	Game Engine.h				*
 *								*
 *	Created : 2022/06/11		*
-*	Updated : 2022/06/15		*
+*	Updated : 2022/07/26		*
 *********************************/
 
 #pragma once
-#include "../../GraphicsEngine/GraphicsEngineFramework.h"
-#include "../Application/Application.h"
+#include "../GraphicsEngine/GraphicsEngineFramework.h"
+#include "Application/Application.h"
+#include "Factory/Factory.h"
+#include "Camera/Camera.h"
+#include "Object/Cube/Cube.h"
+#include "Object/Genji/Genji.h"
+#include "Object/Pig/Pig.h"
 
 namespace GameEngineSpace
 {
@@ -36,12 +41,40 @@ namespace GameEngineSpace
 		GraphicsEngine* graphicsEngine;
 		HMODULE graphicsDLL;
 
+		// Factory
+		Factory* factory;
+		GraphicsEngineSpace::Factory* graphicsFactory;
+
+		// Manager
+		SceneManager*	sceneManager;
+		Input*			inputManager;
+
+		// Camera
+		Camera camera;
+
+		// Test
+		Cube* cube;
+		Genji* genji;
+		Pig* pig;
+
+		GraphicsEngineSpace::SkyBoxBase* skyBox;
+		GraphicsEngineSpace::DirectionalLightBase* dLight;
+
 	public:
 		GameEngine();
 		virtual ~GameEngine();
 
 		virtual bool CreateEngine(EngineType engineType, HINSTANCE hInstance, RECT wndSize);
+		virtual Factory* const CreateFactory();
 		virtual int Run();
+
+		virtual bool SetEntryScene(std::string name);
+
+	private:
+		void Init();
+		void Update();
+		void Render();
+		void Release();
 	};
 
 	extern "C"

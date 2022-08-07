@@ -3,17 +3,16 @@
 *	Application.cpp				*
 *								*
 *	Created : 2022/06/10		*
-*	Updated : 2022/06/15		*
+*	Updated : 2022/07/20		*
 *********************************/
 
 #include "Application.h"
-#include "../../GraphicsEngine/GraphicsEngine/GraphicsEngine.h"
+#include "../GraphicsEngine/GraphicsEngine/GraphicsEngine.h"
 
 namespace GameEngineSpace
 {
 	Application::Application()
 		: app(nullptr)
-		, onResize(nullptr)
 	{
 
 	}
@@ -25,7 +24,12 @@ namespace GameEngineSpace
 
 	void Application::SetOnResizeFunc(std::function<void(UINT, UINT)> onResize)
 	{
-		this->onResize = onResize;
+		app->SetOnResizeFunc(onResize);
+	}
+
+	void Application::SetOnMouseMove(std::function<void(float, float)> mouseMove)
+	{
+		app->SetOnMouseMove(mouseMove);
 	}
 
 	UINT Application::GetWidth()
@@ -45,14 +49,6 @@ namespace GameEngineSpace
 			return nullptr;
 
 		return app->GetWndHandle();
-	}
-
-	void Application::OnResize(UINT width, UINT height)
-	{
-		if (onResize == nullptr)
-			return;
-
-		onResize(width, height);
 	}
 #endif
 }

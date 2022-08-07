@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{93df731b-e154-4465-9fb0-b9e0c9a3ffcd}</ProjectGuid>
+    <RootNamespace>ASEPaser</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>ASEParser</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <EnableUnitySupport>true</EnableUnitySupport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <EnableUnitySupport>true</EnableUnitySupport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+    <EnableUnitySupport>true</EnableUnitySupport>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+    <EnableUnitySupport>true</EnableUnitySupport>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)OutPut\DLL\</OutDir>
+    <TargetName>$(ProjectName)_$(Configuration)_$(LibrariesArchitecture)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)OutPut\DLL\</OutDir>
+    <TargetName>$(ProjectName)_$(Configuration)_$(LibrariesArchitecture)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)OutPut\DLL\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)_$(Configuration)_$(LibrariesArchitecture)</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)OutPut\DLL\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)_$(Configuration)_$(LibrariesArchitecture)</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>ASEParser_Export;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>ASEParser_Export;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>ASEParser_Export;x64;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>ASEParser_Export;x64;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="AseParser\AseParser.cpp" />
+    <ClCompile Include="ASEParserMain.cpp" />
+    <ClCompile Include="Info\AnimationInfo\AnimationInfo.cpp" />
+    <ClCompile Include="Info\AnimationInfo\ControlInfo\ControlInfo.cpp" />
+    <ClCompile Include="Info\BoneListInfo\BoneInfo\BoneInfo.cpp" />
+    <ClCompile Include="Info\BoneListInfo\BoneListInfo.cpp" />
+    <ClCompile Include="Info\BoneListInfo\WeightInfo\WeightInfo.cpp" />
+    <ClCompile Include="Info\FileInfo\FileInfo.cpp" />
+    <ClCompile Include="Info\GeometryInfo\GeometryInfo.cpp" />
+    <ClCompile Include="Info\GeometryInfo\MeshInfo\ColorInfo\ColorInfo.cpp" />
+    <ClCompile Include="Info\GeometryInfo\MeshInfo\FaceInfo\FaceInfo.cpp" />
+    <ClCompile Include="Info\GeometryInfo\MeshInfo\MeshInfo.cpp" />
+    <ClCompile Include="Info\GeometryInfo\MeshInfo\NormalInfo\NormalInfo.cpp" />
+    <ClCompile Include="Info\GeometryInfo\MeshInfo\TextureInfo\TextureInfo.cpp" />
+    <ClCompile Include="Info\GeometryInfo\MeshInfo\VertexInfo\VertexInfo.cpp" />
+    <ClCompile Include="Info\GeometryInfo\NodeInfo\NodeInfo.cpp" />
+    <ClCompile Include="Info\HelperInfo\HelperInfo.cpp" />
+    <ClCompile Include="Info\MaterialListInfo\MaterialInfo\MapInfo\MapInfo.cpp" />
+    <ClCompile Include="Info\MaterialListInfo\MaterialInfo\MaterialInfo.cpp" />
+    <ClCompile Include="Info\MaterialListInfo\MaterialListInfo.cpp" />
+    <ClCompile Include="Info\SceneInfo\SceneInfo.cpp" />
+    <ClCompile Include="Info\ShapeInfo\ShapeInfo.cpp" />
+    <ClCompile Include="Token\TokenList.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AseParser\AseParser.h" />
+    <ClInclude Include="ASEParserFramework.h" />
+    <ClInclude Include="Info\AnimationInfo\AnimationInfo.h" />
+    <ClInclude Include="Info\AnimationInfo\ControlInfo\ControlInfo.h" />
+    <ClInclude Include="Info\BoneListInfo\BoneInfo\BoneInfo.h" />
+    <ClInclude Include="Info\BoneListInfo\BoneListInfo.h" />
+    <ClInclude Include="Info\BoneListInfo\WeightInfo\WeightInfo.h" />
+    <ClInclude Include="Info\FileInfo\FileInfo.h" />
+    <ClInclude Include="Info\GeometryInfo\GeometryInfo.h" />
+    <ClInclude Include="Info\GeometryInfo\MeshInfo\ColorInfo\ColorInfo.h" />
+    <ClInclude Include="Info\GeometryInfo\MeshInfo\FaceInfo\FaceInfo.h" />
+    <ClInclude Include="Info\GeometryInfo\MeshInfo\MeshInfo.h" />
+    <ClInclude Include="Info\GeometryInfo\MeshInfo\NormalInfo\NormalInfo.h" />
+    <ClInclude Include="Info\GeometryInfo\MeshInfo\TextureInfo\TextureInfo.h" />
+    <ClInclude Include="Info\GeometryInfo\MeshInfo\VertexInfo\VertexInfo.h" />
+    <ClInclude Include="Info\GeometryInfo\NodeInfo\NodeInfo.h" />
+    <ClInclude Include="Info\HelperInfo\HelperInfo.h" />
+    <ClInclude Include="Info\MaterialListInfo\MaterialInfo\MapInfo\MapInfo.h" />
+    <ClInclude Include="Info\MaterialListInfo\MaterialInfo\MaterialInfo.h" />
+    <ClInclude Include="Info\MaterialListInfo\MaterialListInfo.h" />
+    <ClInclude Include="Info\SceneInfo\SceneInfo.h" />
+    <ClInclude Include="Info\ShapeInfo\ShapeInfo.h" />
+    <ClInclude Include="Token\TokenList.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

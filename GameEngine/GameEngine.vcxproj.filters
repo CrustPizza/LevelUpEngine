@@ -17,6 +17,29 @@
     <ClCompile Include="Manager\Scene\SceneManager.cpp">
       <Filter>Manager\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Factory\Factory.cpp">
+      <Filter>Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="Manager\Input\Input.cpp">
+      <Filter>Manager\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\ObjectBase\ObjectBase.cpp">
+      <Filter>Object\ObjectBase</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera\Camera.cpp">
+      <Filter>Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Cube\Cube.cpp">
+      <Filter>Object\Cube</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Genji\Genji.cpp">
+      <Filter>Object\Genji</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\Transform\Transform.cpp">
+      <Filter>Component\Transform</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Pig\Pig.cpp" />
+    <ClCompile Include="Manager\Time\Time.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameEngineFramework.h" />
@@ -35,6 +58,29 @@
     <ClInclude Include="Manager\Scene\SceneManager.h">
       <Filter>Manager\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Factory\Factory.h">
+      <Filter>Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="Manager\Input\Input.h">
+      <Filter>Manager\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\ObjectBase\ObjectBase.h">
+      <Filter>Object\ObjectBase</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera\Camera.h">
+      <Filter>Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Cube\Cube.h">
+      <Filter>Object\Cube</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Genji\Genji.h">
+      <Filter>Object\Genji</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\Transform\Transform.h">
+      <Filter>Component\Transform</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Pig\Pig.h" />
+    <ClInclude Include="Manager\Time\Time.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Application">
@@ -51,6 +97,33 @@
     </Filter>
     <Filter Include="Manager\Scene">
       <UniqueIdentifier>{f5afdb63-18eb-4e31-a2dc-caf9496290b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Factory">
+      <UniqueIdentifier>{34842c2e-650b-4247-80a9-ad42afa6f345}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Manager\Input">
+      <UniqueIdentifier>{a8f8158c-5366-4d73-8574-2c0bd82b01b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Camera">
+      <UniqueIdentifier>{ee5c213e-c9a8-48e3-b246-60bae5925099}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{ad664881-dbfb-410c-b761-cbbb4377be5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\ObjectBase">
+      <UniqueIdentifier>{7a60f0e0-ab4a-4ae0-97d3-42e42579964f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Cube">
+      <UniqueIdentifier>{be519432-c879-49e6-b032-5cbdfb6e2335}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Genji">
+      <UniqueIdentifier>{50afa1a9-dc07-4b97-8203-08dae97f1ff3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component">
+      <UniqueIdentifier>{7f3b1502-c647-4840-b6c2-e6dfd3fadc2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\Transform">
+      <UniqueIdentifier>{1f995853-489b-4de0-92aa-31a000044e60}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

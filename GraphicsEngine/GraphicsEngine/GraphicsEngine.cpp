@@ -3,17 +3,19 @@
 *	Graphics Engine.cpp			*
 *								*
 *	Created : 2022/06/15		*
-*	Updated : 2022/06/17		*
+*	Updated : 2022/07/01		*
 *********************************/
 
 #include "GraphicsEngine.h"
-#include "../../DirectX11/DirectX11Framework.h"
+#include "../DirectX11/DirectX11Framework.h"
 
 namespace GraphicsEngineSpace
 {
 	GraphicsEngine::GraphicsEngine()
 		: graphicsDLL(nullptr)
 		, graphicsEngine(nullptr)
+		, factory(nullptr)
+		, resourceManager(nullptr)
 	{
 
 	}
@@ -67,9 +69,83 @@ namespace GraphicsEngineSpace
 		return true;
 	}
 
+	Factory* const GraphicsEngine::CreateFactory()
+	{
+		if (factory != nullptr)
+			return factory;
+
+		if (graphicsEngine == nullptr)
+			return nullptr;
+
+		FactoryBase* graphicsFactory = graphicsEngine->CreateFactory();
+
+		if (graphicsFactory == nullptr)
+			return nullptr;
+
+		factory = new Factory;
+		resourceManager = new ResourceManager;
+		factory->InitFactory(graphicsFactory, resourceManager);
+
+		return factory;
+	}
+
+	ResourceManager* const GraphicsEngine::GetResourceManager()
+	{
+		return resourceManager;
+	}
+
 	bool GraphicsEngine::OnResize(UINT width, UINT height)
 	{
 		return graphicsEngine->OnResize(width, height);
+	}
+
+	bool GraphicsEngine::DrawSprite(Texture* texture, long posX, long posY, long width, long height, float z)
+	{
+		return graphicsEngine->DrawSprite(texture, posX, posY, width, height, z);
+	}
+
+	bool GraphicsEngine::DrawMesh(BufferBase* vertices, BufferBase* indices)
+	{
+		return graphicsEngine->DrawMesh(vertices, indices);
+	}
+
+	bool GraphicsEngine::DrawTextColor(std::string& text, Vector color, Vector position, float rotation, Vector scale)
+	{
+		return graphicsEngine->DrawTextColor(text, color, position, rotation, scale);
+	}
+
+	bool GraphicsEngine::SetUpShader(ShaderBase* shader)
+	{
+		return graphicsEngine->SetUpShader(shader);
+	}
+
+	bool GraphicsEngine::SetUpShader(const std::string& name)
+	{
+		ShaderBase* shader = resourceManager->GetShader(name);
+
+		if (shader == nullptr)
+			return false;
+
+		SetUpShader(shader);
+		shader->Release();
+
+		return true;
+	}
+
+	bool GraphicsEngine::GraphicsDebugBeginEvent(const std::string& name)
+	{
+		if (graphicsEngine == nullptr)
+			return false;
+
+		return graphicsEngine->GraphicsDebugBeginEvent(name);
+	}
+
+	bool GraphicsEngine::GraphicsDebugEndEvent()
+	{
+		if (graphicsEngine == nullptr)
+			return false;
+
+		return graphicsEngine->GraphicsDebugEndEvent();
 	}
 
 	void GraphicsEngine::BeginRender()
@@ -94,6 +170,12 @@ namespace GraphicsEngineSpace
 
 	void GraphicsEngine::Release()
 	{
+		if (resourceManager != nullptr)
+			delete resourceManager;
+
+		if (factory != nullptr)
+			delete factory;
+
 		if (graphicsEngine != nullptr)
 		{
 			graphicsEngine->Release();
@@ -102,6 +184,18 @@ namespace GraphicsEngineSpace
 
 		if (graphicsDLL != nullptr)
 			FreeLibrary(graphicsDLL);
+	}
+
+	void GraphicsEngine::DebugRender(int fps, float deltaTime)
+	{
+		std::string fpsStr = "FPS : ";
+		fpsStr += std::to_string(fps);
+
+		std::string dtStr = "DeltaTime : ";
+		dtStr += std::to_string(deltaTime);
+
+		graphicsEngine->DrawTextColor(fpsStr, Vector{ 1.0f, 1.0f, 0.0f, }, Vector{ 10.0f, 10.0f }, 0.0f, Vector{ 1.5f, 1.5f });
+		graphicsEngine->DrawTextColor(dtStr, Vector{ 1.0f, 1.0f, 0.0f, }, Vector{ 10.0f, 40.0f }, 0.0f, Vector{ 1.5f, 1.5f });
 	}
 
 	GraphicsEngineDeclSpec GraphicsEngine* CreateGraphicsEngine()

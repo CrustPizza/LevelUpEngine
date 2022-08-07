@@ -2,5 +2,8 @@
 
 namespace GameEngineSpace
 {
+	void Scene::PrepareUpdate()
+	{
 
+	}
 }

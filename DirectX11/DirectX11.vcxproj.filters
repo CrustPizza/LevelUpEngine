@@ -4,8 +4,77 @@
     <Filter Include="DirectX11">
       <UniqueIdentifier>{daf7f208-b400-4b48-b2da-9effe7b86f5b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="RenderTexture">
+    <Filter Include="Factory">
+      <UniqueIdentifier>{9438c020-c1d6-48fb-9e06-1d25dffb9cfd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DXObject">
+      <UniqueIdentifier>{e8dc6c52-6d3b-4bf5-970b-de2a75bded34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DXObject\RenderTexture">
       <UniqueIdentifier>{c66bb023-b6b1-4eec-aebd-556efddec1d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DXObject\Shader">
+      <UniqueIdentifier>{a09b0fcb-33c6-44d7-833d-2b97645bdc9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Builder">
+      <UniqueIdentifier>{aedc687f-5605-4864-bc0e-36b431e5a198}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Builder\TextureBuilder">
+      <UniqueIdentifier>{d28875a3-9c48-4b35-8a6a-f3f5ae7f26a4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Builder\ShaderBuilder">
+      <UniqueIdentifier>{215db240-0f00-43ab-abd1-8bf3a09bd5f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DXObject\Shader\VertexShader">
+      <UniqueIdentifier>{4c913c7a-c6bd-44b4-bb69-cebc1a31e534}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DXObject\Shader\PixelShader">
+      <UniqueIdentifier>{3e2d0798-f477-4f8e-acf0-f8eebfbc8071}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DXObject\Layout">
+      <UniqueIdentifier>{5c8644a0-0b69-4173-b001-b7aa7c05d882}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FormatConverter">
+      <UniqueIdentifier>{e621c2fd-6ccd-4175-ba01-2969ce24a8e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PostProcess">
+      <UniqueIdentifier>{322615e9-91cd-419b-a347-18ab1d3b99b4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PostProcess\DownSampling">
+      <UniqueIdentifier>{e2f4463b-a306-4702-9f2f-9fadb32bd8dc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PostProcess\Blur">
+      <UniqueIdentifier>{5cad2c7e-ca9c-4535-9e9c-07aaa15e6161}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PostProcess\Bloom">
+      <UniqueIdentifier>{9e09acb4-75fb-4b9b-802c-6f5066d30cd3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Builder\BufferBuilder">
+      <UniqueIdentifier>{1598cf6d-d7a9-4e90-9aa3-5b6769869883}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DXObject\Buffer">
+      <UniqueIdentifier>{219684a8-385a-42b1-b2e1-e1469329cc4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DXObject\Buffer\ConstantBuffer">
+      <UniqueIdentifier>{42a9832a-6fd9-44b6-acb5-9cd462c4360a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DXObject\Buffer\IndexBuffer">
+      <UniqueIdentifier>{2e207aee-cbf1-4013-a3ed-a88a613e9fea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DXObject\Buffer\VertexBuffer">
+      <UniqueIdentifier>{68a63117-0453-4682-8e34-2aacf39c60fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PostProcess\Combine">
+      <UniqueIdentifier>{606a5c2a-07be-497c-a8ed-42d26f248b6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Builder\SamplerBuilder">
+      <UniqueIdentifier>{fd7e2923-afcf-43f5-955a-45ab3ed722be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DXObject\D3DTexture">
+      <UniqueIdentifier>{c285501f-2291-401a-beac-ac3103458cea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DXObject\Sampler">
+      <UniqueIdentifier>{b536bef9-4a37-44ef-84bf-4c3b3f8eb1e7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -13,20 +82,132 @@
       <Filter>DirectX11</Filter>
     </ClInclude>
     <ClInclude Include="DirectX11Framework.h" />
-    <ClInclude Include="RenderTexture\RenderTexture.h">
-      <Filter>RenderTexture</Filter>
+    <ClInclude Include="DXObject\RenderTexture\RenderTexture.h">
+      <Filter>DXObject\RenderTexture</Filter>
     </ClInclude>
-    <ClInclude Include="Factory\Factory.h" />
+    <ClInclude Include="Factory\Factory.h">
+      <Filter>Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="DXObject\DXObjectBase.h">
+      <Filter>DXObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Builder\TextureBuilder\TextureBuilder.h">
+      <Filter>Builder\TextureBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="Builder\ShaderBuilder\ShaderBuilder.h">
+      <Filter>Builder\ShaderBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="DXObject\Shader\PixelShader\PixelShader.h">
+      <Filter>DXObject\Shader\PixelShader</Filter>
+    </ClInclude>
+    <ClInclude Include="DXObject\Shader\VertexShader\VertexShader.h">
+      <Filter>DXObject\Shader\VertexShader</Filter>
+    </ClInclude>
+    <ClInclude Include="DXObject\Layout\Layout.h">
+      <Filter>DXObject\Layout</Filter>
+    </ClInclude>
+    <ClInclude Include="FormatConverter\FormatConverter.h">
+      <Filter>FormatConverter</Filter>
+    </ClInclude>
+    <ClInclude Include="PostProcess\DownSampling\DownSampling.h">
+      <Filter>PostProcess\DownSampling</Filter>
+    </ClInclude>
+    <ClInclude Include="PostProcess\Blur\Blur.h">
+      <Filter>PostProcess\Blur</Filter>
+    </ClInclude>
+    <ClInclude Include="PostProcess\Bloom\Bloom.h">
+      <Filter>PostProcess\Bloom</Filter>
+    </ClInclude>
+    <ClInclude Include="Builder\BufferBuilder\BufferBuilder.h">
+      <Filter>Builder\BufferBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="DXObject\Buffer\ConstantBuffer\ConstantBuffer.h">
+      <Filter>DXObject\Buffer\ConstantBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="DXObject\Buffer\IndexBuffer\IndexBuffer.h">
+      <Filter>DXObject\Buffer\IndexBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="DXObject\Buffer\VertexBuffer\VertexBuffer.h">
+      <Filter>DXObject\Buffer\VertexBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="PostProcess\Combine\Combine.h">
+      <Filter>PostProcess\Combine</Filter>
+    </ClInclude>
+    <ClInclude Include="Builder\SamplerBuilder\SamplerBuilder.h">
+      <Filter>Builder\SamplerBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="DXObject\D3DTexture\D3DTexture.h">
+      <Filter>DXObject\D3DTexture</Filter>
+    </ClInclude>
+    <ClInclude Include="DXObject\Sampler\Sampler.h">
+      <Filter>DXObject\Sampler</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectX11\DirectX11.cpp">
       <Filter>DirectX11</Filter>
     </ClCompile>
     <ClCompile Include="DirectX11Main.cpp" />
-    <ClCompile Include="RenderTexture\RenderTexture.cpp">
-      <Filter>RenderTexture</Filter>
+    <ClCompile Include="DXObject\RenderTexture\RenderTexture.cpp">
+      <Filter>DXObject\RenderTexture</Filter>
     </ClCompile>
-    <ClCompile Include="Factory\Factory.cpp" />
+    <ClCompile Include="Factory\Factory.cpp">
+      <Filter>Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="DXObject\DXObjectBase.cpp">
+      <Filter>DXObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Builder\TextureBuilder\TextureBuilder.cpp">
+      <Filter>Builder\TextureBuilder</Filter>
+    </ClCompile>
+    <ClCompile Include="Builder\ShaderBuilder\ShaderBuilder.cpp">
+      <Filter>Builder\ShaderBuilder</Filter>
+    </ClCompile>
+    <ClCompile Include="DXObject\Shader\PixelShader\PixelShader.cpp">
+      <Filter>DXObject\Shader\PixelShader</Filter>
+    </ClCompile>
+    <ClCompile Include="DXObject\Shader\VertexShader\VertexShader.cpp">
+      <Filter>DXObject\Shader\VertexShader</Filter>
+    </ClCompile>
+    <ClCompile Include="DXObject\Layout\Layout.cpp">
+      <Filter>DXObject\Layout</Filter>
+    </ClCompile>
+    <ClCompile Include="FormatConverter\FormatConverter.cpp">
+      <Filter>FormatConverter</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProcess\DownSampling\DownSampling.cpp">
+      <Filter>PostProcess\DownSampling</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProcess\Blur\Blur.cpp">
+      <Filter>PostProcess\Blur</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProcess\Bloom\Bloom.cpp">
+      <Filter>PostProcess\Bloom</Filter>
+    </ClCompile>
+    <ClCompile Include="Builder\BufferBuilder\BufferBuilder.cpp">
+      <Filter>Builder\BufferBuilder</Filter>
+    </ClCompile>
+    <ClCompile Include="DXObject\Buffer\ConstantBuffer\ConstantBuffer.cpp">
+      <Filter>DXObject\Buffer\ConstantBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="DXObject\Buffer\IndexBuffer\IndexBuffer.cpp">
+      <Filter>DXObject\Buffer\IndexBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="DXObject\Buffer\VertexBuffer\VertexBuffer.cpp">
+      <Filter>DXObject\Buffer\VertexBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="PostProcess\Combine\Combine.cpp">
+      <Filter>PostProcess\Combine</Filter>
+    </ClCompile>
+    <ClCompile Include="Builder\SamplerBuilder\SamplerBuilder.cpp">
+      <Filter>Builder\SamplerBuilder</Filter>
+    </ClCompile>
+    <ClCompile Include="DXObject\D3DTexture\D3DTexture.cpp">
+      <Filter>DXObject\D3DTexture</Filter>
+    </ClCompile>
+    <ClCompile Include="DXObject\Sampler\Sampler.cpp">
+      <Filter>DXObject\Sampler</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

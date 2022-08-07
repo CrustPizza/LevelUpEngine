@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -102,6 +102,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>DirectX11_Export;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)GraphicsEngine</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -116,6 +117,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>DirectX11_Export;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)GraphicsEngine</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -130,6 +132,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>DirectX11_Export;x64;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)GraphicsEngine</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -145,6 +148,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>DirectX11_Export;x64;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)GraphicsEngine</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -154,16 +158,52 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="PostProcess\Combine\Combine.h" />
+    <ClInclude Include="PostProcess\Bloom\Bloom.h" />
+    <ClInclude Include="PostProcess\Blur\Blur.h" />
+    <ClInclude Include="PostProcess\DownSampling\DownSampling.h" />
+    <ClInclude Include="DXObject\Buffer\ConstantBuffer\ConstantBuffer.h" />
+    <ClInclude Include="Builder\BufferBuilder\BufferBuilder.h" />
     <ClInclude Include="DirectX11Framework.h" />
     <ClInclude Include="DirectX11\DirectX11.h" />
+    <ClInclude Include="DXObject\DXObjectBase.h" />
     <ClInclude Include="Factory\Factory.h" />
-    <ClInclude Include="RenderTexture\RenderTexture.h" />
+    <ClInclude Include="DXObject\RenderTexture\RenderTexture.h" />
+    <ClInclude Include="Builder\TextureBuilder\TextureBuilder.h" />
+    <ClInclude Include="Builder\ShaderBuilder\ShaderBuilder.h" />
+    <ClInclude Include="DXObject\Shader\VertexShader\VertexShader.h" />
+    <ClInclude Include="DXObject\Shader\PixelShader\PixelShader.h" />
+    <ClInclude Include="DXObject\Layout\Layout.h" />
+    <ClInclude Include="FormatConverter\FormatConverter.h" />
+    <ClInclude Include="DXObject\Buffer\IndexBuffer\IndexBuffer.h" />
+    <ClInclude Include="DXObject\Buffer\VertexBuffer\VertexBuffer.h" />
+    <ClInclude Include="DXObject\D3DTexture\D3DTexture.h" />
+    <ClInclude Include="DXObject\Sampler\Sampler.h" />
+    <ClInclude Include="Builder\SamplerBuilder\SamplerBuilder.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="PostProcess\Combine\Combine.cpp" />
+    <ClCompile Include="PostProcess\Bloom\Bloom.cpp" />
+    <ClCompile Include="PostProcess\Blur\Blur.cpp" />
+    <ClCompile Include="PostProcess\DownSampling\DownSampling.cpp" />
+    <ClCompile Include="DXObject\Buffer\ConstantBuffer\ConstantBuffer.cpp" />
+    <ClCompile Include="Builder\BufferBuilder\BufferBuilder.cpp" />
     <ClCompile Include="DirectX11Main.cpp" />
     <ClCompile Include="DirectX11\DirectX11.cpp" />
+    <ClCompile Include="DXObject\DXObjectBase.cpp" />
     <ClCompile Include="Factory\Factory.cpp" />
-    <ClCompile Include="RenderTexture\RenderTexture.cpp" />
+    <ClCompile Include="DXObject\RenderTexture\RenderTexture.cpp" />
+    <ClCompile Include="Builder\TextureBuilder\TextureBuilder.cpp" />
+    <ClCompile Include="Builder\ShaderBuilder\ShaderBuilder.cpp" />
+    <ClCompile Include="DXObject\Shader\VertexShader\VertexShader.cpp" />
+    <ClCompile Include="DXObject\Shader\PixelShader\PixelShader.cpp" />
+    <ClCompile Include="DXObject\Layout\Layout.cpp" />
+    <ClCompile Include="FormatConverter\FormatConverter.cpp" />
+    <ClCompile Include="DXObject\Buffer\IndexBuffer\IndexBuffer.cpp" />
+    <ClCompile Include="DXObject\Buffer\VertexBuffer\VertexBuffer.cpp" />
+    <ClCompile Include="DXObject\D3DTexture\D3DTexture.cpp" />
+    <ClCompile Include="DXObject\Sampler\Sampler.cpp" />
+    <ClCompile Include="Builder\SamplerBuilder\SamplerBuilder.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

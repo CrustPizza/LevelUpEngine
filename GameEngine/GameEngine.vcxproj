@@ -103,6 +103,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);GameEngine_Export</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)GraphicsEngine</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -117,6 +118,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);GameEngine_Export</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)GraphicsEngine</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -133,6 +135,7 @@
       <ConformanceMode>true</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <LanguageStandard>Default</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)GraphicsEngine</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -148,6 +151,7 @@
       <PreprocessorDefinitions>x64;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);GameEngine_Export</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>Default</LanguageStandard>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)GraphicsEngine</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -162,18 +166,36 @@
   <ItemGroup>
     <ClCompile Include="Application\Application.cpp" />
     <ClCompile Include="Application\Windows\WindowConstructor.cpp" />
+    <ClCompile Include="Camera\Camera.cpp" />
+    <ClCompile Include="Object\Cube\Cube.cpp" />
+    <ClCompile Include="Factory\Factory.cpp" />
     <ClCompile Include="GameEngineMain.cpp" />
     <ClCompile Include="GameEngine\GameEngine.cpp" />
+    <ClCompile Include="Object\Genji\Genji.cpp" />
+    <ClCompile Include="Manager\Input\Input.cpp" />
     <ClCompile Include="Manager\Scene\SceneManager.cpp" />
     <ClCompile Include="Manager\Scene\Scene.cpp" />
+    <ClCompile Include="Object\ObjectBase\ObjectBase.cpp" />
+    <ClCompile Include="Component\Transform\Transform.cpp" />
+    <ClCompile Include="Object\Pig\Pig.cpp" />
+    <ClCompile Include="Manager\Time\Time.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Application.h" />
     <ClInclude Include="Application\Windows\WindowConstructor.h" />
+    <ClInclude Include="Camera\Camera.h" />
+    <ClInclude Include="Object\Cube\Cube.h" />
+    <ClInclude Include="Factory\Factory.h" />
     <ClInclude Include="GameEngineFramework.h" />
     <ClInclude Include="GameEngine\GameEngine.h" />
+    <ClInclude Include="Object\Genji\Genji.h" />
+    <ClInclude Include="Manager\Input\Input.h" />
     <ClInclude Include="Manager\Scene\SceneManager.h" />
     <ClInclude Include="Manager\Scene\Scene.h" />
+    <ClInclude Include="Object\ObjectBase\ObjectBase.h" />
+    <ClInclude Include="Component\Transform\Transform.h" />
+    <ClInclude Include="Object\Pig\Pig.h" />
+    <ClInclude Include="Manager\Time\Time.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

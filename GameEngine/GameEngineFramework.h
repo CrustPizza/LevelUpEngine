@@ -13,3 +13,7 @@
 
 /* Engine */
 #include "GameEngine/GameEngine.h"
+#include "Factory/Factory.h"
+
+/* Manager */
+#include "Manager/Scene/SceneManager.h"

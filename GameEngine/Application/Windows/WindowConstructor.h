@@ -3,7 +3,7 @@
 *	Window Constructor.h		*
 *								*
 *	Created : 2022/06/10		*
-*	Updated : 2022/06/15		*
+*	Updated : 2022/07/20		*
 *********************************/
 
 #pragma once
@@ -24,6 +24,7 @@ namespace GameEngineSpace
 		RECT wndSize;
 
 		std::function<void(UINT, UINT)> onResize;
+		std::function<void(float, float)> onMouseMove;
 
 	public:
 		WindowConstructor();
@@ -32,8 +33,10 @@ namespace GameEngineSpace
 
 		HWND GetWndHandle();
 		void OnResize();
+		void OnMouseMove(LPARAM lParam);
 
 		void SetOnResizeFunc(std::function<void(UINT, UINT)> onResize);
+		void SetOnMouseMove(std::function<void(float, float)> mouseMove);
 
 		const RECT& GetWndSize();
 		UINT GetWidth();

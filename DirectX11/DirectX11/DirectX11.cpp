@@ -3,12 +3,18 @@
 *	DirectX11.cpp				*
 *								*
 *	Created : 2022/06/11		*
-*	Updated : 2022/06/17		*
+*	Updated : 2022/07/25		*
 *********************************/
 
 #include "DirectX11.h"
 #include <DirectXColors.h>
 #include <tchar.h>
+#include <DirectXMath.h>
+
+#include "Factory/Factory.h"
+
+#include "DXObject/Buffer/VertexBuffer/VertexBuffer.h"
+#include "DXObject/Buffer/IndexBuffer/IndexBuffer.h"
 
 #define RELEASE_PTR(x) \
 if ((x) != nullptr)\
@@ -32,6 +38,7 @@ namespace DX11
 		, deviceContext(nullptr)
 		, swapChain(nullptr)
 		, annotation(nullptr)
+		, annotationCount(0)
 
 		, renderTarget(nullptr)
 		, renderTargetView(nullptr)
@@ -53,9 +60,10 @@ namespace DX11
 		, featureLevel(D3D_FEATURE_LEVEL_11_1)
 
 		, backScreen(nullptr)
-		, rt1(nullptr)
-		, rt2(nullptr)
-		, rt3(nullptr)
+
+		, factory(nullptr)
+
+		, bloom(nullptr)
 	{
 
 	}
@@ -161,11 +169,33 @@ namespace DX11
 
 		deviceContext->QueryInterface<ID3DUserDefinedAnnotation>(&annotation);
 
+		// Sprite
 		spriteBatch = new DirectX::SpriteBatch(deviceContext);
 		spriteFont = new DirectX::SpriteFont(d3dDevice, _T("Font/gulim9k.spritefont"));
 		spriteFont->SetLineSpacing(14.0f);
 
+		// Factory
+		factory = new Factory(d3dDevice, deviceContext);
+
+		// Post Process
+		bloom = new Bloom(deviceContext);
+		bloom->Init(factory, d3dDevice, backBufferFormat, spriteBatch);
+
+		blur = new Blur(deviceContext);
+		blur->Init(factory, d3dDevice, backBufferFormat, spriteBatch);
+
+		downSampler = new DownSampling(deviceContext);
+		downSampler->Init(factory, d3dDevice, backBufferFormat, spriteBatch);
+
+		combine = new Combine(deviceContext);
+		combine->Init(factory, d3dDevice, backBufferFormat, spriteBatch);
+
 		return true;
+	}
+
+	FactoryBase* const DirectX11::CreateFactory()
+	{
+		return new Factory(d3dDevice, deviceContext);
 	}
 
 	bool DirectX11::OnResize(UINT width, UINT height)
@@ -232,7 +262,7 @@ namespace DX11
 
 		descDSS.DepthEnable = true;
 		descDSS.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
-		descDSS.DepthFunc = D3D11_COMPARISON_LESS;
+		descDSS.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
 
 		descDSS.StencilEnable = false;
 		descDSS.StencilReadMask = D3D11_DEFAULT_STENCIL_READ_MASK;
@@ -262,6 +292,89 @@ namespace DX11
 		return true;
 	}
 
+	bool DirectX11::DrawSprite(Texture* texture, long posX, long posY, long width, long height, float z)
+	{
+		return DrawSprite(reinterpret_cast<ID3D11ShaderResourceView*>(texture), posX, posY, width, height, z);
+	}
+
+	bool DirectX11::DrawSprite(ID3D11ShaderResourceView* texture, long posX, long posY, long width, long height, float z)
+	{
+		spriteBatch->Begin(DirectX::SpriteSortMode_Texture, nullptr, nullptr, depthState);
+		spriteBatch->Draw(texture, RECT{ posX, posY, width, height });
+		spriteBatch->End();
+
+		return true;
+	}
+
+	bool DirectX11::DrawMesh(BufferBase* vertices, BufferBase* indices)
+	{
+		VertexBuffer* vb = dynamic_cast<VertexBuffer*>(vertices);
+
+		if (vb == nullptr)
+			return false;
+
+		IndexBuffer* ib = dynamic_cast<IndexBuffer*>(indices);
+
+		if (ib == nullptr)
+			return false;
+
+		vb->SetUpBuffer(0, nullptr, ShaderType::NONE);
+		ib->SetUpBuffer(0, nullptr, ShaderType::NONE);
+
+		UINT indicesSize = ib->GetSize();
+
+		deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+		deviceContext->DrawIndexed(indicesSize, 0, 0);
+
+		return true;
+	}
+
+	bool DirectX11::DrawTextColor(std::string& text, HeraclesMath::Vector color, HeraclesMath::Vector position, float rotation, HeraclesMath::Vector scale)
+	{
+		if (spriteBatch == nullptr || spriteFont == nullptr)
+			return false;
+
+		spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, nullptr, nullptr, depthState);
+		spriteFont->DrawString(spriteBatch, text.c_str(), DirectX::XMVECTOR{ position.x, position.y }, DirectX::XMVECTOR{ color.x, color.y, color.z }, HeraclesMath::ConvertDegreeToRadian(rotation), DirectX::g_XMZero, DirectX::XMVECTOR{ scale.x, scale.y }, DirectX::SpriteEffects_None, position.z);
+		spriteBatch->End();
+
+		return true;
+	}
+
+	bool DirectX11::SetUpShader(ShaderBase* shader)
+	{
+		shader->SetUpShader();
+
+		return true;
+	}
+
+	bool DirectX11::GraphicsDebugBeginEvent(const std::string& name)
+	{
+		if (annotation == nullptr)
+			return false;
+
+		std::wstring wstr;
+
+		wstr.assign(name.begin(), name.end());
+
+		annotation->BeginEvent(wstr.c_str());
+
+		annotationCount++;
+
+		return true;
+	}
+
+	bool DirectX11::GraphicsDebugEndEvent()
+	{
+		if (annotation == nullptr || annotationCount <= 0)
+			return false;
+
+		annotation->EndEvent();
+		annotationCount--;
+
+		return true;
+	}
+
 	bool DirectX11::CreateBackScreen()
 	{
 		if (backScreen != nullptr)
@@ -281,38 +394,53 @@ namespace DX11
 	{
 		annotation->BeginEvent(_T("Clear"));
 
-		auto backRT = backScreen->GetRenderTargetView();
-
-		deviceContext->OMSetRenderTargets(1, &renderTargetView, depthView);
-		deviceContext->ClearRenderTargetView(renderTargetView, DirectX::Colors::AliceBlue);
 		deviceContext->ClearDepthStencilView(depthView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
-		//deviceContext->OMSetDepthStencilState(depthState, 0);
-		deviceContext->OMSetRenderTargets(1, &backRT, depthView);
-		deviceContext->ClearRenderTargetView(backScreen->GetRenderTargetView(), DirectX::Colors::Black);
+		backScreen->ClearRenderTargetView(deviceContext, depthView, DirectX::Colors::Black);
+		deviceContext->OMSetRenderTargets(1, &renderTargetView, depthView);
+		deviceContext->ClearRenderTargetView(renderTargetView, DirectX::Colors::Black);
+		deviceContext->OMSetDepthStencilState(depthState, 0);
+
+		backScreen->OMSetRenderTarget(deviceContext, depthView);
 
 		annotation->EndEvent();
 	}
 
 	void DirectX11::Render()
 	{
+		annotation->BeginEvent(_T("Render"));
 
+		annotation->EndEvent();
 	}
 
 	void DirectX11::PostProcess()
 	{
-		deviceContext->OMSetRenderTargets(1, &renderTargetView, nullptr);
-		spriteBatch->Begin();
-		auto backSRV = backScreen->GetShaderResourceView();
-		spriteBatch->Draw(backSRV, RECT{ 0, 0, static_cast<long>(viewPort.Width * 0.75f), static_cast<long>(viewPort.Height) });
-		spriteBatch->End();
+		annotation->BeginEvent(_T("Post Process"));
 
-		ID3D11ShaderResourceView* null[] = { nullptr, nullptr };
-		deviceContext->PSSetShaderResources(0, 2, null);
+		//downSampler->OnResize(backScreen->GetWidth() / 2, backScreen->GetHeight());
+
+		//auto downSRV = (*downSampler)(backScreen->GetShaderResourceView());
+
+		//(*blur)(downSampler->GetRenderTexture(), 4.0f);
+		//(*combine)(backScreen, downSRV);
+		//(*blur)(backScreen, 4.0f);
+
+		annotation->BeginEvent(_T("Bloom"));
+
+		(*bloom)(backScreen);
+
+		annotation->EndEvent();
+
+		backScreen->OMSetRenderTarget(deviceContext, depthView);
+
+		annotation->EndEvent();
 	}
 
 	void DirectX11::EndRender()
 	{
 		annotation->BeginEvent(_T("Present"));
+
+		deviceContext->OMSetRenderTargets(1, &renderTargetView, depthView);
+		deviceContext->CopyResource(renderTarget, backScreen->GetRenderTarget());
 
 		swapChain->Present(0, 0);
 
@@ -342,6 +470,14 @@ namespace DX11
 		delete spriteFont;
 
 		DELETE_RELEASE_PTR(backScreen);
+
+		delete factory;
+
+		delete bloom;
+
+		delete blur;
+		delete downSampler;
+		delete combine;
 	}
 
 	DirectX11DeclSpec DirectX11* CreateDirectX11()

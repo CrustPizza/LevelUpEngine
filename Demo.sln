@@ -25,6 +25,69 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Readme.md = Readme.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shader", "Shader", "{A6DD9502-1C76-4BC1-92AB-C28AB3A946D9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BasicColor", "BasicColor", "{680F3570-667F-4C75-9813-22B6C5C7A72D}"
+	ProjectSection(SolutionItems) = preProject
+		OutPut\Shader\BasicColor\BasicColorPS.hlsl = OutPut\Shader\BasicColor\BasicColorPS.hlsl
+		OutPut\Shader\BasicColor\BasicColorTypes.hlsli = OutPut\Shader\BasicColor\BasicColorTypes.hlsli
+		OutPut\Shader\BasicColor\BasicColorVS.hlsl = OutPut\Shader\BasicColor\BasicColorVS.hlsl
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TextureCombine", "TextureCombine", "{77F36DC8-24D1-4F63-ADBA-D11D0D3C46C4}"
+	ProjectSection(SolutionItems) = preProject
+		OutPut\Shader\TextureCombine\TextureCombinePS.hlsl = OutPut\Shader\TextureCombine\TextureCombinePS.hlsl
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ASEParser", "ASEParser\ASEParser.vcxproj", "{93DF731B-E154-4465-9FB0-B9E0C9A3FFCD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BasicModel", "BasicModel", "{CFFF9826-58C5-45EA-B450-4A27373A4994}"
+	ProjectSection(SolutionItems) = preProject
+		OutPut\Shader\BasicModel\BasicModelPS.hlsl = OutPut\Shader\BasicModel\BasicModelPS.hlsl
+		OutPut\Shader\BasicModel\BasicModelTypes.hlsli = OutPut\Shader\BasicModel\BasicModelTypes.hlsli
+		OutPut\Shader\BasicModel\BasicModelVS.hlsl = OutPut\Shader\BasicModel\BasicModelVS.hlsl
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GaussianBlur", "GaussianBlur", "{26518D9C-09D7-4574-9E3F-BE272498520E}"
+	ProjectSection(SolutionItems) = preProject
+		OutPut\Shader\GaussianBlur\GaussianBlurPS.hlsl = OutPut\Shader\GaussianBlur\GaussianBlurPS.hlsl
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DownSampling", "DownSampling", "{84ED2AD7-A559-4F0B-ABAF-6E1C27CDFC93}"
+	ProjectSection(SolutionItems) = preProject
+		OutPut\Shader\DownSampling\DownSamplingPS.hlsl = OutPut\Shader\DownSampling\DownSamplingPS.hlsl
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LegacyModel", "LegacyModel", "{EE2E9194-998D-4F48-BC62-9E3A71BB6C47}"
+	ProjectSection(SolutionItems) = preProject
+		OutPut\Shader\LegacyModel\LegacyModelPS.hlsl = OutPut\Shader\LegacyModel\LegacyModelPS.hlsl
+		OutPut\Shader\LegacyModel\LegacyModelTypes.hlsli = OutPut\Shader\LegacyModel\LegacyModelTypes.hlsli
+		OutPut\Shader\LegacyModel\LegacyModelVS.hlsl = OutPut\Shader\LegacyModel\LegacyModelVS.hlsl
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SkinningModel", "SkinningModel", "{6E2365D2-01BF-4EAD-BD06-0E41D26E92A2}"
+	ProjectSection(SolutionItems) = preProject
+		OutPut\Shader\SkinningModel\SkinningModelTypes.hlsli = OutPut\Shader\SkinningModel\SkinningModelTypes.hlsli
+		OutPut\Shader\SkinningModel\SkinningModelVS.hlsl = OutPut\Shader\SkinningModel\SkinningModelVS.hlsl
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HeraclesMath", "HeraclesMath\HeraclesMath.vcxproj", "{ECC47645-B47B-4428-9BFD-8E11542C8B04}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SkyBox", "SkyBox", "{0F84F62A-E50A-4C89-B719-03BBA7904D02}"
+	ProjectSection(SolutionItems) = preProject
+		OutPut\Shader\SkyBox\SkyBoxPS.hlsl = OutPut\Shader\SkyBox\SkyBoxPS.hlsl
+		OutPut\Shader\SkyBox\SkyBoxTypes.hlsli = OutPut\Shader\SkyBox\SkyBoxTypes.hlsli
+		OutPut\Shader\SkyBox\SkyBoxVS.hlsl = OutPut\Shader\SkyBox\SkyBoxVS.hlsl
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PBRModel", "PBRModel", "{BEA331B6-4946-4145-823E-93B15A971977}"
+	ProjectSection(SolutionItems) = preProject
+		OutPut\Shader\PBRModel\PBRModelMethod.hlsli = OutPut\Shader\PBRModel\PBRModelMethod.hlsli
+		OutPut\Shader\PBRModel\PBRModelPS.hlsl = OutPut\Shader\PBRModel\PBRModelPS.hlsl
+		OutPut\Shader\PBRModel\PBRModelTypes.hlsli = OutPut\Shader\PBRModel\PBRModelTypes.hlsli
+		OutPut\Shader\PBRModel\PBRModelVS.hlsl = OutPut\Shader\PBRModel\PBRModelVS.hlsl
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -65,9 +128,36 @@ Global
 		{BAAC12BE-7B72-4F6D-B3ED-04CD35017284}.Release|x64.Build.0 = Release|x64
 		{BAAC12BE-7B72-4F6D-B3ED-04CD35017284}.Release|x86.ActiveCfg = Release|Win32
 		{BAAC12BE-7B72-4F6D-B3ED-04CD35017284}.Release|x86.Build.0 = Release|Win32
+		{93DF731B-E154-4465-9FB0-B9E0C9A3FFCD}.Debug|x64.ActiveCfg = Debug|x64
+		{93DF731B-E154-4465-9FB0-B9E0C9A3FFCD}.Debug|x64.Build.0 = Debug|x64
+		{93DF731B-E154-4465-9FB0-B9E0C9A3FFCD}.Debug|x86.ActiveCfg = Debug|Win32
+		{93DF731B-E154-4465-9FB0-B9E0C9A3FFCD}.Debug|x86.Build.0 = Debug|Win32
+		{93DF731B-E154-4465-9FB0-B9E0C9A3FFCD}.Release|x64.ActiveCfg = Release|x64
+		{93DF731B-E154-4465-9FB0-B9E0C9A3FFCD}.Release|x64.Build.0 = Release|x64
+		{93DF731B-E154-4465-9FB0-B9E0C9A3FFCD}.Release|x86.ActiveCfg = Release|Win32
+		{93DF731B-E154-4465-9FB0-B9E0C9A3FFCD}.Release|x86.Build.0 = Release|Win32
+		{ECC47645-B47B-4428-9BFD-8E11542C8B04}.Debug|x64.ActiveCfg = Debug|x64
+		{ECC47645-B47B-4428-9BFD-8E11542C8B04}.Debug|x64.Build.0 = Debug|x64
+		{ECC47645-B47B-4428-9BFD-8E11542C8B04}.Debug|x86.ActiveCfg = Debug|Win32
+		{ECC47645-B47B-4428-9BFD-8E11542C8B04}.Debug|x86.Build.0 = Debug|Win32
+		{ECC47645-B47B-4428-9BFD-8E11542C8B04}.Release|x64.ActiveCfg = Release|x64
+		{ECC47645-B47B-4428-9BFD-8E11542C8B04}.Release|x64.Build.0 = Release|x64
+		{ECC47645-B47B-4428-9BFD-8E11542C8B04}.Release|x86.ActiveCfg = Release|Win32
+		{ECC47645-B47B-4428-9BFD-8E11542C8B04}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{680F3570-667F-4C75-9813-22B6C5C7A72D} = {A6DD9502-1C76-4BC1-92AB-C28AB3A946D9}
+		{77F36DC8-24D1-4F63-ADBA-D11D0D3C46C4} = {A6DD9502-1C76-4BC1-92AB-C28AB3A946D9}
+		{CFFF9826-58C5-45EA-B450-4A27373A4994} = {A6DD9502-1C76-4BC1-92AB-C28AB3A946D9}
+		{26518D9C-09D7-4574-9E3F-BE272498520E} = {A6DD9502-1C76-4BC1-92AB-C28AB3A946D9}
+		{84ED2AD7-A559-4F0B-ABAF-6E1C27CDFC93} = {A6DD9502-1C76-4BC1-92AB-C28AB3A946D9}
+		{EE2E9194-998D-4F48-BC62-9E3A71BB6C47} = {A6DD9502-1C76-4BC1-92AB-C28AB3A946D9}
+		{6E2365D2-01BF-4EAD-BD06-0E41D26E92A2} = {A6DD9502-1C76-4BC1-92AB-C28AB3A946D9}
+		{0F84F62A-E50A-4C89-B719-03BBA7904D02} = {A6DD9502-1C76-4BC1-92AB-C28AB3A946D9}
+		{BEA331B6-4946-4145-823E-93B15A971977} = {A6DD9502-1C76-4BC1-92AB-C28AB3A946D9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {83918DE7-1E59-4741-A17B-97563249EE37}
