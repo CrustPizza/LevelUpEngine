@@ -25,7 +25,7 @@ for (auto* iter : (v))\
 }
 
 #define RELEASE_MAP(m) \
-for (auto iter : (m))\
+for (auto& iter : (m))\
 {\
 	if (iter.second != nullptr)\
 		delete iter.second;\

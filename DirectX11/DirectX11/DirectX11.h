@@ -15,6 +15,8 @@
 #include "Inc/SpriteFont.h"
 #include "Factory/Factory.h"
 
+#include "DXObject/Effect2D/Effect2D.h"
+
 #include "PostProcess/Blur/Blur.h"
 #include "PostProcess/Bloom/Bloom.h"
 #include "PostProcess/Combine/Combine.h"
@@ -65,6 +67,7 @@ namespace DX11
 		// Sprite
 		DirectX::SpriteBatch*	spriteBatch;
 		DirectX::SpriteFont*	spriteFont;
+		Effect2D*				effect2D;
 
 		// Properties
 		DXGI_FORMAT			backBufferFormat;
@@ -95,8 +98,10 @@ namespace DX11
 		virtual FactoryBase* const CreateFactory() override;
 		virtual bool OnResize(UINT width, UINT height) override;
 
-		virtual bool DrawSprite(Texture* texture, long posX, long posY, long width, long height, float z) override;
+		bool DrawSprite(Texture* texture, long posX, long posY, long width, long height, float z) override;
 		bool DrawSprite(ID3D11ShaderResourceView* texture, long posX, long posY, long width, long height, float z);
+		bool DrawSpriteOn3D(Texture* texture, HeraclesMath::Vector worldPosition[3], const HeraclesMath::Matrix& viewProjection) override;
+		bool DrawSpriteOn3D(Texture* texture, HeraclesMath::Vector worldPosition, long width, long height, const HeraclesMath::Matrix& viewProjection) override;
 
 		bool DrawMesh(BufferBase* vertices, BufferBase* indices) override;
 		bool DrawTextColor(std::string& text, HeraclesMath::Vector color, HeraclesMath::Vector position, float rotation, HeraclesMath::Vector scale) override;

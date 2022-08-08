@@ -88,6 +88,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PBRModel", "PBRModel", "{BE
 		OutPut\Shader\PBRModel\PBRModelVS.hlsl = OutPut\Shader\PBRModel\PBRModelVS.hlsl
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Texture2D", "Texture2D", "{35DC8FC6-F69E-43C3-869F-C147158191DC}"
+	ProjectSection(SolutionItems) = preProject
+		OutPut\Shader\Texture2D\Texture2DPS.hlsl = OutPut\Shader\Texture2D\Texture2DPS.hlsl
+		OutPut\Shader\Texture2D\Texture2DTypes.hlsli = OutPut\Shader\Texture2D\Texture2DTypes.hlsli
+		OutPut\Shader\Texture2D\Texture2DVS.hlsl = OutPut\Shader\Texture2D\Texture2DVS.hlsl
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -158,6 +165,7 @@ Global
 		{6E2365D2-01BF-4EAD-BD06-0E41D26E92A2} = {A6DD9502-1C76-4BC1-92AB-C28AB3A946D9}
 		{0F84F62A-E50A-4C89-B719-03BBA7904D02} = {A6DD9502-1C76-4BC1-92AB-C28AB3A946D9}
 		{BEA331B6-4946-4145-823E-93B15A971977} = {A6DD9502-1C76-4BC1-92AB-C28AB3A946D9}
+		{35DC8FC6-F69E-43C3-869F-C147158191DC} = {A6DD9502-1C76-4BC1-92AB-C28AB3A946D9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {83918DE7-1E59-4741-A17B-97563249EE37}

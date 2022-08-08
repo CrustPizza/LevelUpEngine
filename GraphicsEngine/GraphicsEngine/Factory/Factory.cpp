@@ -565,7 +565,7 @@ namespace GraphicsEngineSpace
 
 		if (resourceManager->AddIBLTexture(name, newIBLTexture) != true)
 		{
-			newIBLTexture->Release();
+			delete newIBLTexture;
 
 			return nullptr;
 		}
@@ -605,6 +605,72 @@ namespace GraphicsEngineSpace
 		return resourceManager->GetIBLTexture(name);
 	}
 
+	DirectionalLight* Factory::CreateDirectionalLight(const std::string& name)
+	{
+		if (graphicsFactory == nullptr || resourceManager == nullptr)
+			return nullptr;
+
+		DirectionalLight* newLight = new DirectionalLight;
+
+		BufferBase* constantBuffer = resourceManager->GetBuffer("DirectionalLightCB");
+
+		if (constantBuffer == nullptr)
+		{
+			constantBuffer = CreateConstantBuffer("DirectionalLightCB", USAGE::DEFAULT, 0, sizeof(Vector) * 4);
+
+			if (constantBuffer == nullptr)
+			{
+				delete newLight;
+
+				return nullptr;
+			}
+		}
+
+		if (resourceManager->AddLight(name, newLight) != true)
+		{
+			delete newLight;
+
+			return nullptr;
+		}
+
+		newLight->SetBuffer(constantBuffer);
+
+		return dynamic_cast<DirectionalLight*>(resourceManager->GetLight(name));
+	}
+
+	PointLight* Factory::CreatePointLight(const std::string& name)
+	{
+		if (graphicsFactory == nullptr || resourceManager == nullptr)
+			return nullptr;
+
+		PointLight* newLight = new PointLight;
+
+		BufferBase* constantBuffer = resourceManager->GetBuffer("PointLightCB");
+
+		if (constantBuffer == nullptr)
+		{
+			constantBuffer = CreateConstantBuffer("PointLightCB", USAGE::DEFAULT, 0, sizeof(Vector) * 3);
+
+			if (constantBuffer == nullptr)
+			{
+				delete newLight;
+
+				return nullptr;
+			}
+		}
+
+		if (resourceManager->AddLight(name, newLight) != true)
+		{
+			delete newLight;
+
+			return nullptr;
+		}
+
+		newLight->SetBuffer(constantBuffer);
+
+		return dynamic_cast<PointLight*>(resourceManager->GetLight(name));
+	}
+
 	bool Factory::InitFactory(FactoryBase* factory, ResourceManager* resourceManager)
 	{
 		if (graphicsFactory != nullptr)
@@ -635,6 +701,7 @@ namespace GraphicsEngineSpace
 
 		/* Light Buffer */
 		CreateConstantBuffer("DirectionalLightCB", USAGE::DEFAULT, 0, sizeof(Vector) * 4);
+		CreateConstantBuffer("PointLightCB", USAGE::DEFAULT, 0, sizeof(Vector) * 3);
 
 		/* Bone Matrix Buffer */
 		CreateConstantBuffer("BoneMatrixCB", USAGE::DEFAULT, 0, sizeof(Matrix) * 64);

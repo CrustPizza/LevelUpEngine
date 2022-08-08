@@ -26,9 +26,9 @@ struct PixelLighting
 };
 
 // RadianceMipLevel
-cbuffer cbRadianceMipLevels : register(b3)
+cbuffer cbRadianceMipLevels : register( b4 )
 {
-	int RadianceMipLevels;
+	int RadianceMipLevels[4];
 }
 
 /* Fresnel Shlick */
@@ -80,7 +80,7 @@ float3 DiffuseIBL(float3 Normal)
 
 float3 SpecularIBL(float3 Normal, float3 View, float lodBias)
 {
-	float mip = lodBias * RadianceMipLevels;
+	float mip = lodBias * RadianceMipLevels[0];
 	float3 dir = reflect( -View, Normal );
 	
 	return Radiance.SampleLevel( Sampler, dir, mip );

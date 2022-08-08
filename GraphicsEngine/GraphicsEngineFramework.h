@@ -14,6 +14,3 @@
 
 /* Engine */
 #include "GraphicsEngine/GraphicsEngine.h"
-
-/* Bases */
-#include "Bases/DirectionalLightBase.h"

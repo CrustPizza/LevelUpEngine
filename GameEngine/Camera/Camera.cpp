@@ -15,7 +15,7 @@ namespace GameEngineSpace
 		: view{}
 		, projection{}
 		, nearZ(0.1f)
-		, farZ(100.0f)
+		, farZ(1000.0f)
 		, fov(PI / 2)
 		, aspectRatio(1.0f)
 		, position{ 0.0f, 3.0f, -20.0f, 1.0f }

@@ -271,6 +271,11 @@ namespace HeraclesMath
 		return *this * VectorReciprocal(other);
 	}
 
+	bool Vector::operator==(const Vector& v)
+	{
+		return Vector4Equal(*this, v);
+	}
+
 	Matrix::Matrix(const Vector& v1, const Vector& v2, const Vector& v3, const Vector& v4)
 		: r{ v1, v2, v3, v4 }
 	{
@@ -388,6 +393,11 @@ namespace HeraclesMath
 		};
 	}
 
+	bool Matrix::operator==(const Matrix& m)
+	{
+		return MatrixEqaul(*this, m);
+	}
+
 	Vector operator*(float scalar, Vector& vec)
 	{
 		return vec * scalar;
@@ -401,6 +411,11 @@ namespace HeraclesMath
 	bool Vector3Equal(const Vector& v1, const Vector& v2)
 	{
 		return (v1.x == v2.x) && (v1.y == v2.y) && (v1.z == v2.z);
+	}
+
+	bool Vector4Equal(const Vector& v1, const Vector& v2)
+	{
+		return (v1.x == v2.x) && (v1.y == v2.y) && (v1.z == v2.z) && (v1.w == v2.w);
 	}
 
 	bool Vector3IsInfinite(const Vector& v)
@@ -825,6 +840,11 @@ namespace HeraclesMath
 			matrix[0][2], matrix[1][2], matrix[2][2], matrix[3][2],
 			matrix[0][3], matrix[1][3], matrix[2][3], matrix[3][3]
 		};
+	}
+
+	bool MatrixEqaul(const Matrix& m1, const Matrix& m2)
+	{
+		return Vector4Equal(m1[0], m2[0]) && Vector4Equal(m1[1], m2[1]) && Vector4Equal(m1[2], m2[2]) && Vector4Equal(m1[3], m2[3]);
 	}
 
 	Matrix MatrixLookAtLH(const Vector& eyePosition, const Vector& focusPosition, const Vector& upDirection)

@@ -1,12 +1,12 @@
 /********************************
 *								*
-*	Point Light Base.h			*
+*	UI Object.cpp				*
 *								*
-*	Created : 2022/07/26		*
-*	Updated : 2022/07/26		*
+*	Created : 2022/08/08		*
+*	Updated : 2022/08/08		*
 *********************************/
 
-#pragma once
+#include "UIObject.h"
 
 namespace GraphicsEngineSpace
 {

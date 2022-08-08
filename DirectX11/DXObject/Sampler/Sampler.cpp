@@ -12,28 +12,28 @@ namespace DX11
 {
 	Sampler::Sampler(ID3D11DeviceContext* deviceContext)
 		: deviceContext(deviceContext)
-		, sampler(nullptr)
+		, samplerState(nullptr)
 	{
 
 	}
 
 	Sampler::~Sampler()
 	{
-		if (this->sampler != nullptr)
-			this->sampler->Release();
+		if (samplerState != nullptr)
+			samplerState->Release();
 	}
 
 	void Sampler::SetSampler(ID3D11SamplerState* sampler)
 	{
-		if (this->sampler != nullptr)
-			this->sampler->Release();
+		if (samplerState != nullptr)
+			samplerState->Release();
 
-		this->sampler = sampler;
+		samplerState = sampler;
 	}
 
 	bool Sampler::SetUpSampler(unsigned int slot, ShaderType targetType)
 	{
-		if (sampler == nullptr)
+		if (samplerState == nullptr)
 			return false;
 
 		switch (targetType)
@@ -41,14 +41,14 @@ namespace DX11
 			
 		case ShaderType::VERTEX:
 		{
-			deviceContext->VSSetSamplers(slot, 1, &sampler);
+			deviceContext->VSSetSamplers(slot, 1, &samplerState);
 
 			return true;
 		}
 			
 		case ShaderType::PIXEL:
 		{
-			deviceContext->PSSetSamplers(slot, 1, &sampler);
+			deviceContext->PSSetSamplers(slot, 1, &samplerState);
 
 			return true;
 		}

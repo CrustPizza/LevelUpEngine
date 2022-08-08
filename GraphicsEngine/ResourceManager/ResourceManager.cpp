@@ -26,6 +26,8 @@ namespace GraphicsEngineSpace
 		RELEASE_MAP(samplerList);
 		RELEASE_MAP(skyBoxList);
 		RELEASE_MAP(PBRModelList);
+		RELEASE_MAP(IBLTextureList);
+		RELEASE_MAP(lightList);
 	}
 
 	bool ResourceManager::AddTexture(const std::string& name, TextureBase* textureObject)
@@ -144,6 +146,18 @@ namespace GraphicsEngineSpace
 			return false;
 
 		IBLTextureList[name] = IBLTexture;
+
+		return true;
+	}
+
+	bool ResourceManager::AddLight(const std::string& name, LightBase* light)
+	{
+		auto result = FindGraphicsResource(lightList, name);
+
+		if (result != nullptr)
+			return false;
+
+		lightList[name] = light;
 
 		return true;
 	}
@@ -282,5 +296,17 @@ namespace GraphicsEngineSpace
 		result->GetRefCount()++;
 
 		return dynamic_cast<IBLTexture*>(result);
+	}
+
+	LightBase* const ResourceManager::GetLight(const std::string& name)
+	{
+		auto result = FindGraphicsResource(lightList, name);
+
+		if (result == nullptr)
+			return nullptr;
+
+		result->GetRefCount()++;
+
+		return dynamic_cast<LightBase*>(result);
 	}
 }

@@ -19,7 +19,7 @@ namespace GraphicsEngineSpace
 
 		struct __declspec(align(16)) Parameter
 		{
-			int mipLevles;
+			int mipLevels[4];
 		};
 
 		BufferBase* mipLevelCB;

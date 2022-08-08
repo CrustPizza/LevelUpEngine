@@ -30,8 +30,17 @@ cbuffer cbDirectionalLight : register( b1 )
 	float  DLightSpecularPower;
 }
 
+/* Point Light */
+cbuffer cbPointLight : register( b2 )
+{
+	float4 PLightPosition;
+	float4 PLightDiffuse;
+	float  PLightSpecularPower;
+	float  PLightIntensity;
+}
+
 /* Material */
-cbuffer cbMaterial : register( b2 )
+cbuffer cbMaterial : register( b3 )
 {
 	float4 MaterialAmbient;
 	float4 MaterialDiffuse;
@@ -52,6 +61,8 @@ float4 main(VS_Output input) : SV_TARGET0
 	float3 Normal = NormalMap.Sample( Sampler, input.TexCoord ).xyz;
 	Normal = mul( Normal.xyz, TSpace );
 
+	// Directional Light
+
 	// Ambient
 	float4 ret = 0;
 	ret.x = DLightAmbient.x * MaterialAmbient.x;
@@ -62,16 +73,41 @@ float4 main(VS_Output input) : SV_TARGET0
 	float NDotL = dot( Normal, -DLightDirection);
 	float Specular = 0.0f;
 
+	float3 V = normalize(ViewPosition - input.WorldPos); // View Vector
+
 	if (NDotL > 0.0f)
 	{
 		ret += NDotL * DLightDiffuse * MaterialDiffuse;
 
-		float3 V = normalize( ViewPosition - input.WorldPos ); // View Vector
 		float3 H = normalize( -DLightDirection + V ); // Half Vector
 
 		float NDotH = max( dot( Normal, H ), 0.0f );
 
 		Specular = pow( NDotH, DLightSpecularPower );
+	}
+
+	// Point Light
+
+	// Diffuse & Specular
+	float3 pLightDirection = PLightPosition.xyz - input.WorldPos;
+	float distance = length(pLightDirection);
+
+	if (distance < PLightIntensity)
+	{
+		float NDotL = dot( Normal, pLightDirection );
+
+		if (NDotL > 0.0f)
+		{
+			float intensity = 1.0f - (distance / PLightIntensity);
+
+			ret += NDotL * PLightDiffuse * MaterialDiffuse * intensity;
+
+			float3 H = normalize( pLightDirection + V );
+
+			float NDotH = max( dot( Normal, H ), 0.0f );
+
+			Specular += pow( NDotH, PLightSpecularPower ) * intensity;
+		}
 	}
 
 	// Gamma Correction

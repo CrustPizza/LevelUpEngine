@@ -46,6 +46,9 @@
     <ClCompile Include="Builder\PBRBuilder\PBRBuilder.cpp" />
     <ClCompile Include="Object\PBRModel\PBRModel.cpp" />
     <ClCompile Include="Object\IBLTexture\IBLTexture.cpp" />
+    <ClCompile Include="Object\PointLight\PointLight.cpp" />
+    <ClCompile Include="Object\DirectionalLight\DirectionalLight.cpp" />
+    <ClCompile Include="Object\UIObject\UIObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GraphicsEngineFramework.h" />
@@ -121,13 +124,7 @@
     <ClInclude Include="Bases\SamplerBase.h">
       <Filter>Bases</Filter>
     </ClInclude>
-    <ClInclude Include="Bases\PointLightBase.h">
-      <Filter>Bases</Filter>
-    </ClInclude>
-    <ClInclude Include="Bases\DirectionalLightBase.h">
-      <Filter>Bases</Filter>
-    </ClInclude>
-    <ClInclude Include="Bases\SpotLightBase.h">
+    <ClInclude Include="Object\PointLight\PointLight.h">
       <Filter>Bases</Filter>
     </ClInclude>
     <ClInclude Include="Define\GraphicsFilterOption.h">
@@ -137,6 +134,10 @@
     <ClInclude Include="Builder\PBRBuilder\PBRBuilder.h" />
     <ClInclude Include="Object\PBRModel\PBRModel.h" />
     <ClInclude Include="Object\IBLTexture\IBLTexture.h" />
+    <ClInclude Include="Bases\LightBase.h" />
+    <ClInclude Include="Object\DirectionalLight\DirectionalLight.h" />
+    <ClInclude Include="Object\UIObject\UIObject.h" />
+    <ClInclude Include="Bases\UIBase.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

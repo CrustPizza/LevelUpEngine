@@ -33,8 +33,8 @@ namespace GameEngineSpace
 		prefab = pbrModel->GetPrefab();
 
 		transform.position.y -= 5.0f;
-		transform.scale.x *= 10.0f;
-		transform.scale.z *= 10.0f;
+		transform.scale.x *= 50.0f;
+		transform.scale.z *= 50.0f;
 	}
 
 	void Cube::Init(GraphicsEngineSpace::Factory* factory, ModelBase* model, ShaderBase* vertexShader, ShaderBase* pixelShader, BufferBase* matrixBuffer)
@@ -67,5 +67,14 @@ namespace GameEngineSpace
 	void Cube::Render(GraphicsEngineSpace::GraphicsEngineBase* engine, float tick)
 	{
 		prefab->Render(engine, transform.GetWorldTransform(), tick);
+	}
+
+	void Cube::SetLight(const Vector& dir, const Vector& color, int index)
+	{
+		if (pbrModel == nullptr)
+			return;
+
+		pbrModel->SetLightDirection(dir, index);
+		pbrModel->SetLightColor(color, index);
 	}
 }

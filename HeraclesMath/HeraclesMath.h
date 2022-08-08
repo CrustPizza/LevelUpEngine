@@ -85,6 +85,8 @@ namespace HeraclesMath
 		Vector operator /(float scalar);
 		Vector operator /(const Vector& other);
 		Vector operator /(const Vector& other) const;
+
+		bool operator ==(const Vector& v);
 	};
 
 	Vector operator *(float scalar, Vector& vec);
@@ -119,11 +121,14 @@ namespace HeraclesMath
 		Matrix operator *(const Matrix& other) const;
 		Vector operator *(const Vector& v);
 		Vector operator *(const Vector& v) const;
+
+		bool operator ==(const Matrix& m);
 	};
 
 	Vector VectorZero();
 
 	bool Vector3Equal(const Vector& v1, const Vector& v2);
+	bool Vector4Equal(const Vector& v1, const Vector& v2);
 	bool Vector3IsInfinite(const Vector& v);
 
 	float Vector3Length(const Vector& v);
@@ -164,6 +169,7 @@ namespace HeraclesMath
 	Matrix MatrixIdentity();
 	Matrix MatrixInverse(Matrix matrix);
 	Matrix MatrixTranspose(const Matrix& matrix);
+	bool MatrixEqaul(const Matrix& m1, const Matrix& m2);
 
 	Matrix MatrixLookAtLH(const Vector& eyePosition, const Vector& focusPosition, const Vector& upDirection);
 	Matrix MatrixLookAtRH(const Vector& eyePosition, const Vector& focusPosition, const Vector& upDirection);

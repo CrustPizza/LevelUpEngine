@@ -31,7 +31,7 @@ namespace GameEngineSpace
 		pbrModel = factory->CreateSkinningAlbedoModel("PigPBR_" + std::to_string(ID++), model);
 		pbrModel->SetAlpha(1.0f);
 		pbrModel->SetMetallic(0.5f);
-		pbrModel->SetRoughness(0.5f);
+		pbrModel->SetRoughness(0.0f);
 
 		prefab = pbrModel->GetPrefab();
 		this->model = model;
@@ -46,7 +46,7 @@ namespace GameEngineSpace
 		prefab = factory->CreatePrefab("PigPrefab", model, matrixBuffer, 0);
 		prefab->SetVertexShader(vertexShader);
 		prefab->SetPixelShader(pixelShader);
-		prefab->SetMaterialBuffer({ materialBuffer, 2, &material, GraphicsEngineSpace::ShaderType::PIXEL });
+		prefab->SetMaterialBuffer({ materialBuffer, 3, &material, GraphicsEngineSpace::ShaderType::PIXEL });
 		this->model = model;
 		this->model->SetAnimationKey("Idle");
 

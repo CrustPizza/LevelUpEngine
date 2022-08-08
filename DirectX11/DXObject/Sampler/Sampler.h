@@ -19,7 +19,7 @@ namespace DX11
 	class Sampler : public SamplerBase
 	{
 		ID3D11DeviceContext* deviceContext;
-		ID3D11SamplerState* sampler;
+		ID3D11SamplerState* samplerState;
 
 	public:
 		Sampler(ID3D11DeviceContext* deviceContext);

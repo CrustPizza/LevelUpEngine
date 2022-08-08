@@ -53,6 +53,7 @@ namespace DX11
 
 		, spriteBatch(nullptr)
 		, spriteFont(nullptr)
+		, effect2D(nullptr)
 
 		, backBufferFormat(DXGI_FORMAT_B8G8R8A8_UNORM)
 		, depthBufferFormat(DXGI_FORMAT_D32_FLOAT)
@@ -169,13 +170,16 @@ namespace DX11
 
 		deviceContext->QueryInterface<ID3DUserDefinedAnnotation>(&annotation);
 
+		// Factory
+		factory = new Factory(d3dDevice, deviceContext);
+
 		// Sprite
 		spriteBatch = new DirectX::SpriteBatch(deviceContext);
 		spriteFont = new DirectX::SpriteFont(d3dDevice, _T("Font/gulim9k.spritefont"));
 		spriteFont->SetLineSpacing(14.0f);
 
-		// Factory
-		factory = new Factory(d3dDevice, deviceContext);
+		effect2D = new Effect2D(deviceContext);
+		effect2D->Init(factory);
 
 		// Post Process
 		bloom = new Bloom(deviceContext);
@@ -300,8 +304,74 @@ namespace DX11
 	bool DirectX11::DrawSprite(ID3D11ShaderResourceView* texture, long posX, long posY, long width, long height, float z)
 	{
 		spriteBatch->Begin(DirectX::SpriteSortMode_Texture, nullptr, nullptr, depthState);
-		spriteBatch->Draw(texture, RECT{ posX, posY, width, height });
+		spriteBatch->Draw(texture, RECT{ posX, posY, width, height }, nullptr, DirectX::Colors::White, 0.0f, { 0.0f, 0.0f }, DirectX::SpriteEffects_None, z);
 		spriteBatch->End();
+
+		return true;
+	}
+
+	bool DirectX11::DrawSpriteOn3D(Texture* texture, HeraclesMath::Vector worldPosition[3], const HeraclesMath::Matrix& viewProjection)
+	{
+		if (effect2D == nullptr)
+			return false;
+
+		DirectX::XMVECTOR worldPos[3];
+
+		for (int i = 0; i < 3; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				worldPos[i].m128_f32[j] = worldPosition[i][j];
+			}
+		}
+
+		DirectX::XMMATRIX viewProj;
+
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				viewProj.r[i].m128_f32[j] = viewProjection[i][j];
+			}
+		}
+		
+		effect2D->Draw(reinterpret_cast<ID3D11ShaderResourceView*>(texture), worldPos, &viewProj);
+
+		return true;
+	}
+
+	bool DirectX11::DrawSpriteOn3D(Texture* texture, HeraclesMath::Vector worldPosition, long width, long height, const HeraclesMath::Matrix& viewProjection)
+	{
+		if (effect2D == nullptr)
+			return false;
+
+		DirectX::XMVECTOR worldPos[3];
+
+		for (int i = 0; i < 3; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				worldPos[i].m128_f32[j] = worldPosition[j];
+			}
+
+			worldPos[i].m128_f32[0] += width / 2.0f;
+			worldPos[i].m128_f32[1] += height / 2.0f;
+		}
+
+		worldPos[1].m128_f32[0] -= width;
+		worldPos[2].m128_f32[1] -= height;
+
+		DirectX::XMMATRIX viewProj;
+
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				viewProj.r[i].m128_f32[j] = viewProjection[i][j];
+			}
+		}
+
+		effect2D->Draw(reinterpret_cast<ID3D11ShaderResourceView*>(texture), worldPos, &viewProj);
 
 		return true;
 	}
@@ -468,6 +538,7 @@ namespace DX11
 
 		delete spriteBatch;
 		delete spriteFont;
+		delete effect2D;
 
 		DELETE_RELEASE_PTR(backScreen);
 

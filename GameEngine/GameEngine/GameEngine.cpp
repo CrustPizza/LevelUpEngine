@@ -178,8 +178,10 @@ namespace GameEngineSpace
 		ModelBase* genjiModel = graphicsFactory->CreateModelFromASEFile("ASEGenji", "Resources/Model/genji_max.ase");
 		
 		genji = new Genji;
-		//genji->Init(graphicsFactory, genjiModel, vertexShdaer, pixelShader, matrixBuffer, materialBuffer);
-		genji->Init(graphicsFactory, genjiModel);
+		genji->Init(graphicsFactory, genjiModel, vertexShader, pixelShader, matrixBuffer, materialBuffer);
+		
+		pbrGenji = new Genji;
+		pbrGenji->Init(graphicsFactory, genjiModel);
 
 		vertexShader = resourceManager->GetShader("SkinningModelVS");
 		BufferBase* boneBuffer = resourceManager->GetBuffer("BoneMatrixCB");
@@ -202,13 +204,17 @@ namespace GameEngineSpace
 		skyBox = graphicsFactory->CreateSkyBox("SkyBox");
 		skyBox->SetTexture(graphicsFactory->CreateTexture("LobbyCubeMap", "Resources/Texture/lobbycube.dds"));
 
-		dLight = new DirectionalLightBase;
+		dLight = graphicsFactory->CreateDirectionalLight("DLight");
 		dLight->rotation.x += 45.0f;
-		dLight->SetBuffer(resourceManager->GetBuffer("DirectionalLightCB"));
+
+		pLight = graphicsFactory->CreatePointLight("PLight");
+		pLight->color = { 1.0f, 0.0f, 0.0f, 1.0f };
+		pLight->intensity = 20.0f;
 
 		graphicsFactory->CreateTexture("Bricks", "Resources/Texture/bricks.dds");
 
-		ibl = graphicsFactory->CreateIBLTexture("MSIBL", "Resources/Texture/SunSubMixer_diffuseIBL.dds", "Resources/Texture/SunSubMixer_specularIBL.dds");
+		ibl = graphicsFactory->CreateIBLTexture("MSIBL", "Resources/Texture/SunSubMixer_specularIBL.dds", "Resources/Texture/SunSubMixer_diffuseIBL.dds");
+		skyBox->SetTexture(resourceManager->GetTexture("MSIBL_radiance"));
 	}
 
 	void GameEngine::Update()
@@ -224,6 +230,7 @@ namespace GameEngineSpace
 		cube->Update(Time::instance.deltaTime);
 		pbrCube->Update(Time::instance.deltaTime);
 		genji->Update(Time::instance.deltaTime);
+		pbrGenji->Update(Time::instance.deltaTime);
 
 		static float metallic = 0.5f;
 
@@ -234,7 +241,7 @@ namespace GameEngineSpace
 			if (metallic > 1.0f)
 				metallic = 1.0f;
 
-			genji->SetMetallic(metallic);
+			pbrGenji->SetMetallic(metallic);
 		}
 		else if (Input::GetInstance()->GetInputState('F', KeyState::STAY) == true)
 		{
@@ -243,7 +250,7 @@ namespace GameEngineSpace
 			if (metallic < 0.0f)
 				metallic = 0.0f;
 
-			genji->SetMetallic(metallic);
+			pbrGenji->SetMetallic(metallic);
 		}
 
 		static float roughness = 0.5f;
@@ -255,7 +262,7 @@ namespace GameEngineSpace
 			if (roughness > 1.0f)
 				roughness = 1.0f;
 
-			genji->SetRoughness(roughness);
+			pbrGenji->SetRoughness(roughness);
 		}
 		else if (Input::GetInstance()->GetInputState('G', KeyState::STAY) == true)
 		{
@@ -264,7 +271,7 @@ namespace GameEngineSpace
 			if (roughness < 0.0f)
 				roughness = 0.0f;
 
-			genji->SetRoughness(roughness);
+			pbrGenji->SetRoughness(roughness);
 		}
 
 		if (Input::GetInstance()->GetInputState(VK_RIGHT, KeyState::DOWN) == true)
@@ -278,15 +285,85 @@ namespace GameEngineSpace
 		else
 			pig->Update(Time::instance.deltaTime);
 
-		for (int i = 0; i < 10; i++)
-			pigs[i]->Update(Time::instance.deltaTime);
-
 		dLight->rotation.y += 1.0f * Time::instance.deltaTime;
 
 		//pig->LookAt(-camera.GetWorldPosition());
 
+		Vector pLightVector = pig->GetTransform().GetWorldTransform()[3] - pLight->position;
+		float distance = Vector3Length(pLightVector);
+
+		if (distance > 0.0f)
+			pLightVector = Vector3Normalize(pLightVector);
+		else
+			pLightVector = Vector::Zero;
+
+		Vector pLightColor;
+
+		if (distance > pLight->intensity)
+			pLightColor = Vector::Zero;
+		else
+			pLightColor = pLight->color * VectorReplicate(1.0f - distance / pLight->intensity);
+
 		pig->SetLight(Vector::UnitZ * MatrixRotationFromVector(dLight->rotation), dLight->color, 0);
-		genji->SetLight(Vector::UnitZ * MatrixRotationFromVector(dLight->rotation), dLight->color, 0);
+		pig->SetLight(pLightVector, pLightColor, 1);
+
+		pLightVector = pbrGenji->GetTransform().GetWorldTransform()[3] - pLight->position;
+		distance = Vector3Length(pLightVector);
+
+		if (distance > 0.0f)
+			pLightVector = Vector3Normalize(pLightVector);
+		else
+			pLightVector = Vector::Zero;
+
+		pLightColor;
+
+		if (distance > pLight->intensity)
+			pLightColor = Vector::Zero;
+		else
+			pLightColor = pLight->color * VectorReplicate(1.0f - distance / pLight->intensity);
+
+		pbrGenji->SetLight(Vector::UnitZ * MatrixRotationFromVector(dLight->rotation), dLight->color, 0);
+		pbrGenji->SetLight(pLightVector, pLightColor, 1);
+
+		for (int i = 0; i < 10; i++)
+		{
+			pLightVector = pigs[i]->GetTransform().GetWorldTransform()[3] - pLight->position;
+			distance = Vector3Length(pLightVector);
+
+			if (distance > 0.0f)
+				pLightVector = Vector3Normalize(pLightVector);
+			else
+				pLightVector = Vector::Zero;
+
+			pLightColor;
+
+			if (distance > pLight->intensity)
+				pLightColor = Vector::Zero;
+			else
+				pLightColor = pLight->color * VectorReplicate(1.0f - distance / pLight->intensity);
+
+			pigs[i]->Update(Time::instance.deltaTime);
+			pigs[i]->SetLight(Vector::UnitZ * MatrixRotationFromVector(dLight->rotation), dLight->color, 0);
+			pigs[i]->SetLight(pLightVector, pLightColor, 1);
+		}
+
+		pLightVector = pbrCube->GetTransform().GetWorldTransform()[3] - pLight->position;
+		distance = Vector3Length(pLightVector);
+
+		if (distance > 0.0f)
+			pLightVector = Vector3Normalize(pLightVector);
+		else
+			pLightVector = Vector::Zero;
+
+		pLightColor;
+
+		if (distance > pLight->intensity)
+			pLightColor = Vector::Zero;
+		else
+			pLightColor = pLight->color * VectorReplicate(1.0f - distance / pLight->intensity);
+
+		pbrCube->SetLight(Vector::UnitZ* MatrixRotationFromVector(dLight->rotation), dLight->color, 0);
+		pbrCube->SetLight(pLightVector, pLightColor, 1);
 
 		inputManager->LateUpdate();
 	}
@@ -322,9 +399,6 @@ namespace GameEngineSpace
 		cube->Render(graphicsEngine, tick);
 		graphicsEngine->GraphicsDebugEndEvent();
 
-		/* Genji */
-		graphicsEngine->GraphicsDebugBeginEvent("Genji");
-
 		/* View world*/
 		graphicsEngine->GraphicsDebugBeginEvent("ViewWorldPosition");
 		struct viewPos
@@ -339,7 +413,12 @@ namespace GameEngineSpace
 
 		/* Directional Light */
 		graphicsEngine->GraphicsDebugBeginEvent("Directional Light");
-		dLight->SetUpBuffer(1);
+		dLight->SetUpBuffer(1, ShaderType::PIXEL);
+		graphicsEngine->GraphicsDebugEndEvent();
+
+		/* Point Light */
+		graphicsEngine->GraphicsDebugBeginEvent("Point Light");
+		pLight->SetUpBuffer(2, ShaderType::PIXEL);
 		graphicsEngine->GraphicsDebugEndEvent();
 
 		/* Sampler */
@@ -348,10 +427,12 @@ namespace GameEngineSpace
 		graphicsEngine->GraphicsDebugEndEvent();
 
 		/* IBL */
-		ibl->SetUpIBL(3, 4, 5, ShaderType::PIXEL);
+		ibl->SetUpIBL(4, 4, 5, ShaderType::PIXEL);
 
+		/* Genji */
+		graphicsEngine->GraphicsDebugBeginEvent("Genji");
 		genji->Render(graphicsEngine, tick);
-
+		pbrGenji->Render(graphicsEngine, tick);
 		graphicsEngine->GraphicsDebugEndEvent();
 
 		/* Pig */
@@ -365,12 +446,31 @@ namespace GameEngineSpace
 
 		graphicsEngine->GraphicsDebugEndEvent();
 
-		graphicsEngine->Render();
-
 		/* PBR Cube */
 		graphicsEngine->GraphicsDebugBeginEvent("PBR Cube");
 		pbrCube->Render(graphicsEngine, tick);
 		graphicsEngine->GraphicsDebugEndEvent();
+
+		static float depth = 0.0f;
+
+		if (Input::GetInstance()->GetInputState(VK_UP, KeyState::STAY) == true)
+			depth += 0.01f;
+		else if (Input::GetInstance()->GetInputState(VK_DOWN, KeyState::STAY) == true)
+			depth -= 0.01f;
+
+		graphicsEngine->GraphicsDebugBeginEvent("Bricks 1");
+		Vector position[3] =
+		{
+			{ 10.0f, 0.0f, 0.0f, 1.0f },
+			{ 0.0f, 0.0f, 0.0f, 1.0f },
+			{ 10.0f, -10.0f, 0.0f, 1.0f }
+		};
+		graphicsEngine->DrawSpriteOn3D(resourceManager->GetTexture("Bricks")->GetTexture(), position, viewProjection);
+		Vector singlePosition = { 5.0f, 5.0f, 0.0f, 1.0f };
+		graphicsEngine->DrawSpriteOn3D(resourceManager->GetTexture("Bricks")->GetTexture(), singlePosition, 10.0f, 10.0f, viewProjection);
+		graphicsEngine->GraphicsDebugEndEvent();
+
+		graphicsEngine->Render();
 
 		/* Post Process */
 		if (Input::GetInstance()->GetInputState(VK_TAB, KeyState::TOGGLE) == true)
@@ -378,7 +478,7 @@ namespace GameEngineSpace
 
 		/* Texture test */
 		graphicsEngine->GraphicsDebugBeginEvent("Bricks");
-		graphicsEngine->DrawSprite(resourceManager->GetTexture("Bricks")->GetTexture(), 5, 5, 300, 100, 10);
+		graphicsEngine->DrawSprite(resourceManager->GetTexture("Bricks")->GetTexture(), 5, 5, 300, 100, 0.0f);
 		graphicsEngine->GraphicsDebugEndEvent();
 
 		graphicsEngine->DebugRender(Time::instance.GetFPS(), Time::instance.deltaTime);
@@ -393,13 +493,11 @@ namespace GameEngineSpace
 		delete cube;
 		delete pbrCube;
 		delete genji;
+		delete pbrGenji;
 		delete pig;
-		delete ibl;
 
 		for (int i = 0; i < 10; i++)
 			delete pigs[i];
-		
-		delete dLight;
 	}
 
 	GameEngineDeclSpec GameEngine* CreateGameEngine()

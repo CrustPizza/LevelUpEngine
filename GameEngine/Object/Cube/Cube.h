@@ -39,5 +39,7 @@ namespace GameEngineSpace
 		void Init(GraphicsEngineSpace::Factory* factory, ModelBase* model, ShaderBase* vertexShader, ShaderBase* pixelShader, BufferBase* matrixBuffer);
 		void Update(float tick) override;
 		void Render(GraphicsEngineSpace::GraphicsEngineBase* engine, float tick = 0.0f) override;
+
+		void SetLight(const Vector& dir, const Vector& color, int index);
 	};
 }

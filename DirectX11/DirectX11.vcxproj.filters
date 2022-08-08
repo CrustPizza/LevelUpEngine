@@ -142,6 +142,7 @@
     <ClInclude Include="DXObject\Sampler\Sampler.h">
       <Filter>DXObject\Sampler</Filter>
     </ClInclude>
+    <ClInclude Include="DXObject\Effect2D\Effect2D.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectX11\DirectX11.cpp">
@@ -208,6 +209,7 @@
     <ClCompile Include="DXObject\Sampler\Sampler.cpp">
       <Filter>DXObject\Sampler</Filter>
     </ClCompile>
+    <ClCompile Include="DXObject\Effect2D\Effect2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

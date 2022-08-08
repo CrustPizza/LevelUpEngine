@@ -19,7 +19,7 @@ namespace GameEngineSpace
 		{ 1.0f, 1.0f, 1.0f, 0.0f },
 	}
 	{
-		transform.position.x -= 14.0f;
+		transform.position.x -= 10.0f;
 		transform.scale *= 2.0f;
 	}
 
@@ -35,6 +35,8 @@ namespace GameEngineSpace
 		pbrModel->SetMetallic(0.5f);
 		pbrModel->SetRoughness(0.5f);
 		prefab = pbrModel->GetPrefab();
+
+		transform.position.x += 5.0f;
 	}
 
 	void Genji::Init(GraphicsEngineSpace::Factory* factory, ModelBase* model, ShaderBase* vertexShader, ShaderBase* pixelShader, BufferBase* matrixBuffer, BufferBase* materialBuffer)
@@ -42,7 +44,7 @@ namespace GameEngineSpace
 		prefab = factory->CreatePrefab("GenjiPrefab", model, matrixBuffer, 0);
 		prefab->SetVertexShader(vertexShader);
 		prefab->SetPixelShader(pixelShader);
-		prefab->SetMaterialBuffer({ materialBuffer, 2, &material, GraphicsEngineSpace::ShaderType::PIXEL });
+		prefab->SetMaterialBuffer({ materialBuffer, 3, &material, GraphicsEngineSpace::ShaderType::PIXEL });
 
 		struct GenjiVertex
 		{

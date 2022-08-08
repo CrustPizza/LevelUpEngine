@@ -21,6 +21,8 @@
 #include "Bases/SkyBoxBase.h"
 #include "Object/PBRModel/PBRModel.h"
 #include "Object/IBLTexture/IBLTexture.h"
+#include "Object/PointLight/PointLight.h"
+#include "Object/DirectionalLight/DirectionalLight.h"
 
 namespace GraphicsEngineSpace
 {
@@ -51,6 +53,7 @@ namespace GraphicsEngineSpace
 		std::map<std::string, SkyBoxBase*>	skyBoxList;
 		std::map<std::string, PBRModel*>	PBRModelList;
 		std::map<std::string, IBLTexture*>	IBLTextureList;
+		std::map<std::string, LightBase*>	lightList;
 
 	public:
 		ResourceManager();
@@ -67,6 +70,7 @@ namespace GraphicsEngineSpace
 		bool AddSkyBox(const std::string& name, SkyBoxBase* skyBox);
 		bool AddPBRModel(const std::string& name, PBRModel* PBRModel);
 		bool AddIBLTexture(const std::string& name, IBLTexture* IBLTexture);
+		bool AddLight(const std::string& name, LightBase* light);
 
 		bool SubLayout(const std::string& name);
 
@@ -81,6 +85,7 @@ namespace GraphicsEngineSpace
 		virtual SkyBoxBase* const GetSkyBox(const std::string& name);
 		virtual PBRModel* const GetPBRModel(const std::string& name);
 		virtual IBLTexture* const GetIBLTexture(const std::string& name);
+		virtual LightBase* const GetLight(const std::string& name);
 
 	private:
 		template<typename T>

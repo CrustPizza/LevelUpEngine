@@ -158,6 +158,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DXObject\Effect2D\Effect2D.h" />
     <ClInclude Include="PostProcess\Combine\Combine.h" />
     <ClInclude Include="PostProcess\Bloom\Bloom.h" />
     <ClInclude Include="PostProcess\Blur\Blur.h" />
@@ -182,6 +183,7 @@
     <ClInclude Include="Builder\SamplerBuilder\SamplerBuilder.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DXObject\Effect2D\Effect2D.cpp" />
     <ClCompile Include="PostProcess\Combine\Combine.cpp" />
     <ClCompile Include="PostProcess\Bloom\Bloom.cpp" />
     <ClCompile Include="PostProcess\Blur\Blur.cpp" />

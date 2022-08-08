@@ -19,13 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Bases\DirectionalLightBase.h" />
-    <ClInclude Include="Bases\PointLightBase.h" />
+    <ClInclude Include="Bases\LightBase.h" />
+    <ClInclude Include="Bases\UIBase.h" />
+    <ClInclude Include="Object\DirectionalLight\DirectionalLight.h" />
+    <ClInclude Include="Object\PointLight\PointLight.h" />
     <ClInclude Include="Bases\PrefabBase.h" />
     <ClInclude Include="Bases\SamplerBase.h" />
     <ClInclude Include="Bases\ShapeBase.h" />
     <ClInclude Include="Bases\SkyBoxBase.h" />
-    <ClInclude Include="Bases\SpotLightBase.h" />
     <ClInclude Include="Builder\ASEBuilder\ASEBuilder.h" />
     <ClInclude Include="Bases\AnimationBase.h" />
     <ClInclude Include="Bases\BoneBase.h" />
@@ -52,17 +53,21 @@
     <ClInclude Include="Bases\TextureBase.h" />
     <ClInclude Include="Bases\ShaderBase.h" />
     <ClInclude Include="Transform\Transform.h" />
+    <ClInclude Include="Object\UIObject\UIObject.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Builder\ASEBuilder\ASEBuilder.cpp" />
+    <ClCompile Include="Object\DirectionalLight\DirectionalLight.cpp" />
     <ClCompile Include="GraphicsEngine\Factory\Factory.cpp" />
     <ClCompile Include="GraphicsEngine\GraphicsEngine.cpp" />
     <ClCompile Include="GraphicsEngineMain.cpp" />
     <ClCompile Include="Builder\PBRBuilder\PBRBuilder.cpp" />
     <ClCompile Include="Object\IBLTexture\IBLTexture.cpp" />
     <ClCompile Include="Object\PBRModel\PBRModel.cpp" />
+    <ClCompile Include="Object\PointLight\PointLight.cpp" />
     <ClCompile Include="ResourceManager\ResourceManager.cpp" />
     <ClCompile Include="Transform\Transform.cpp" />
+    <ClCompile Include="Object\UIObject\UIObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

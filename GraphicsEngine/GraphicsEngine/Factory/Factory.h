@@ -50,6 +50,9 @@ namespace GraphicsEngineSpace
 
 		virtual IBLTexture* CreateIBLTexture(const std::string& name, const std::string& radiancePath, const std::string& irradiancePath);
 
+		virtual DirectionalLight* CreateDirectionalLight(const std::string& name);
+		virtual PointLight* CreatePointLight(const std::string& name);
+
 	private:
 		bool InitFactory(FactoryBase* factory, ResourceManager* resourceManager);
 		void InitDefaultData();

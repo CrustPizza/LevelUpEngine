@@ -15,7 +15,10 @@ namespace GraphicsEngineSpace
 		, radiance(nullptr)
 		, irradiance(nullptr)
 	{
-		param.mipLevles = 1;
+		param.mipLevels[0] = 1;
+		param.mipLevels[1] = 1;
+		param.mipLevels[2] = 1;
+		param.mipLevels[3] = 1;
 	}
 
 	IBLTexture::~IBLTexture()
@@ -29,7 +32,10 @@ namespace GraphicsEngineSpace
 		this->irradiance = irradiance;
 
 		this->mipLevelCB = mipLevelCB;
-		param.mipLevles = radiance->GetMipLevels();
+		param.mipLevels[0] = radiance->GetMipLevels() / 2;
+		param.mipLevels[1] = radiance->GetMipLevels() / 2;
+		param.mipLevels[2] = radiance->GetMipLevels() / 2;
+		param.mipLevels[3] = radiance->GetMipLevels() / 2;
 	}
 
 	void IBLTexture::SetUpIBL(unsigned int mipLevelSlot, unsigned int radianceSlot, unsigned int irradianceSlot, ShaderType type)
