@@ -50,8 +50,9 @@ namespace GraphicsEngineSpace
 		bool OnResize(UINT width, UINT height) override;
 
 		bool DrawSprite(Texture* texture, long posX, long posY, long width, long height, float z) override;
-		bool DrawSpriteOn3D(Texture* texture, HeraclesMath::Vector worldPosition[3], const HeraclesMath::Matrix& viewProjection) override;
-		bool DrawSpriteOn3D(Texture* texture, HeraclesMath::Vector worldPosition, long width, long height, const HeraclesMath::Matrix& viewProjection) override;
+		bool DrawSpriteOn3D(Texture* texture, Vector worldPosition[3], const Matrix& viewProjection) override;
+		bool DrawSpriteOn3D(Texture* texture, long width, long height, const Matrix& worldViewProjection) override;
+		bool DrawSpriteOn3D(Texture* texture, long width, long height, const Matrix& worldViewProjection, const Vector texCoord[3]) override;
 
 		bool DrawMesh(BufferBase* vertices, BufferBase* indices) override;
 		bool DrawTextColor(std::string& text, Vector color, Vector position, float rotation = 0.0f, Vector scale = { 1.0f, 1.0f }) override;

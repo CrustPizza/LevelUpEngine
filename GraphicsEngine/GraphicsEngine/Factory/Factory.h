@@ -53,6 +53,10 @@ namespace GraphicsEngineSpace
 		virtual DirectionalLight* CreateDirectionalLight(const std::string& name);
 		virtual PointLight* CreatePointLight(const std::string& name);
 
+		virtual Canvas* CreateCanvas(const std::string& name, float width, float height);
+
+		virtual SpriteAnimation* CreateSpriteAnimation(const std::string& name);
+
 	private:
 		bool InitFactory(FactoryBase* factory, ResourceManager* resourceManager);
 		void InitDefaultData();

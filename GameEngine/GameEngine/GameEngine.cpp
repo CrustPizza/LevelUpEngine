@@ -176,10 +176,10 @@ namespace GameEngineSpace
 		BufferBase* materialBuffer = resourceManager->GetBuffer("LegacyMaterialCB");
 
 		ModelBase* genjiModel = graphicsFactory->CreateModelFromASEFile("ASEGenji", "Resources/Model/genji_max.ase");
-		
+
 		genji = new Genji;
 		genji->Init(graphicsFactory, genjiModel, vertexShader, pixelShader, matrixBuffer, materialBuffer);
-		
+
 		pbrGenji = new Genji;
 		pbrGenji->Init(graphicsFactory, genjiModel);
 
@@ -202,7 +202,7 @@ namespace GameEngineSpace
 		}
 
 		skyBox = graphicsFactory->CreateSkyBox("SkyBox");
-		skyBox->SetTexture(graphicsFactory->CreateTexture("LobbyCubeMap", "Resources/Texture/lobbycube.dds"));
+		//skyBox->SetTexture(graphicsFactory->CreateTexture("LobbyCubeMap", "Resources/Texture/lobbycube.dds"));
 
 		dLight = graphicsFactory->CreateDirectionalLight("DLight");
 		dLight->rotation.x += 45.0f;
@@ -215,6 +215,30 @@ namespace GameEngineSpace
 
 		ibl = graphicsFactory->CreateIBLTexture("MSIBL", "Resources/Texture/SunSubMixer_specularIBL.dds", "Resources/Texture/SunSubMixer_diffuseIBL.dds");
 		skyBox->SetTexture(resourceManager->GetTexture("MSIBL_radiance"));
+
+		canvas = graphicsFactory->CreateCanvas("Canvas", app->GetWidth(), app->GetHeight());
+		TextureUI* t1 = canvas->CreateTextureUI("Image");
+		TextureUI* t2 = canvas->CreateTextureUI("Image");
+		TextUI* text = canvas->CreateTextUI("Text");
+		t1->SetTexture(graphicsFactory->CreateTexture("Cat1", "Resources/UI/MainMenuTest.jpg"));
+		t2->SetTexture(graphicsFactory->CreateTexture("Cat2", "Resources/UI/ButtonTest1.jpg"));
+		text->SetText("BBBBBBBB");
+
+		t1->SetPosition({ 0.0f, 0.0f, 0.2f });
+		t2->SetPosition({ 0.0f, 0.0f, -0.1f });
+		t1->SetWidth(t1->GetWidth() * 2);
+		t1->SetHeight(t1->GetHeight() * 2);
+		t2->SetParent(t1);
+		text->SetParent(t2);
+		text->SetPosition({ 0.0f, 0.0f, -0.1f });
+		text->SetColor({ 1.0f, 1.0f, 0.0f });
+
+		spriteAnim = graphicsFactory->CreateSpriteAnimation("SpriteAnimation");
+		spriteAnim->SetTexture(graphicsFactory->CreateTexture("Explosion", "Resources/Effect/explosion.png"), 960, 382, 5, 2, 0.1f);
+		spriteAnim->SetLoop(true);
+		spriteAnim->SetPosition({ 10.0f, 10.0f, 0.0f, 1.0f });
+		spriteAnim->SetWidth(2.0f);
+		spriteAnim->SetHeight(2.0f);
 	}
 
 	void GameEngine::Update()
@@ -223,7 +247,9 @@ namespace GameEngineSpace
 		inputManager->Update();
 		camera.CameraMove(Time::instance.deltaTime);
 		camera.CameraRotation();
-		//camera.LookAt(pig->GetTransform().position);
+
+		if (Input::GetInstance()->GetInputState('Z', KeyState::TOGGLE) == true)
+			camera.LookAt(pig->GetTransform().position);
 
 		sceneManager->Update();
 
@@ -276,10 +302,10 @@ namespace GameEngineSpace
 
 		if (Input::GetInstance()->GetInputState(VK_RIGHT, KeyState::DOWN) == true)
 			pig->AddForce(Vector::UnitX * VectorReplicate(5.0f));
-		
+
 		if (Input::GetInstance()->GetInputState(VK_LEFT, KeyState::DOWN) == true)
 			pig->AddForce(-Vector::UnitX * VectorReplicate(5.0f));
-		
+
 		if (Input::GetInstance()->GetInputState(VK_SPACE, KeyState::TOGGLE) == true)
 			pig->Update(0.0f);
 		else
@@ -362,8 +388,75 @@ namespace GameEngineSpace
 		else
 			pLightColor = pLight->color * VectorReplicate(1.0f - distance / pLight->intensity);
 
-		pbrCube->SetLight(Vector::UnitZ* MatrixRotationFromVector(dLight->rotation), dLight->color, 0);
+		pbrCube->SetLight(Vector::UnitZ * MatrixRotationFromVector(dLight->rotation), dLight->color, 0);
 		pbrCube->SetLight(pLightVector, pLightColor, 1);
+
+		using GraphicsEngineSpace::HorizontalLocation;
+		using GraphicsEngineSpace::VerticalLocation;
+
+		if (Input::GetInstance()->GetInputState(VK_RETURN, KeyState::TOGGLE) == true)
+		{
+			if (Input::GetInstance()->GetInputState('1', KeyState::DOWN) == true)
+				canvas->GetTextureUI("Image")->SetAnchor({ HorizontalLocation::LEFT, VerticalLocation::TOP });
+			if (Input::GetInstance()->GetInputState('2', KeyState::DOWN) == true)
+				canvas->GetTextureUI("Image")->SetAnchor({ HorizontalLocation::CENTER, VerticalLocation::TOP });
+			if (Input::GetInstance()->GetInputState('3', KeyState::DOWN) == true)
+				canvas->GetTextureUI("Image")->SetAnchor({ HorizontalLocation::RIGHT, VerticalLocation::TOP });
+			if (Input::GetInstance()->GetInputState('4', KeyState::DOWN) == true)
+				canvas->GetTextureUI("Image")->SetAnchor({ HorizontalLocation::LEFT, VerticalLocation::MIDDLE });
+			if (Input::GetInstance()->GetInputState('5', KeyState::DOWN) == true)
+				canvas->GetTextureUI("Image")->SetAnchor({ HorizontalLocation::CENTER, VerticalLocation::MIDDLE });
+			if (Input::GetInstance()->GetInputState('6', KeyState::DOWN) == true)
+				canvas->GetTextureUI("Image")->SetAnchor({ HorizontalLocation::RIGHT, VerticalLocation::MIDDLE });
+			if (Input::GetInstance()->GetInputState('7', KeyState::DOWN) == true)
+				canvas->GetTextureUI("Image")->SetAnchor({ HorizontalLocation::LEFT, VerticalLocation::BOTTOM });
+			if (Input::GetInstance()->GetInputState('8', KeyState::DOWN) == true)
+				canvas->GetTextureUI("Image")->SetAnchor({ HorizontalLocation::CENTER, VerticalLocation::BOTTOM });
+			if (Input::GetInstance()->GetInputState('9', KeyState::DOWN) == true)
+				canvas->GetTextureUI("Image")->SetAnchor({ HorizontalLocation::RIGHT, VerticalLocation::BOTTOM });
+		}
+		else if (Input::GetInstance()->GetInputState(VK_SHIFT, KeyState::TOGGLE) == true)
+		{
+			if (Input::GetInstance()->GetInputState('1', KeyState::DOWN) == true)
+				canvas->GetTextureUI("Image1")->SetAnchor({ HorizontalLocation::LEFT, VerticalLocation::TOP });
+			if (Input::GetInstance()->GetInputState('2', KeyState::DOWN) == true)
+				canvas->GetTextureUI("Image1")->SetAnchor({ HorizontalLocation::CENTER, VerticalLocation::TOP });
+			if (Input::GetInstance()->GetInputState('3', KeyState::DOWN) == true)
+				canvas->GetTextureUI("Image1")->SetAnchor({ HorizontalLocation::RIGHT, VerticalLocation::TOP });
+			if (Input::GetInstance()->GetInputState('4', KeyState::DOWN) == true)
+				canvas->GetTextureUI("Image1")->SetAnchor({ HorizontalLocation::LEFT, VerticalLocation::MIDDLE });
+			if (Input::GetInstance()->GetInputState('5', KeyState::DOWN) == true)
+				canvas->GetTextureUI("Image1")->SetAnchor({ HorizontalLocation::CENTER, VerticalLocation::MIDDLE });
+			if (Input::GetInstance()->GetInputState('6', KeyState::DOWN) == true)
+				canvas->GetTextureUI("Image1")->SetAnchor({ HorizontalLocation::RIGHT, VerticalLocation::MIDDLE });
+			if (Input::GetInstance()->GetInputState('7', KeyState::DOWN) == true)
+				canvas->GetTextureUI("Image1")->SetAnchor({ HorizontalLocation::LEFT, VerticalLocation::BOTTOM });
+			if (Input::GetInstance()->GetInputState('8', KeyState::DOWN) == true)
+				canvas->GetTextureUI("Image1")->SetAnchor({ HorizontalLocation::CENTER, VerticalLocation::BOTTOM });
+			if (Input::GetInstance()->GetInputState('9', KeyState::DOWN) == true)
+				canvas->GetTextureUI("Image1")->SetAnchor({ HorizontalLocation::RIGHT, VerticalLocation::BOTTOM });
+		}
+		else if (Input::GetInstance()->GetInputState(VK_BACK, KeyState::TOGGLE) == true)
+		{
+			if (Input::GetInstance()->GetInputState('1', KeyState::DOWN) == true)
+				canvas->GetTextureUI("Image1")->SetPivot({ HorizontalLocation::LEFT, VerticalLocation::TOP });
+			if (Input::GetInstance()->GetInputState('2', KeyState::DOWN) == true)
+				canvas->GetTextureUI("Image1")->SetPivot({ HorizontalLocation::CENTER, VerticalLocation::TOP });
+			if (Input::GetInstance()->GetInputState('3', KeyState::DOWN) == true)
+				canvas->GetTextureUI("Image1")->SetPivot({ HorizontalLocation::RIGHT, VerticalLocation::TOP });
+			if (Input::GetInstance()->GetInputState('4', KeyState::DOWN) == true)
+				canvas->GetTextureUI("Image1")->SetPivot({ HorizontalLocation::LEFT, VerticalLocation::MIDDLE });
+			if (Input::GetInstance()->GetInputState('5', KeyState::DOWN) == true)
+				canvas->GetTextureUI("Image1")->SetPivot({ HorizontalLocation::CENTER, VerticalLocation::MIDDLE });
+			if (Input::GetInstance()->GetInputState('6', KeyState::DOWN) == true)
+				canvas->GetTextureUI("Image1")->SetPivot({ HorizontalLocation::RIGHT, VerticalLocation::MIDDLE });
+			if (Input::GetInstance()->GetInputState('7', KeyState::DOWN) == true)
+				canvas->GetTextureUI("Image1")->SetPivot({ HorizontalLocation::LEFT, VerticalLocation::BOTTOM });
+			if (Input::GetInstance()->GetInputState('8', KeyState::DOWN) == true)
+				canvas->GetTextureUI("Image1")->SetPivot({ HorizontalLocation::CENTER, VerticalLocation::BOTTOM });
+			if (Input::GetInstance()->GetInputState('9', KeyState::DOWN) == true)
+				canvas->GetTextureUI("Image1")->SetPivot({ HorizontalLocation::RIGHT, VerticalLocation::BOTTOM });
+		}
 
 		inputManager->LateUpdate();
 	}
@@ -441,7 +534,7 @@ namespace GameEngineSpace
 
 		for (int i = 0; i < 10; i++)
 		{
-			pigs[i]->Render(graphicsEngine, tick* i);
+			pigs[i]->Render(graphicsEngine, tick * i);
 		}
 
 		graphicsEngine->GraphicsDebugEndEvent();
@@ -465,9 +558,28 @@ namespace GameEngineSpace
 			{ 0.0f, 0.0f, 0.0f, 1.0f },
 			{ 10.0f, -10.0f, 0.0f, 1.0f }
 		};
-		graphicsEngine->DrawSpriteOn3D(resourceManager->GetTexture("Bricks")->GetTexture(), position, viewProjection);
-		Vector singlePosition = { 5.0f, 5.0f, 0.0f, 1.0f };
-		graphicsEngine->DrawSpriteOn3D(resourceManager->GetTexture("Bricks")->GetTexture(), singlePosition, 10.0f, 10.0f, viewProjection);
+		graphicsEngine->DrawSpriteOn3D(resourceManager->GetTexture("Explosion")->GetTexture(), position, viewProjection);
+		Vector singlePosition = { 0.0f, 0.0f, 0.0f, 1.0f };
+
+		static float x = 0.0f;
+		if (Input::GetInstance()->GetInputState('V', KeyState::STAY) == true)
+		{
+			x += 0.01f;
+			
+		}
+
+		singlePosition.x = x;
+
+		Matrix rtm = MatrixLookAtLH(singlePosition, camera.GetWorldPosition(), Vector::UnitY);
+
+		rtm = MatrixInverse(rtm);
+		rtm = MatrixTranspose(rtm * camera.GetView() * camera.GetProjection());
+
+		graphicsEngine->DrawSpriteOn3D(resourceManager->GetTexture("Explosion")->GetTexture(), 10.0f, 10.0f, rtm);
+		graphicsEngine->GraphicsDebugEndEvent();
+
+		graphicsEngine->GraphicsDebugBeginEvent("Sprite Animation");
+		spriteAnim->Render(graphicsEngine, camera.GetView() * camera.GetProjection(), camera.GetWorldPosition(), tick);
 		graphicsEngine->GraphicsDebugEndEvent();
 
 		graphicsEngine->Render();
@@ -478,8 +590,10 @@ namespace GameEngineSpace
 
 		/* Texture test */
 		graphicsEngine->GraphicsDebugBeginEvent("Bricks");
-		graphicsEngine->DrawSprite(resourceManager->GetTexture("Bricks")->GetTexture(), 5, 5, 300, 100, 0.0f);
+		graphicsEngine->DrawSprite(resourceManager->GetTexture("Explosion")->GetTexture(), 5, 5, 300, 100, 0.0f);
 		graphicsEngine->GraphicsDebugEndEvent();
+
+		canvas->Render(graphicsEngine);
 
 		graphicsEngine->DebugRender(Time::instance.GetFPS(), Time::instance.deltaTime);
 

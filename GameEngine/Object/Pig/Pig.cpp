@@ -98,7 +98,7 @@ namespace GameEngineSpace
 	{
 		using namespace GraphicsEngineSpace;
 
-		auto materials = prefab->GetMaterials();
+		auto& materials = prefab->GetMaterials();
 		//auto materials = pbrModel->GetPrefab()->GetMaterials();
 
 		for (auto iter : materials)

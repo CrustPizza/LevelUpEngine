@@ -65,6 +65,8 @@ namespace GameEngineSpace
 		
 		GraphicsEngineSpace::SkyBoxBase* skyBox;
 		GraphicsEngineSpace::IBLTexture* ibl;
+		GraphicsEngineSpace::Canvas* canvas;
+		GraphicsEngineSpace::SpriteAnimation* spriteAnim;
 
 	public:
 		GameEngine();

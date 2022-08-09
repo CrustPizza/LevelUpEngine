@@ -671,6 +671,46 @@ namespace GraphicsEngineSpace
 		return dynamic_cast<PointLight*>(resourceManager->GetLight(name));
 	}
 
+	Canvas* Factory::CreateCanvas(const std::string& name, float width, float height)
+	{
+		if (graphicsFactory == nullptr || resourceManager == nullptr)
+			return nullptr;
+
+		Canvas* newCanvas = new Canvas(width, height);
+
+		if (newCanvas == nullptr)
+			return nullptr;
+
+		if (resourceManager->AddCanvas(name, newCanvas) != true)
+		{
+			delete newCanvas;
+
+			return nullptr;
+		}
+
+		return resourceManager->GetCanvas(name);
+	}
+
+	SpriteAnimation* Factory::CreateSpriteAnimation(const std::string& name)
+	{
+		if (graphicsFactory == nullptr || resourceManager == nullptr)
+			return nullptr;
+
+		SpriteAnimation* newSpriteAnimation = new SpriteAnimation;
+
+		if (newSpriteAnimation == nullptr)
+			return nullptr;
+
+		if (resourceManager->AddSpriteAnimation(name, newSpriteAnimation) != true)
+		{
+			delete newSpriteAnimation;
+
+			return nullptr;
+		}
+
+		return resourceManager->GetSpriteAnimation(name);
+	}
+
 	bool Factory::InitFactory(FactoryBase* factory, ResourceManager* resourceManager)
 	{
 		if (graphicsFactory != nullptr)

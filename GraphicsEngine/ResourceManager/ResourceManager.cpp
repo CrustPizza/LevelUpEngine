@@ -28,6 +28,8 @@ namespace GraphicsEngineSpace
 		RELEASE_MAP(PBRModelList);
 		RELEASE_MAP(IBLTextureList);
 		RELEASE_MAP(lightList);
+		RELEASE_MAP(canvasList);
+		RELEASE_MAP(spriteAnimationList);
 	}
 
 	bool ResourceManager::AddTexture(const std::string& name, TextureBase* textureObject)
@@ -158,6 +160,30 @@ namespace GraphicsEngineSpace
 			return false;
 
 		lightList[name] = light;
+
+		return true;
+	}
+
+	bool ResourceManager::AddCanvas(const std::string& name, Canvas* canvas)
+	{
+		auto result = FindGraphicsResource(canvasList, name);
+
+		if (result != nullptr)
+			return false;
+
+		canvasList[name] = canvas;
+
+		return true;
+	}
+
+	bool ResourceManager::AddSpriteAnimation(const std::string& name, SpriteAnimation* spriteAnimation)
+	{
+		auto result = FindGraphicsResource(spriteAnimationList, name);
+
+		if (result != nullptr)
+			return false;
+
+		spriteAnimationList[name] = spriteAnimation;
 
 		return true;
 	}
@@ -308,5 +334,29 @@ namespace GraphicsEngineSpace
 		result->GetRefCount()++;
 
 		return dynamic_cast<LightBase*>(result);
+	}
+
+	Canvas* const ResourceManager::GetCanvas(const std::string& name)
+	{
+		auto result = FindGraphicsResource(canvasList, name);
+
+		if (result == nullptr)
+			return nullptr;
+
+		result->GetRefCount()++;
+
+		return dynamic_cast<Canvas*>(result);
+	}
+
+	SpriteAnimation* const ResourceManager::GetSpriteAnimation(const std::string& name)
+	{
+		auto result = FindGraphicsResource(spriteAnimationList, name);
+
+		if (result == nullptr)
+			return nullptr;
+
+		result->GetRefCount()++;
+
+		return dynamic_cast<SpriteAnimation*>(result);
 	}
 }

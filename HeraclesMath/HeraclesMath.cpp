@@ -39,6 +39,13 @@ namespace HeraclesMath
 	const Vector Vector::NegativeOne = { -1.0f, -1.0f, -1.0f, -1.0f };
 	const Vector Vector::SignMask = { 0x80000000u, 0x80000000u, 0x80000000u, 0x80000000u };
 
+	const Vector Vector::Left = { -1.0f, 0.0f, 0.0f, 0.0f };
+	const Vector Vector::Right = { 1.0f, 0.0f, 0.0f, 0.0f };
+	const Vector Vector::Up = { 0.0f, 1.0f, 0.0f, 0.0f };
+	const Vector Vector::Down = { 0.0f, -1.0f, 0.0f, 0.0f };
+	const Vector Vector::Forward = { 0.0f, 0.0f, 1.0f, 0.0f };
+	const Vector Vector::Backward = { 0.0f, 0.0f, -1.0f, 0.0f };
+
 	const Vector Vector::Select0101 = { SELECT_0, SELECT_1, SELECT_0, SELECT_1 };
 	const Vector Vector::Select1010 = { SELECT_1, SELECT_0, SELECT_1, SELECT_0 };
 	const Vector Vector::Select1000 = { SELECT_1, SELECT_0, SELECT_0, SELECT_0 };
@@ -1168,6 +1175,28 @@ namespace HeraclesMath
 		quaternion += q1 * r1;
 
 		return quaternion;
+	}
+
+	Vector ConvertDegreeToRadian(const Vector& degree)
+	{
+		return Vector
+		{
+			ConvertDegreeToRadian(degree.x),
+			ConvertDegreeToRadian(degree.y),
+			ConvertDegreeToRadian(degree.z),
+			0.0f
+		};
+	}
+
+	Vector ConvertRadianToDegree(const Vector& radian)
+	{
+		return Vector
+		{
+			ConvertRadianToDegree(radian.x),
+			ConvertRadianToDegree(radian.y),
+			ConvertRadianToDegree(radian.z),
+			0.0f
+		};
 	}
 
 	float ConvertDegreeToRadian(float degree)

@@ -21,12 +21,6 @@ void TestScene2::Update()
 {
 	//OutputDebugString(_T("TestScene2 Update\n"));
 
-	int* a = CreateObject<int>(100);
-
-
-
-
-
 	if (inputManager->GetInputState('1', GameEngineSpace::KeyState::DOWN) == true)
 	{
 		sceneManager->ChangeScene("Test");

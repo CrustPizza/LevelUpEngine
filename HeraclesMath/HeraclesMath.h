@@ -42,6 +42,13 @@ namespace HeraclesMath
 		static const Vector NegativeOne;
 		static const Vector SignMask;
 
+		static const Vector Left;
+		static const Vector Right;
+		static const Vector Up;
+		static const Vector Down;
+		static const Vector Forward;
+		static const Vector Backward;
+
 		static const Vector Select0101;
 		static const Vector Select1010;
 		static const Vector Select1000;
@@ -189,6 +196,8 @@ namespace HeraclesMath
 	Vector ConvertQuaternionToEuler(const Vector& quaternion);
 	Vector ConvertRotationMatrixToEuler(const Matrix& matrix);
 	Vector ConvertEulerToQuaternion(const Vector& euler);
+	Vector ConvertDegreeToRadian(const Vector& degree);
+	Vector ConvertRadianToDegree(const Vector& radian);
 
 	float ConvertDegreeToRadian(float degree);
 	float ConvertRadianToDegree(float radian);

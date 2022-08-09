@@ -156,12 +156,12 @@ namespace DX11
 		ZeroMemory(&descBlend, sizeof(D3D11_BLEND_DESC));
 
 		descBlend.RenderTarget[0].BlendEnable = true;
-		descBlend.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
-		descBlend.RenderTarget[0].DestBlend = D3D11_BLEND_ZERO;
-		descBlend.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+		descBlend.RenderTarget[0].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_RED | D3D11_COLOR_WRITE_ENABLE_GREEN | D3D11_COLOR_WRITE_ENABLE_BLUE;
+		descBlend.RenderTarget[0].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
+		descBlend.RenderTarget[0].SrcBlend = D3D11_BLEND_SRC_ALPHA;
 		descBlend.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
 		descBlend.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
-		descBlend.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+		descBlend.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ZERO;
 		descBlend.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
 
 		hr = d3dDevice->CreateBlendState(&descBlend, &blendState);
@@ -215,6 +215,7 @@ namespace DX11
 		RELEASE_PTR(depth);
 		RELEASE_PTR(depthView);
 		RELEASE_PTR(depthState);
+		RELEASE_PTR(blendState);
 
 		// 이하 리사이즈만 제외하고 생성 과정과 같음
 		hr = swapChain->ResizeBuffers(1, width, height, backBufferFormat, 0);
@@ -298,12 +299,12 @@ namespace DX11
 
 	bool DirectX11::DrawSprite(Texture* texture, long posX, long posY, long width, long height, float z)
 	{
-		return DrawSprite(reinterpret_cast<ID3D11ShaderResourceView*>(texture), posX, posY, width, height, z);
+		return DrawSprite(reinterpret_cast<ID3D11ShaderResourceView*>(texture), posX, posY, posX + width, posY + height, z);
 	}
 
 	bool DirectX11::DrawSprite(ID3D11ShaderResourceView* texture, long posX, long posY, long width, long height, float z)
 	{
-		spriteBatch->Begin(DirectX::SpriteSortMode_Texture, nullptr, nullptr, depthState);
+		spriteBatch->Begin(DirectX::SpriteSortMode_Texture, blendState, nullptr, depthState);
 		spriteBatch->Draw(texture, RECT{ posX, posY, width, height }, nullptr, DirectX::Colors::White, 0.0f, { 0.0f, 0.0f }, DirectX::SpriteEffects_None, z);
 		spriteBatch->End();
 
@@ -315,15 +316,19 @@ namespace DX11
 		if (effect2D == nullptr)
 			return false;
 
-		DirectX::XMVECTOR worldPos[3];
-
-		for (int i = 0; i < 3; i++)
+		DirectX::XMVECTOR worldPos[3] =
 		{
-			for (int j = 0; j < 4; j++)
-			{
-				worldPos[i].m128_f32[j] = worldPosition[i][j];
-			}
-		}
+			{ worldPosition[0][0], worldPosition[0][1], worldPosition[0][2], worldPosition[0][3] },
+			{ worldPosition[1][0], worldPosition[1][1], worldPosition[1][2], worldPosition[1][3] },
+			{ worldPosition[2][0], worldPosition[2][1], worldPosition[2][2], worldPosition[2][3] }
+		};
+
+		DirectX::XMVECTOR texCoord[3] =
+		{
+			{ 0.0f, 0.0f },
+			{ 1.0f, 0.0f },
+			{ 0.0f, 1.0f }
+		};
 
 		DirectX::XMMATRIX viewProj;
 
@@ -335,43 +340,69 @@ namespace DX11
 			}
 		}
 		
-		effect2D->Draw(reinterpret_cast<ID3D11ShaderResourceView*>(texture), worldPos, &viewProj);
+		deviceContext->OMSetBlendState(blendState, nullptr, 0xff);
+
+		effect2D->Draw(reinterpret_cast<ID3D11ShaderResourceView*>(texture), worldPos, texCoord, &viewProj);
 
 		return true;
 	}
 
-	bool DirectX11::DrawSpriteOn3D(Texture* texture, HeraclesMath::Vector worldPosition, long width, long height, const HeraclesMath::Matrix& viewProjection)
+	bool DirectX11::DrawSpriteOn3D(Texture* texture, long width, long height, const HeraclesMath::Matrix& worldViewProjection)
 	{
 		if (effect2D == nullptr)
 			return false;
 
 		DirectX::XMVECTOR worldPos[3];
 
-		for (int i = 0; i < 3; i++)
-		{
-			for (int j = 0; j < 4; j++)
-			{
-				worldPos[i].m128_f32[j] = worldPosition[j];
-			}
+		DirectX::XMVECTOR texCoord[3] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 0.0f, 1.0f } };
 
-			worldPos[i].m128_f32[0] += width / 2.0f;
-			worldPos[i].m128_f32[1] += height / 2.0f;
-		}
+		for (int i = 0; i < 3; i++)
+			worldPos[i] = { width / 2.0f, height / 2.0f, 0.0f, 1.0f	};
 
 		worldPos[1].m128_f32[0] -= width;
 		worldPos[2].m128_f32[1] -= height;
 
-		DirectX::XMMATRIX viewProj;
+		DirectX::XMMATRIX transformMatrix;
 
 		for (int i = 0; i < 4; i++)
 		{
 			for (int j = 0; j < 4; j++)
-			{
-				viewProj.r[i].m128_f32[j] = viewProjection[i][j];
-			}
+				transformMatrix.r[i].m128_f32[j] = worldViewProjection[i][j];
 		}
 
-		effect2D->Draw(reinterpret_cast<ID3D11ShaderResourceView*>(texture), worldPos, &viewProj);
+		deviceContext->OMSetBlendState(blendState, nullptr, 0xff);
+
+		effect2D->Draw(reinterpret_cast<ID3D11ShaderResourceView*>(texture), worldPos, texCoord, &transformMatrix);
+
+		return true;
+	}
+
+	bool DirectX11::DrawSpriteOn3D(Texture* texture, long width, long height, const HeraclesMath::Matrix& worldViewProjection, const HeraclesMath::Vector texCoord[3])
+	{
+		if (effect2D == nullptr)
+			return false;
+
+		DirectX::XMVECTOR worldPos[3];
+
+		DirectX::XMVECTOR xmTexCoord[3] = { { texCoord[0].x, texCoord[0].y }, { texCoord[1].x, texCoord[1].y }, { texCoord[2].x, texCoord[2].y } };
+
+		for (int i = 0; i < 3; i++)
+			worldPos[i] = { width / 2.0f, height / 2.0f, 0.0f, 1.0f };
+
+		worldPos[1].m128_f32[0] -= width;
+		worldPos[2].m128_f32[1] -= height;
+
+		DirectX::XMMATRIX transformMatrix;
+
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+				transformMatrix.r[i].m128_f32[j] = worldViewProjection[i][j];
+		}
+
+		deviceContext->OMSetBlendState(blendState, nullptr, 0xff);
+
+		effect2D->Draw(reinterpret_cast<ID3D11ShaderResourceView*>(texture), worldPos, xmTexCoord, &transformMatrix);
 
 		return true;
 	}

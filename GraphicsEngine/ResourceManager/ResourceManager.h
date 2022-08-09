@@ -23,6 +23,8 @@
 #include "Object/IBLTexture/IBLTexture.h"
 #include "Object/PointLight/PointLight.h"
 #include "Object/DirectionalLight/DirectionalLight.h"
+#include "Object/Canvas/Canvas.h"
+#include "Object/SpriteAnimation/SpriteAnimation.h"
 
 namespace GraphicsEngineSpace
 {
@@ -54,6 +56,8 @@ namespace GraphicsEngineSpace
 		std::map<std::string, PBRModel*>	PBRModelList;
 		std::map<std::string, IBLTexture*>	IBLTextureList;
 		std::map<std::string, LightBase*>	lightList;
+		std::map<std::string, UIBase*>		canvasList;
+		std::map<std::string, SpriteAnimation*> spriteAnimationList;
 
 	public:
 		ResourceManager();
@@ -71,6 +75,8 @@ namespace GraphicsEngineSpace
 		bool AddPBRModel(const std::string& name, PBRModel* PBRModel);
 		bool AddIBLTexture(const std::string& name, IBLTexture* IBLTexture);
 		bool AddLight(const std::string& name, LightBase* light);
+		bool AddCanvas(const std::string& name, Canvas* canvas);
+		bool AddSpriteAnimation(const std::string& name, SpriteAnimation* spriteAnimation);
 
 		bool SubLayout(const std::string& name);
 
@@ -86,6 +92,8 @@ namespace GraphicsEngineSpace
 		virtual PBRModel* const GetPBRModel(const std::string& name);
 		virtual IBLTexture* const GetIBLTexture(const std::string& name);
 		virtual LightBase* const GetLight(const std::string& name);
+		virtual Canvas* const GetCanvas(const std::string& name);
+		virtual SpriteAnimation* const GetSpriteAnimation(const std::string& name);
 
 	private:
 		template<typename T>

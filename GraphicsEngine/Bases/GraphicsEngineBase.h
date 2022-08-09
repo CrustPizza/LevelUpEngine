@@ -29,7 +29,8 @@ namespace GraphicsEngineSpace
 		// Texture 타입을 동적 타입으로 받고 싶다..
 		virtual bool DrawSprite(Texture* texture, long posX, long posY, long width, long height, float z) abstract;
 		virtual bool DrawSpriteOn3D(Texture* texture, Vector worldPosition[3], const Matrix& viewProjection) abstract;
-		virtual bool DrawSpriteOn3D(Texture* texture, HeraclesMath::Vector worldPosition, long width, long height, const HeraclesMath::Matrix& viewProjection) abstract;
+		virtual bool DrawSpriteOn3D(Texture* texture, long width, long height, const Matrix& worldViewProjection) abstract;
+		virtual bool DrawSpriteOn3D(Texture* texture, long width, long height, const Matrix& worldViewProjection, const Vector texCoord[3]) abstract;
 
 		virtual bool DrawMesh(BufferBase* vertices, BufferBase* indices) abstract;
 		virtual bool DrawTextColor(std::string& text, Vector color, Vector position, float rotation = 0.0f, Vector scale = { 1.0f, 1.0f }) abstract;

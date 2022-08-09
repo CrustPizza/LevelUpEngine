@@ -56,6 +56,6 @@ namespace DX11
 
 		void SetSampler(SamplerBase* sampler);
 
-		void Draw(ID3D11ShaderResourceView* texture, DirectX::XMVECTOR position[3], void* viewProjection);
+		void Draw(ID3D11ShaderResourceView* texture, DirectX::XMVECTOR position[3], DirectX::XMVECTOR texCoord[3], void* transformMatrix);
 	};
 }

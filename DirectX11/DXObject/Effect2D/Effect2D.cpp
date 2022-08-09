@@ -112,7 +112,7 @@ namespace DX11
 		this->sampler = sampler;
 	}
 
-	void Effect2D::Draw(ID3D11ShaderResourceView* texture, DirectX::XMVECTOR position[3], void* viewProjection)
+	void Effect2D::Draw(ID3D11ShaderResourceView* texture, DirectX::XMVECTOR position[3], DirectX::XMVECTOR texCoord[3], void* transformMatrix)
 	{
 		auto buffer = vertexBuffer->GetBuffer();
 		D3D11_MAPPED_SUBRESOURCE mappedBuffer;
@@ -124,11 +124,11 @@ namespace DX11
 		for (int i = 0; i < 3; i++)
 		{
 			vertices[i].position = position[i];
-			vertices[i].texCoord = { static_cast<float>(i / 2), static_cast<float>(i % 2) };
+			vertices[i].texCoord = texCoord[i];
 		}
 
 		vertices[3].position = position[1] + position[2] - position[0];
-		vertices[3].texCoord = { 1.0f, 1.0f };
+		vertices[3].texCoord = { texCoord[1].m128_f32[0], texCoord[2].m128_f32[1] };
 
 		deviceContext->Unmap(buffer, 0);
 
@@ -138,7 +138,7 @@ namespace DX11
 		vertexBuffer->SetUpBuffer(0, nullptr, ShaderType::NONE);
 		indexBuffer->SetUpBuffer(0, nullptr, ShaderType::NONE);
 
-		viewProjCB->SetUpBuffer(1, viewProjection, ShaderType::VERTEX);
+		viewProjCB->SetUpBuffer(1, transformMatrix, ShaderType::VERTEX);
 		deviceContext->PSSetShaderResources(0, 1, &texture);
 
 		deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

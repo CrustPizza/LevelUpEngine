@@ -25,6 +25,33 @@
     <Filter Include="Transform">
       <UniqueIdentifier>{2910a3bd-648b-44cd-8157-994751f3a714}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{5203e4a7-25c7-47c1-b0db-006a5dc76850}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\PBRModel">
+      <UniqueIdentifier>{e40dae64-9645-49b3-93d3-dd9cd43be675}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Builder\PBRBuilder">
+      <UniqueIdentifier>{2a6574db-e82a-4357-ac22-45f6d11d67de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\IBLTexture">
+      <UniqueIdentifier>{1f917b40-23eb-4b29-97aa-f077e3087b68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\Canvas">
+      <UniqueIdentifier>{965a3c6a-1b0b-46b5-b7e2-f3ea309c897e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\PointLight">
+      <UniqueIdentifier>{6845cd81-912a-403f-9b51-75227af6135c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\TextUI">
+      <UniqueIdentifier>{fc385d52-c854-4eba-8150-35333cd7803f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\TextureUI">
+      <UniqueIdentifier>{80a4c63c-3af0-4b0e-9f83-4304874e0034}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\DirectionalLight">
+      <UniqueIdentifier>{b7eda652-81c6-487c-9267-60c24b02db54}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GraphicsEngineMain.cpp" />
@@ -43,12 +70,31 @@
     <ClCompile Include="Transform\Transform.cpp">
       <Filter>Transform</Filter>
     </ClCompile>
-    <ClCompile Include="Builder\PBRBuilder\PBRBuilder.cpp" />
-    <ClCompile Include="Object\PBRModel\PBRModel.cpp" />
-    <ClCompile Include="Object\IBLTexture\IBLTexture.cpp" />
-    <ClCompile Include="Object\PointLight\PointLight.cpp" />
-    <ClCompile Include="Object\DirectionalLight\DirectionalLight.cpp" />
-    <ClCompile Include="Object\UIObject\UIObject.cpp" />
+    <ClCompile Include="Object\PBRModel\PBRModel.cpp">
+      <Filter>Object\PBRModel</Filter>
+    </ClCompile>
+    <ClCompile Include="Builder\PBRBuilder\PBRBuilder.cpp">
+      <Filter>Builder\PBRBuilder</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\Canvas\Canvas.cpp">
+      <Filter>Object\Canvas</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\IBLTexture\IBLTexture.cpp">
+      <Filter>Object\IBLTexture</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\PointLight\PointLight.cpp">
+      <Filter>Object\PointLight</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\TextUI\TextUI.cpp">
+      <Filter>Object\TextUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\TextureUI\TextureUI.cpp">
+      <Filter>Object\TextureUI</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\DirectionalLight\DirectionalLight.cpp">
+      <Filter>Object\DirectionalLight</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\SpriteAnimation\SpriteAnimation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GraphicsEngineFramework.h" />
@@ -124,20 +170,43 @@
     <ClInclude Include="Bases\SamplerBase.h">
       <Filter>Bases</Filter>
     </ClInclude>
-    <ClInclude Include="Object\PointLight\PointLight.h">
-      <Filter>Bases</Filter>
-    </ClInclude>
     <ClInclude Include="Define\GraphicsFilterOption.h">
       <Filter>Define</Filter>
     </ClInclude>
-    <ClInclude Include="Bases\SkyBoxBase.h" />
-    <ClInclude Include="Builder\PBRBuilder\PBRBuilder.h" />
-    <ClInclude Include="Object\PBRModel\PBRModel.h" />
-    <ClInclude Include="Object\IBLTexture\IBLTexture.h" />
-    <ClInclude Include="Bases\LightBase.h" />
-    <ClInclude Include="Object\DirectionalLight\DirectionalLight.h" />
-    <ClInclude Include="Object\UIObject\UIObject.h" />
-    <ClInclude Include="Bases\UIBase.h" />
+    <ClInclude Include="Object\PBRModel\PBRModel.h">
+      <Filter>Object\PBRModel</Filter>
+    </ClInclude>
+    <ClInclude Include="Builder\PBRBuilder\PBRBuilder.h">
+      <Filter>Builder\PBRBuilder</Filter>
+    </ClInclude>
+    <ClInclude Include="Bases\LightBase.h">
+      <Filter>Bases</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\Canvas\Canvas.h">
+      <Filter>Object\Canvas</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\IBLTexture\IBLTexture.h">
+      <Filter>Object\IBLTexture</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\PointLight\PointLight.h">
+      <Filter>Object\PointLight</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\TextUI\TextUI.h">
+      <Filter>Object\TextUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\TextureUI\TextureUI.h">
+      <Filter>Object\TextureUI</Filter>
+    </ClInclude>
+    <ClInclude Include="Bases\SkyBoxBase.h">
+      <Filter>Bases</Filter>
+    </ClInclude>
+    <ClInclude Include="Bases\UIBase.h">
+      <Filter>Bases</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\DirectionalLight\DirectionalLight.h">
+      <Filter>Object\DirectionalLight</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\SpriteAnimation\SpriteAnimation.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

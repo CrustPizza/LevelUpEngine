@@ -76,6 +76,9 @@
     <Filter Include="DXObject\Sampler">
       <UniqueIdentifier>{b536bef9-4a37-44ef-84bf-4c3b3f8eb1e7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DXObject\Effect2D">
+      <UniqueIdentifier>{272c68aa-1f17-45e9-9b5e-58d758724604}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DirectX11\DirectX11.h">
@@ -142,7 +145,9 @@
     <ClInclude Include="DXObject\Sampler\Sampler.h">
       <Filter>DXObject\Sampler</Filter>
     </ClInclude>
-    <ClInclude Include="DXObject\Effect2D\Effect2D.h" />
+    <ClInclude Include="DXObject\Effect2D\Effect2D.h">
+      <Filter>DXObject\Effect2D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectX11\DirectX11.cpp">
@@ -209,7 +214,9 @@
     <ClCompile Include="DXObject\Sampler\Sampler.cpp">
       <Filter>DXObject\Sampler</Filter>
     </ClCompile>
-    <ClCompile Include="DXObject\Effect2D\Effect2D.cpp" />
+    <ClCompile Include="DXObject\Effect2D\Effect2D.cpp">
+      <Filter>DXObject\Effect2D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

@@ -109,9 +109,14 @@ namespace GraphicsEngineSpace
 		return graphicsEngine->DrawSpriteOn3D(texture, worldPosition, viewProjection);
 	}
 
-	bool GraphicsEngine::DrawSpriteOn3D(Texture* texture, HeraclesMath::Vector worldPosition, long width, long height, const HeraclesMath::Matrix& viewProjection)
+	bool GraphicsEngine::DrawSpriteOn3D(Texture* texture, long width, long height, const HeraclesMath::Matrix& worldViewProjection)
 	{
-		return graphicsEngine->DrawSpriteOn3D(texture, worldPosition, width, height, viewProjection);
+		return graphicsEngine->DrawSpriteOn3D(texture, width, height, worldViewProjection);
+	}
+
+	bool GraphicsEngine::DrawSpriteOn3D(Texture* texture, long width, long height, const Matrix& worldViewProjection, const Vector texCoord[3])
+	{
+		return graphicsEngine->DrawSpriteOn3D(texture, width, height, worldViewProjection, texCoord);
 	}
 
 	bool GraphicsEngine::DrawMesh(BufferBase* vertices, BufferBase* indices)
