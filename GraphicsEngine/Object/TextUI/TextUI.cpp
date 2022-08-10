@@ -35,6 +35,15 @@ namespace GraphicsEngineSpace
 
 	void TextUI::Render(GraphicsEngineBase* engine)
 	{
+		if (isEnable != true || engine == nullptr)
+			return;
+
 		engine->DrawTextColor(text, color, GetScreenPosition(), 0.0f, Vector{ fontSize / 14.0f, fontSize / 14.0f } * scale);
+
+		for (auto* iter : child)
+		{
+			if (iter != nullptr)
+				iter->Render(engine);
+		}
 	}
 }

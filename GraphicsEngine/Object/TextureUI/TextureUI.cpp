@@ -28,8 +28,17 @@ namespace GraphicsEngineSpace
 
 	void TextureUI::Render(GraphicsEngineBase* engine)
 	{
+		if (isEnable != true || engine == nullptr)
+			return;
+
 		auto screenPosition = GetScreenPosition();
 
 		engine->DrawSprite(texture->GetTexture(), screenPosition.x, screenPosition.y, width, height, screenPosition.z);
+
+		for (auto* iter : child)
+		{
+			if (iter != nullptr)
+				iter->Render(engine);
+		}
 	}
 }

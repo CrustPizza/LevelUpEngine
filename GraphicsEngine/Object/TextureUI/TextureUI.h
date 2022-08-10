@@ -26,6 +26,8 @@ namespace GraphicsEngineSpace
 
 	public:
 		virtual void SetTexture(TextureBase* texture);
+
+	protected:
 		void Render(GraphicsEngineBase* engine);
 
 		friend Canvas;

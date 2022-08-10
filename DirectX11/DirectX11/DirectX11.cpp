@@ -299,13 +299,21 @@ namespace DX11
 
 	bool DirectX11::DrawSprite(Texture* texture, long posX, long posY, long width, long height, float z)
 	{
-		return DrawSprite(reinterpret_cast<ID3D11ShaderResourceView*>(texture), posX, posY, posX + width, posY + height, z);
+		return DrawSprite(reinterpret_cast<ID3D11ShaderResourceView*>(texture), RECT{ posX, posY, posX + width, posY + height }, nullptr, z);
 	}
 
-	bool DirectX11::DrawSprite(ID3D11ShaderResourceView* texture, long posX, long posY, long width, long height, float z)
+	bool DirectX11::DrawSprite(Texture* texture, const HeraclesMath::Rect& dest, const HeraclesMath::Rect& src, float z)
+	{
+		RECT dxDest = { dest.left, dest.top, dest.right, dest.bottom };
+		RECT dxSrc = { src.left, src.top, src.right, src.bottom };
+
+		return DrawSprite(reinterpret_cast<ID3D11ShaderResourceView*>(texture), dxDest, &dxSrc,	z);
+	}
+
+	bool DirectX11::DrawSprite(ID3D11ShaderResourceView* texture, RECT dest, RECT* src, float z)
 	{
 		spriteBatch->Begin(DirectX::SpriteSortMode_Texture, blendState, nullptr, depthState);
-		spriteBatch->Draw(texture, RECT{ posX, posY, width, height }, nullptr, DirectX::Colors::White, 0.0f, { 0.0f, 0.0f }, DirectX::SpriteEffects_None, z);
+		spriteBatch->Draw(texture, dest, src, DirectX::Colors::White, 0.0f, { 0.0f, 0.0f }, DirectX::SpriteEffects_None, z);
 		spriteBatch->End();
 
 		return true;

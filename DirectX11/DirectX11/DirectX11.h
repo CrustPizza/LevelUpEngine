@@ -99,7 +99,12 @@ namespace DX11
 		virtual bool OnResize(UINT width, UINT height) override;
 
 		bool DrawSprite(Texture* texture, long posX, long posY, long width, long height, float z) override;
-		bool DrawSprite(ID3D11ShaderResourceView* texture, long posX, long posY, long width, long height, float z);
+		bool DrawSprite(Texture* texture, const HeraclesMath::Rect& dest, const HeraclesMath::Rect& src, float z) override;
+
+	private:
+		bool DrawSprite(ID3D11ShaderResourceView* texture, RECT dest, RECT* src, float z);
+
+	public:
 		bool DrawSpriteOn3D(Texture* texture, HeraclesMath::Vector worldPosition[3], const HeraclesMath::Matrix& viewProjection) override;
 		bool DrawSpriteOn3D(Texture* texture, long width, long height, const HeraclesMath::Matrix& worldViewProjection) override;
 		bool DrawSpriteOn3D(Texture* texture, long width, long height, const HeraclesMath::Matrix& worldViewProjection, const HeraclesMath::Vector texCoord[3]) override;

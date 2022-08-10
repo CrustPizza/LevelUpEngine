@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="Bases\LightBase.h" />
     <ClInclude Include="Bases\UIBase.h" />
+    <ClInclude Include="Object\ButtonUI\ButtonUI.h" />
     <ClInclude Include="Object\Canvas\Canvas.h" />
     <ClInclude Include="Object\DirectionalLight\DirectionalLight.h" />
     <ClInclude Include="Object\PointLight\PointLight.h" />
@@ -50,6 +51,7 @@
     <ClInclude Include="Builder\PBRBuilder\PBRBuilder.h" />
     <ClInclude Include="Object\IBLTexture\IBLTexture.h" />
     <ClInclude Include="Object\PBRModel\PBRModel.h" />
+    <ClInclude Include="Object\ProgressBar\ProgressBar.h" />
     <ClInclude Include="ResourceManager\ResourceManager.h" />
     <ClInclude Include="Bases\TextureBase.h" />
     <ClInclude Include="Bases\ShaderBase.h" />
@@ -60,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Builder\ASEBuilder\ASEBuilder.cpp" />
+    <ClCompile Include="Object\ButtonUI\ButtonUI.cpp" />
     <ClCompile Include="Object\Canvas\Canvas.cpp" />
     <ClCompile Include="Object\DirectionalLight\DirectionalLight.cpp" />
     <ClCompile Include="GraphicsEngine\Factory\Factory.cpp" />
@@ -69,6 +72,7 @@
     <ClCompile Include="Object\IBLTexture\IBLTexture.cpp" />
     <ClCompile Include="Object\PBRModel\PBRModel.cpp" />
     <ClCompile Include="Object\PointLight\PointLight.cpp" />
+    <ClCompile Include="Object\ProgressBar\ProgressBar.cpp" />
     <ClCompile Include="ResourceManager\ResourceManager.cpp" />
     <ClCompile Include="Object\TextUI\TextUI.cpp" />
     <ClCompile Include="Object\SpriteAnimation\SpriteAnimation.cpp" />

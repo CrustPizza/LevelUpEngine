@@ -50,6 +50,7 @@ namespace GraphicsEngineSpace
 		bool OnResize(UINT width, UINT height) override;
 
 		bool DrawSprite(Texture* texture, long posX, long posY, long width, long height, float z) override;
+		bool DrawSprite(Texture* texture, const Rect& dest, const Rect& src, float z) override;
 		bool DrawSpriteOn3D(Texture* texture, Vector worldPosition[3], const Matrix& viewProjection) override;
 		bool DrawSpriteOn3D(Texture* texture, long width, long height, const Matrix& worldViewProjection) override;
 		bool DrawSpriteOn3D(Texture* texture, long width, long height, const Matrix& worldViewProjection, const Vector texCoord[3]) override;

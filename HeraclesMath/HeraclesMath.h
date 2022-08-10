@@ -16,6 +16,17 @@ namespace HeraclesMath
 
 	struct Matrix;
 
+	struct Rect
+	{
+		long left;
+		long top;
+		long right;
+		long bottom;
+
+		long GetWidth() { return right - left; }
+		long GetHeight() { return bottom - top; }
+	};
+
 	struct Vector
 	{
 		union

@@ -96,12 +96,18 @@ namespace GraphicsEngineSpace
 
 	bool GraphicsEngine::OnResize(UINT width, UINT height)
 	{
+
 		return graphicsEngine->OnResize(width, height);
 	}
 
 	bool GraphicsEngine::DrawSprite(Texture* texture, long posX, long posY, long width, long height, float z)
 	{
 		return graphicsEngine->DrawSprite(texture, posX, posY, width, height, z);
+	}
+
+	bool GraphicsEngine::DrawSprite(Texture* texture, const Rect& dest, const Rect& src, float z)
+	{
+		return graphicsEngine->DrawSprite(texture, dest, src, z);
 	}
 
 	bool GraphicsEngine::DrawSpriteOn3D(Texture* texture, HeraclesMath::Vector worldPosition[3], const HeraclesMath::Matrix& viewProjection)

@@ -95,6 +95,8 @@
       <Filter>Object\DirectionalLight</Filter>
     </ClCompile>
     <ClCompile Include="Object\SpriteAnimation\SpriteAnimation.cpp" />
+    <ClCompile Include="Object\ProgressBar\ProgressBar.cpp" />
+    <ClCompile Include="Object\ButtonUI\ButtonUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GraphicsEngineFramework.h" />
@@ -207,6 +209,8 @@
       <Filter>Object\DirectionalLight</Filter>
     </ClInclude>
     <ClInclude Include="Object\SpriteAnimation\SpriteAnimation.h" />
+    <ClInclude Include="Object\ProgressBar\ProgressBar.h" />
+    <ClInclude Include="Object\ButtonUI\ButtonUI.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

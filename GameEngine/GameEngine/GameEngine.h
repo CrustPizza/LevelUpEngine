@@ -67,6 +67,14 @@ namespace GameEngineSpace
 		GraphicsEngineSpace::IBLTexture* ibl;
 		GraphicsEngineSpace::Canvas* canvas;
 		GraphicsEngineSpace::SpriteAnimation* spriteAnim;
+		GraphicsEngineSpace::SpriteAnimation* spriteAnim1;
+		GraphicsEngineSpace::SpriteAnimation* spriteAnim2;
+		GraphicsEngineSpace::SpriteAnimation* spriteAnim3;
+		GraphicsEngineSpace::SpriteAnimation* spriteAnim4;
+		GraphicsEngineSpace::SpriteAnimation* spriteAnim5;
+		GraphicsEngineSpace::SpriteAnimation* spriteAnim6;
+		GraphicsEngineSpace::SpriteAnimation* spriteAnim7;
+		GraphicsEngineSpace::SpriteAnimation* spriteAnim8;
 
 	public:
 		GameEngine();

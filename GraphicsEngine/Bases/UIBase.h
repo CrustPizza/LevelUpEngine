@@ -3,12 +3,14 @@
 *	UI Base.h					*
 *								*
 *	Created : 2022/08/08		*
-*	Updated : 2022/08/08		*
+*	Updated : 2022/08/10		*
 *********************************/
 
 #pragma once
 
+#include <vector>
 #include "Bases/ResourceBase.h"
+#include "Bases/GraphicsEngineBase.h"
 
 namespace GraphicsEngineSpace
 {
@@ -43,13 +45,17 @@ namespace GraphicsEngineSpace
 		float width;
 		float height;
 
+		bool isEnable;
+
 		UIBase* parent;
+		std::vector<UIBase*> child;
 		Vector position;
+		Vector rotation;
 		Vector scale;
 
 	private:
 		Vector screenPosition;
-	
+
 	protected:
 		UIBase()
 			: anchor{ HorizontalLocation::CENTER, VerticalLocation::MIDDLE }
@@ -58,11 +64,15 @@ namespace GraphicsEngineSpace
 			, height(0.0f)
 			, parent(nullptr)
 			, position(Vector::Zero)
+			, rotation(Vector::Zero)
 			, scale(Vector::One)
+			, isEnable(true)
 			, screenPosition(Vector::Zero) {}
 
 	public:
 		virtual ~UIBase() = default;
+
+		virtual void Render(GraphicsEngineBase* engine) abstract;
 
 		void SetAnchor(Location anchor)
 		{
@@ -72,6 +82,7 @@ namespace GraphicsEngineSpace
 			SetHorizontalAnchor(anchor.hLocation);
 			SetVerticalAnchor(anchor.vLocation);
 		}
+
 		void SetHorizontalAnchor(HorizontalLocation hLocation)
 		{
 			if (parent == nullptr)
@@ -82,6 +93,7 @@ namespace GraphicsEngineSpace
 
 			anchor.hLocation = hLocation;
 		}
+
 		void SetVerticalAnchor(VerticalLocation vLocation)
 		{
 			if (parent == nullptr)
@@ -99,17 +111,42 @@ namespace GraphicsEngineSpace
 		}
 
 		void SetPosition(const Vector& position) { this->position = position; }
+		void SetRotation(const Vector& rotation) { this->rotation = rotation; }
 		void SetScale(const Vector& scale) { this->scale = scale; }
 		void SetWidth(float width) { this->width = width; }
 		void SetHeight(float height) { this->height = height; }
-		void SetParent(UIBase* parent) { this->parent = parent; }
-		
+		void SetEnable(bool enable) { this->isEnable = enable; }
+		void SetParent(UIBase* parent)
+		{
+			if (parent == nullptr)
+				return;
+
+			if (this->parent != nullptr)
+				this->parent->PopChild(this);
+
+			this->parent = parent;
+			parent->SetChild(this);
+		}
+
 		const Vector& GetPosition() { return position; }
+		const Vector& GetRotation() { return rotation; }
 		const Vector& GetScale() { return scale; }
 		float GetWidth() { return width; }
 		float GetHeight() { return height; }
+		bool  GetEnable() { return isEnable; }
+		Rect  GetUIRect()
+		{
+			auto screenPosition = GetScreenPosition();
 
-	protected:
+			return Rect
+			{
+				static_cast<long>(screenPosition.x),
+				static_cast<long>(screenPosition.y),
+				static_cast<long>(screenPosition.x + width),
+				static_cast<long>(screenPosition.y + height)
+			};
+		}
+
 		Vector GetScreenPosition()
 		{
 			auto screenPosition = Vector::Zero;
@@ -127,7 +164,7 @@ namespace GraphicsEngineSpace
 
 					break;
 				}
-				
+
 				case HorizontalLocation::RIGHT:
 				{
 					screenPosition.x += parent->width;
@@ -146,7 +183,7 @@ namespace GraphicsEngineSpace
 
 					break;
 				}
-				
+
 				case VerticalLocation::BOTTOM:
 				{
 					screenPosition.y += parent->height;
@@ -196,6 +233,31 @@ namespace GraphicsEngineSpace
 			}
 
 			return position + screenPosition;
+		}
+
+	private:
+		void SetChild(UIBase* child)
+		{
+			for (int i = 0; i < this->child.size(); i++)
+			{
+				if (this->child[i] == child)
+					return;
+			}
+
+			this->child.push_back(child);
+		}
+
+		void PopChild(UIBase* child)
+		{
+			for (int i = 0; i < this->child.size(); i++)
+			{
+				if (this->child[i] == child)
+				{
+					this->child.erase(this->child.begin() + i);
+
+					return;
+				}
+			}
 		}
 	};
 }

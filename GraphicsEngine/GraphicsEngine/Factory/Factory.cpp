@@ -110,11 +110,7 @@ namespace GraphicsEngineSpace
 			return nullptr;
 
 		if (resourceManager->AddTexture(name, newTexture) != true)
-		{
-			newTexture->Release();
-
-			return nullptr;
-		}
+			delete newTexture;
 
 		return resourceManager->GetTexture(name);
 	}
@@ -213,11 +209,12 @@ namespace GraphicsEngineSpace
 		if (newBuffer == nullptr)
 			return nullptr;
 
-		if (resourceManager->AddBuffer(name, newBuffer) != true)
-		{
-			newBuffer->Release();
+		std::string bufferName = name;
+		int ID = 1;
 
-			return nullptr;
+		while (resourceManager->AddBuffer(bufferName, newBuffer) != true)
+		{
+			bufferName = name + std::to_string(ID++);
 		}
 
 		return resourceManager->GetBuffer(name);

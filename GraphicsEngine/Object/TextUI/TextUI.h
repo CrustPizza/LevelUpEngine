@@ -29,6 +29,8 @@ namespace GraphicsEngineSpace
 	public:
 		virtual void SetText(const std::string& text);
 		virtual void SetColor(const Vector& color);
+
+	protected:
 		void Render(GraphicsEngineBase* engine);
 
 		friend Canvas;

@@ -771,6 +771,7 @@ namespace GraphicsEngineSpace
 			if (index != -1)
 			{
 				std::string path = "Resources/Texture/" + map.bitmap.substr(index + 1);
+
 				tempMapData.map = factory->CreateTexture(map.bitmap.substr(index + 1), path);
 
 				// Type

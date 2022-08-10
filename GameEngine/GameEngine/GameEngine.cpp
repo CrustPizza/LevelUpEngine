@@ -220,11 +220,13 @@ namespace GameEngineSpace
 		TextureUI* t1 = canvas->CreateTextureUI("Image");
 		TextureUI* t2 = canvas->CreateTextureUI("Image");
 		TextUI* text = canvas->CreateTextUI("Text");
+		ProgressBar* pBar = canvas->CreateProgressBar("Progress Bar");
 		t1->SetTexture(graphicsFactory->CreateTexture("Cat1", "Resources/UI/MainMenuTest.jpg"));
 		t2->SetTexture(graphicsFactory->CreateTexture("Cat2", "Resources/UI/ButtonTest1.jpg"));
 		text->SetText("BBBBBBBB");
+		pBar->SetTexture(graphicsFactory->CreateTexture("Bar", "Resources/UI/bars.png"));
 
-		t1->SetPosition({ 0.0f, 0.0f, 0.2f });
+		t1->SetPosition({ 0.0f, 0.0f, 0.6f });
 		t2->SetPosition({ 0.0f, 0.0f, -0.1f });
 		t1->SetWidth(t1->GetWidth() * 2);
 		t1->SetHeight(t1->GetHeight() * 2);
@@ -232,6 +234,18 @@ namespace GameEngineSpace
 		text->SetParent(t2);
 		text->SetPosition({ 0.0f, 0.0f, -0.1f });
 		text->SetColor({ 1.0f, 1.0f, 0.0f });
+		
+		//t1->SetEnable(false);
+		//t2->SetEnable(false);
+		
+		pBar->SetAnchor({ HorizontalLocation::CENTER, VerticalLocation::TOP });
+		pBar->SetPivot({ HorizontalLocation::CENTER, VerticalLocation::TOP });
+		pBar->SetPosition({ 0.0f, 30.0f, 0.3f });
+		pBar->SetBackBarTexCoord(0.0f, 0.0f, 300.0f, 100.0f);
+		pBar->SetFrontBarTexCoord(0.0f, 200.0f, 300.0f, 100.0f);
+		pBar->SetWidth(300.0f);
+		pBar->SetHeight(100.0f);
+		pBar->SetScale({ 1.0f, 0.5f, 1.0f });
 
 		spriteAnim = graphicsFactory->CreateSpriteAnimation("SpriteAnimation");
 		spriteAnim->SetTexture(graphicsFactory->CreateTexture("Explosion", "Resources/Effect/explosion.png"), 960, 382, 5, 2, 0.1f);
@@ -239,6 +253,62 @@ namespace GameEngineSpace
 		spriteAnim->SetPosition({ 10.0f, 10.0f, 0.0f, 1.0f });
 		spriteAnim->SetWidth(2.0f);
 		spriteAnim->SetHeight(2.0f);
+
+		spriteAnim1 = graphicsFactory->CreateSpriteAnimation("SpriteAnimation1");
+		spriteAnim1->SetTexture(graphicsFactory->CreateTexture("Explosion2", "Resources/Effect/explosion2.png"), 1920, 1440, 8, 6, 0.05f);
+		spriteAnim1->SetLoop(true);
+		spriteAnim1->SetPosition({ 0.0f, 10.0f, 0.0f, 1.0f });
+		spriteAnim1->SetWidth(2.0f);
+		spriteAnim1->SetHeight(2.0f);
+
+		spriteAnim2 = graphicsFactory->CreateSpriteAnimation("SpriteAnimation2");
+		spriteAnim2->SetTexture(graphicsFactory->CreateTexture("Effect1", "Resources/Effect/effect1.png"), 960, 960, 5, 5, 0.05f);
+		spriteAnim2->SetLoop(true);
+		spriteAnim2->SetPosition({ -10.0f, 10.0f, 0.0f, 1.0f });
+		spriteAnim2->SetWidth(2.0f);
+		spriteAnim2->SetHeight(2.0f);
+
+		spriteAnim3 = graphicsFactory->CreateSpriteAnimation("SpriteAnimation3");
+		spriteAnim3->SetTexture(graphicsFactory->CreateTexture("Effect2", "Resources/Effect/Preview_270.png"), 250, 250, 6, 5, 0.05f);
+		spriteAnim3->SetLoop(true);
+		spriteAnim3->SetPosition({ -10.0f, 15.0f, 0.0f, 1.0f });
+		spriteAnim3->SetWidth(2.0f);
+		spriteAnim3->SetHeight(2.0f);
+
+		spriteAnim4 = graphicsFactory->CreateSpriteAnimation("SpriteAnimation4");
+		spriteAnim4->SetTexture(graphicsFactory->CreateTexture("Effect3", "Resources/Effect/Preview_Alternative_1.png"), 250, 250, 6, 5, 0.05f);
+		spriteAnim4->SetLoop(true);
+		spriteAnim4->SetPosition({ -8.0f, 15.0f, 0.0f, 1.0f });
+		spriteAnim4->SetWidth(2.0f);
+		spriteAnim4->SetHeight(2.0f);
+
+		spriteAnim5 = graphicsFactory->CreateSpriteAnimation("SpriteAnimation5");
+		spriteAnim5->SetTexture(graphicsFactory->CreateTexture("Effect4", "Resources/Effect/Preview_Alternative_2.png"), 250, 250, 6, 5, 0.05f);
+		spriteAnim5->SetLoop(true);
+		spriteAnim5->SetPosition({ -6.0f, 15.0f, 0.0f, 1.0f });
+		spriteAnim5->SetWidth(2.0f);
+		spriteAnim5->SetHeight(2.0f);
+
+		spriteAnim6 = graphicsFactory->CreateSpriteAnimation("SpriteAnimation6");
+		spriteAnim6->SetTexture(graphicsFactory->CreateTexture("Effect5", "Resources/Effect/Preview_Alternative_3.png"), 250, 250, 6, 5, 0.05f);
+		spriteAnim6->SetLoop(true);
+		spriteAnim6->SetPosition({ -4.0f, 15.0f, 0.0f, 1.0f });
+		spriteAnim6->SetWidth(2.0f);
+		spriteAnim6->SetHeight(2.0f);
+
+		spriteAnim7 = graphicsFactory->CreateSpriteAnimation("SpriteAnimation7");
+		spriteAnim7->SetTexture(graphicsFactory->CreateTexture("Effect6", "Resources/Effect/pngwing.com (2).png"), 960, 768, 5, 4, 0.05f);
+		spriteAnim7->SetLoop(true);
+		spriteAnim7->SetPosition({ -2.0f, 15.0f, 0.0f, 1.0f });
+		spriteAnim7->SetWidth(2.0f);
+		spriteAnim7->SetHeight(2.0f);
+
+		spriteAnim8 = graphicsFactory->CreateSpriteAnimation("SpriteAnimation8");
+		spriteAnim8->SetTexture(graphicsFactory->CreateTexture("Effect7", "Resources/Effect/pngwing.com (3).png"), 960, 960, 5, 5, 0.05f);
+		spriteAnim8->SetLoop(true);
+		spriteAnim8->SetPosition({ 0.0f, 15.0f, 0.0f, 1.0f });
+		spriteAnim8->SetWidth(2.0f);
+		spriteAnim8->SetHeight(2.0f);
 	}
 
 	void GameEngine::Update()
@@ -458,6 +528,15 @@ namespace GameEngineSpace
 				canvas->GetTextureUI("Image1")->SetPivot({ HorizontalLocation::RIGHT, VerticalLocation::BOTTOM });
 		}
 
+		static float bar = 0.0f;
+
+		bar += 0.01f;
+
+		if (bar > 1.0f)
+			bar = 0.0f;
+
+		canvas->GetProgressBar("Progress Bar")->SetPercent(bar);
+
 		inputManager->LateUpdate();
 	}
 
@@ -580,6 +659,14 @@ namespace GameEngineSpace
 
 		graphicsEngine->GraphicsDebugBeginEvent("Sprite Animation");
 		spriteAnim->Render(graphicsEngine, camera.GetView() * camera.GetProjection(), camera.GetWorldPosition(), tick);
+		spriteAnim1->Render(graphicsEngine, camera.GetView() * camera.GetProjection(), camera.GetWorldPosition(), tick);
+		spriteAnim2->Render(graphicsEngine, camera.GetView() * camera.GetProjection(), camera.GetWorldPosition(), tick);
+		spriteAnim3->Render(graphicsEngine, camera.GetView() * camera.GetProjection(), camera.GetWorldPosition(), tick);
+		spriteAnim4->Render(graphicsEngine, camera.GetView() * camera.GetProjection(), camera.GetWorldPosition(), tick);
+		spriteAnim5->Render(graphicsEngine, camera.GetView() * camera.GetProjection(), camera.GetWorldPosition(), tick);
+		spriteAnim6->Render(graphicsEngine, camera.GetView() * camera.GetProjection(), camera.GetWorldPosition(), tick);
+		spriteAnim7->Render(graphicsEngine, camera.GetView() * camera.GetProjection(), camera.GetWorldPosition(), tick);
+		spriteAnim8->Render(graphicsEngine, camera.GetView() * camera.GetProjection(), camera.GetWorldPosition(), tick);
 		graphicsEngine->GraphicsDebugEndEvent();
 
 		graphicsEngine->Render();
@@ -588,12 +675,13 @@ namespace GameEngineSpace
 		if (Input::GetInstance()->GetInputState(VK_TAB, KeyState::TOGGLE) == true)
 			graphicsEngine->PostProcess();
 
+		/* Canvas */
+		canvas->Render(graphicsEngine);
+
 		/* Texture test */
 		graphicsEngine->GraphicsDebugBeginEvent("Bricks");
-		graphicsEngine->DrawSprite(resourceManager->GetTexture("Explosion")->GetTexture(), 5, 5, 300, 100, 0.0f);
+		graphicsEngine->DrawSprite(resourceManager->GetTexture("Explosion")->GetTexture(), 5, 5, 300, 100, 0.1f);
 		graphicsEngine->GraphicsDebugEndEvent();
-
-		canvas->Render(graphicsEngine);
 
 		graphicsEngine->DebugRender(Time::instance.GetFPS(), Time::instance.deltaTime);
 
