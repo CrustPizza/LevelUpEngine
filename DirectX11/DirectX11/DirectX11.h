@@ -80,7 +80,9 @@ namespace DX11
 
 		// MRT
 		RenderTexture* depthBuffer;
-
+		RenderTexture* albedoBuffer;
+		RenderTexture* normalBuffer;
+		RenderTexture* worldPosBuffer;
 
 		// Factory
 		Factory* factory;

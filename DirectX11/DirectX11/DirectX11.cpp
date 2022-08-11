@@ -61,6 +61,10 @@ namespace DX11
 		, featureLevel(D3D_FEATURE_LEVEL_11_1)
 
 		, backScreen(nullptr)
+		, depthBuffer(nullptr)
+		, albedoBuffer(nullptr)
+		, normalBuffer(nullptr)
+		, worldPosBuffer(nullptr)
 
 		, factory(nullptr)
 
@@ -147,6 +151,18 @@ namespace DX11
 			return false;
 
 		CreateBackScreen();
+
+		depthBuffer = new RenderTexture(backBufferFormat);
+		depthBuffer->SetDevice(d3dDevice);
+
+		albedoBuffer = new RenderTexture(backBufferFormat);
+		albedoBuffer->SetDevice(d3dDevice);
+
+		normalBuffer = new RenderTexture(backBufferFormat);
+		normalBuffer->SetDevice(d3dDevice);
+
+		worldPosBuffer = new RenderTexture(backBufferFormat);
+		worldPosBuffer->SetDevice(d3dDevice);
 
 		if (OnResize(width, height) != true)
 			return false;
@@ -293,6 +309,10 @@ namespace DX11
 		deviceContext->RSSetViewports(1, &viewPort);
 
 		backScreen->OnResize(width, height);
+		depthBuffer->OnResize(width, height);
+		albedoBuffer->OnResize(width, height);
+		normalBuffer->OnResize(width, height);
+		worldPosBuffer->OnResize(width, height);
 
 		return true;
 	}
@@ -528,11 +548,24 @@ namespace DX11
 
 		deviceContext->ClearDepthStencilView(depthView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 		backScreen->ClearRenderTargetView(deviceContext, depthView, DirectX::Colors::Black);
+		depthBuffer->ClearRenderTargetView(deviceContext, depthView, DirectX::Colors::Black);
+		albedoBuffer->ClearRenderTargetView(deviceContext, depthView, DirectX::Colors::Black);
+		normalBuffer->ClearRenderTargetView(deviceContext, depthView, DirectX::Colors::Black);
+		worldPosBuffer->ClearRenderTargetView(deviceContext, depthView, DirectX::Colors::Black);
 		deviceContext->OMSetRenderTargets(1, &renderTargetView, depthView);
 		deviceContext->ClearRenderTargetView(renderTargetView, DirectX::Colors::Black);
 		deviceContext->OMSetDepthStencilState(depthState, 0);
 
-		backScreen->OMSetRenderTarget(deviceContext, depthView);
+		ID3D11RenderTargetView* mrt[] =
+		{
+			backScreen->GetRenderTargetView(),
+			depthBuffer->GetRenderTargetView(),
+			albedoBuffer->GetRenderTargetView(),
+			normalBuffer->GetRenderTargetView(),
+			worldPosBuffer->GetRenderTargetView()
+		};
+
+		deviceContext->OMSetRenderTargets(ARRAYSIZE(mrt), mrt, depthView);
 
 		annotation->EndEvent();
 	}
@@ -571,6 +604,36 @@ namespace DX11
 	{
 		annotation->BeginEvent(_T("Present"));
 
+		backScreen->OMSetRenderTarget(deviceContext, depthView);
+
+		ID3D11ShaderResourceView* null[] = { nullptr };
+
+		auto depthSRV = depthBuffer->GetShaderResourceView();
+
+		spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, nullptr, nullptr, depthState);
+		spriteBatch->Draw(depthSRV, RECT{ static_cast<long>(viewPort.Width * 0.8f), 0, static_cast<long>(viewPort.Width), static_cast<long>(viewPort.Height * 0.25f )});
+		spriteBatch->End();
+
+		auto albedoSRV = albedoBuffer->GetShaderResourceView();
+
+		spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, nullptr, nullptr, depthState);
+		spriteBatch->Draw(albedoSRV, RECT{ static_cast<long>(viewPort.Width * 0.8f), static_cast<long>(viewPort.Height * 0.25f), static_cast<long>(viewPort.Width), static_cast<long>(viewPort.Height * 0.5f )});
+		spriteBatch->End();
+
+		auto normalSRV = normalBuffer->GetShaderResourceView();
+
+		spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, nullptr, nullptr, depthState);
+		spriteBatch->Draw(normalSRV, RECT{ static_cast<long>(viewPort.Width * 0.8f), static_cast<long>(viewPort.Height * 0.5f), static_cast<long>(viewPort.Width), static_cast<long>(viewPort.Height * 0.75f )});
+		spriteBatch->End();
+
+		auto worldPosSRV = worldPosBuffer->GetShaderResourceView();
+
+		spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, nullptr, nullptr, depthState);
+		spriteBatch->Draw(worldPosSRV, RECT{ static_cast<long>(viewPort.Width * 0.8f), static_cast<long>(viewPort.Height * 0.75f), static_cast<long>(viewPort.Width), static_cast<long>(viewPort.Height)});
+		spriteBatch->End();
+
+		deviceContext->PSSetShaderResources(0, 1, null);
+
 		deviceContext->OMSetRenderTargets(1, &renderTargetView, depthView);
 		deviceContext->CopyResource(renderTarget, backScreen->GetRenderTarget());
 
@@ -603,6 +666,10 @@ namespace DX11
 		delete effect2D;
 
 		DELETE_RELEASE_PTR(backScreen);
+		DELETE_RELEASE_PTR(depthBuffer);
+		DELETE_RELEASE_PTR(albedoBuffer);
+		DELETE_RELEASE_PTR(normalBuffer);
+		DELETE_RELEASE_PTR(worldPosBuffer);
 
 		delete factory;
 

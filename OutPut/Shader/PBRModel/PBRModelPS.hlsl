@@ -40,21 +40,41 @@ cbuffer cbPBRParmeter : register( b2 )
 	float  Roughness;
 }
 
-/* PS Main - Constant Value */
-float4 ConstVarMain(VS_Default_Output input) : SV_TARGET0
+/* PS Output */
+struct PS_Output
 {
+	float4 screen	: SV_TARGET0;
+	float4 depth	: SV_TARGET1;
+	float4 albedo	: SV_TARGET2;
+	float4 normal	: SV_TARGET3;
+	float4 worldPos	: SV_TARGET4;
+};
+
+/* PS Main - Constant Value */
+PS_Output ConstVarMain(VS_Default_Output input)
+{
+	PS_Output output = (PS_Output)0;
+
 	const float3 ViewVector = normalize( ViewPosition - input.WorldPos );
 	const float3 Normal = normalize( input.Normal );
 	const float AO = 1.0f;
 
 	float3 color = LightSurface(ViewVector, Normal, 3, LightColor, LightDirection, Albedo, Roughness, Metallic, AO );
 
-	return float4(color, Alpha);
+	output.screen = float4(color, Alpha);
+	output.depth = input.Position.z / input.Position.w;
+	output.albedo = DiffuseMap.Sample( Sampler, input.TexCoord );
+	output.normal = float4(Normal, 1.0f);
+	output.worldPos = float4(input.WorldPos, 1.0f);
+
+	return output;
 }
 
 /* PS Main - Albedo Map */
-float4 AlbedoMain(VS_Default_Output input) : SV_TARGET0
+PS_Output AlbedoMain(VS_Default_Output input)
 {
+	PS_Output output = (PS_Output)0;
+
 	const float3 ViewVector = normalize( ViewPosition - input.WorldPos );
 	const float3 Normal = normalize( input.Normal );
 	const float AO = 1.0f;
@@ -62,12 +82,20 @@ float4 AlbedoMain(VS_Default_Output input) : SV_TARGET0
 
 	float3 color = LightSurface( ViewVector, Normal, 3, LightColor, LightDirection, AlbedoColor, Roughness, Metallic, AO );
 
-	return float4(color, Alpha);
+	output.screen = float4(color, Alpha);
+	output.depth = input.Position.z / input.Position.w;
+	output.albedo = DiffuseMap.Sample(Sampler, input.TexCoord);
+	output.normal = float4(Normal, 1.0f);
+	output.worldPos = float4(input.WorldPos, 1.0f);
+
+	return output;
 }
 
 /* PS Main - Albedo Map + Normal Map */
-float4 AlbedoNormalMain(VS_Normal_Output input) : SV_TARGET0
+PS_Output AlbedoNormalMain(VS_Normal_Output input)
 {
+	PS_Output output = (PS_Output)0;
+
 	float3 N = normalize(input.Normal);
 	float3 T = input.Tangent;
 	T = normalize(T - dot(T, N) * N);
@@ -84,5 +112,11 @@ float4 AlbedoNormalMain(VS_Normal_Output input) : SV_TARGET0
 
 	float3 color = LightSurface( ViewVector, Normal, 3, LightColor, LightDirection, AlbedoColor, Roughness, Metallic, AO );
 
-	return float4(color, Alpha);
+	output.screen = float4(color, Alpha);
+	output.depth = input.Position.z / input.Position.w;
+	output.albedo = DiffuseMap.Sample(Sampler, input.TexCoord);
+	output.normal = float4(Normal, 1.0f);
+	output.worldPos = float4(input.WorldPos, 1.0f);
+
+	return output;
 }
