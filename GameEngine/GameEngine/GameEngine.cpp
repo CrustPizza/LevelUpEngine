@@ -309,6 +309,11 @@ namespace GameEngineSpace
 		spriteAnim8->SetPosition({ 0.0f, 15.0f, 0.0f, 1.0f });
 		spriteAnim8->SetWidth(2.0f);
 		spriteAnim8->SetHeight(2.0f);
+
+		ModelBase* pillarModel = graphicsFactory->CreateModelFromASEFile("ASEPillar", "Resources/Model/Pillar.ase");
+
+		pillar = new Pillar;
+		pillar->Init(graphicsFactory, pillarModel);
 	}
 
 	void GameEngine::Update()
@@ -327,6 +332,7 @@ namespace GameEngineSpace
 		pbrCube->Update(Time::instance.deltaTime);
 		genji->Update(Time::instance.deltaTime);
 		pbrGenji->Update(Time::instance.deltaTime);
+		pillar->Update(Time::instance.deltaTime);
 
 		static float metallic = 0.5f;
 
@@ -605,6 +611,11 @@ namespace GameEngineSpace
 		graphicsEngine->GraphicsDebugBeginEvent("Genji");
 		genji->Render(graphicsEngine, tick);
 		pbrGenji->Render(graphicsEngine, tick);
+		graphicsEngine->GraphicsDebugEndEvent();
+
+		/* Genji */
+		graphicsEngine->GraphicsDebugBeginEvent("Genji");
+		pillar->Render(graphicsEngine, tick);
 		graphicsEngine->GraphicsDebugEndEvent();
 
 		/* Pig */

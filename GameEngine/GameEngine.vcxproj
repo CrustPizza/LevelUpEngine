@@ -179,6 +179,7 @@
     <ClCompile Include="Component\Transform\Transform.cpp" />
     <ClCompile Include="Object\Pig\Pig.cpp" />
     <ClCompile Include="Manager\Time\Time.cpp" />
+    <ClCompile Include="Object\Pillar\Pillar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Application.h" />
@@ -196,6 +197,7 @@
     <ClInclude Include="Component\Transform\Transform.h" />
     <ClInclude Include="Object\Pig\Pig.h" />
     <ClInclude Include="Manager\Time\Time.h" />
+    <ClInclude Include="Object\Pillar\Pillar.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

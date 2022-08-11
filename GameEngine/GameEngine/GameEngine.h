@@ -14,6 +14,7 @@
 #include "Object/Cube/Cube.h"
 #include "Object/Genji/Genji.h"
 #include "Object/Pig/Pig.h"
+#include "Object/Pillar/Pillar.h"
 
 namespace GameEngineSpace
 {
@@ -75,6 +76,8 @@ namespace GameEngineSpace
 		GraphicsEngineSpace::SpriteAnimation* spriteAnim6;
 		GraphicsEngineSpace::SpriteAnimation* spriteAnim7;
 		GraphicsEngineSpace::SpriteAnimation* spriteAnim8;
+
+		Pillar* pillar;
 
 	public:
 		GameEngine();

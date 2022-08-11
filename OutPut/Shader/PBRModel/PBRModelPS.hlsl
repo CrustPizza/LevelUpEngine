@@ -77,6 +77,8 @@ float4 AlbedoNormalMain(VS_Normal_Output input) : SV_TARGET0
 
 	N = NormalMap.Sample(Sampler, input.TexCoord).xyz;
 
+	return float4(input.TexCoord.xy, 0.0f, 1.0f );
+
 	const float3 ViewVector = normalize( ViewPosition - input.WorldPos );
 	const float3 Normal = mul( N.xyz, TSpace );
 	const float AO = 1.0f;

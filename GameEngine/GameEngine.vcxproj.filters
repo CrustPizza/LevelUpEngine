@@ -40,6 +40,7 @@
     </ClCompile>
     <ClCompile Include="Object\Pig\Pig.cpp" />
     <ClCompile Include="Manager\Time\Time.cpp" />
+    <ClCompile Include="Object\Pillar\Pillar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameEngineFramework.h" />
@@ -81,6 +82,7 @@
     </ClInclude>
     <ClInclude Include="Object\Pig\Pig.h" />
     <ClInclude Include="Manager\Time\Time.h" />
+    <ClInclude Include="Object\Pillar\Pillar.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Application">
