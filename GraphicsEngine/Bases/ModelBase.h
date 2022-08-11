@@ -50,6 +50,8 @@ if (parent == nullptr) continue;\
 element->SetupAttachment(parent);
 #pragma endregion
 
+		std::string modelName;
+
 		std::vector<MeshBase*> meshes;
 		std::vector<BoneBase*> bones;
 		std::vector<ShapeBase*> shapes;
@@ -123,7 +125,9 @@ element->SetupAttachment(parent);
 
 			return timeReset;
 		}
+		void SetName(const std::string& name) { this->modelName = name; }
 
+		const std::string& GetName() { return modelName; }
 		const std::vector<MeshBase*>& GetMeshes() { return meshes; }
 		const std::vector<BoneBase*>& GetBones() { return bones; }
 		const std::map<int, MaterialBase*>& GetMaterials() { return materials; }

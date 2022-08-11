@@ -450,6 +450,29 @@ namespace DX11
 		return true;
 	}
 
+	bool DirectX11::DrawLine(BufferBase* vertices, BufferBase* indices)
+	{
+		VertexBuffer* vb = dynamic_cast<VertexBuffer*>(vertices);
+
+		if (vb == nullptr)
+			return false;
+
+		IndexBuffer* ib = dynamic_cast<IndexBuffer*>(indices);
+
+		if (ib == nullptr)
+			return false;
+
+		vb->SetUpBuffer(0, nullptr, ShaderType::NONE);
+		ib->SetUpBuffer(0, nullptr, ShaderType::NONE);
+
+		UINT indicesSize = ib->GetSize();
+
+		deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+		deviceContext->DrawIndexed(indicesSize, 0, 0);
+
+		return true;
+	}
+
 	bool DirectX11::SetUpShader(ShaderBase* shader)
 	{
 		shader->SetUpShader();

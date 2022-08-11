@@ -211,6 +211,7 @@
     <ClInclude Include="Object\SpriteAnimation\SpriteAnimation.h" />
     <ClInclude Include="Object\ProgressBar\ProgressBar.h" />
     <ClInclude Include="Object\ButtonUI\ButtonUI.h" />
+    <ClInclude Include="Define\GraphicsTopology.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

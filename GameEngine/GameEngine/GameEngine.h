@@ -15,6 +15,7 @@
 #include "Object/Genji/Genji.h"
 #include "Object/Pig/Pig.h"
 #include "Object/Pillar/Pillar.h"
+#include "Object/Mannequin/Mannequin.h"
 
 namespace GameEngineSpace
 {
@@ -78,6 +79,7 @@ namespace GameEngineSpace
 		GraphicsEngineSpace::SpriteAnimation* spriteAnim8;
 
 		Pillar* pillar;
+		Mannequin* mannequin;
 
 	public:
 		GameEngine();

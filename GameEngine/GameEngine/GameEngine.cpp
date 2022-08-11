@@ -3,7 +3,7 @@
 *	Game Engine.cpp				*
 *								*
 *	Created : 2022/06/11		*
-*	Updated : 2022/07/20		*
+*	Updated : 2022/08/11		*
 *********************************/
 
 #include "GameEngine.h"
@@ -183,6 +183,14 @@ namespace GameEngineSpace
 		pbrGenji = new Genji;
 		pbrGenji->Init(graphicsFactory, genjiModel);
 
+		ModelBase* mannequinModel = graphicsFactory->CreateModelFromASEFile("ASEMannequin", "Resources/Model/Paladin_idle.ase", "Idle");
+		mannequinModel = graphicsFactory->CreateAnimationFromASEFile("ASEMannequin", "Resources/Model/Paladin_run.ase", "Run");
+		mannequinModel = graphicsFactory->CreateAnimationFromASEFile("ASEMannequin", "Resources/Model/Paladin_slash.ase", "Slash");
+
+		mannequin = new Mannequin;
+		mannequin->Init(graphicsFactory, mannequinModel);
+		//mannequin->AddForce({ -15.0f, 10.0f, -20.0f });
+
 		vertexShader = resourceManager->GetShader("SkinningModelVS");
 		BufferBase* boneBuffer = resourceManager->GetBuffer("BoneMatrixCB");
 
@@ -234,10 +242,10 @@ namespace GameEngineSpace
 		text->SetParent(t2);
 		text->SetPosition({ 0.0f, 0.0f, -0.1f });
 		text->SetColor({ 1.0f, 1.0f, 0.0f });
-		
+
 		//t1->SetEnable(false);
 		//t2->SetEnable(false);
-		
+
 		pBar->SetAnchor({ HorizontalLocation::CENTER, VerticalLocation::TOP });
 		pBar->SetPivot({ HorizontalLocation::CENTER, VerticalLocation::TOP });
 		pBar->SetPosition({ 0.0f, 30.0f, 0.3f });
@@ -314,6 +322,65 @@ namespace GameEngineSpace
 
 		pillar = new Pillar;
 		pillar->Init(graphicsFactory, pillarModel);
+
+		Vector vertices[24] =
+		{
+			{ +1.0f, +1.0f, +1.0f, 1.0f },
+			{ +1.0f, -1.0f, +1.0f, 1.0f },
+			{ -1.0f, -1.0f, +1.0f, 1.0f },
+			{ -1.0f, +1.0f, +1.0f, 1.0f },
+			{ -1.0f, +1.0f, -1.0f, 1.0f },
+			{ -1.0f, -1.0f, -1.0f, 1.0f },
+			{ +1.0f, -1.0f, -1.0f, 1.0f },
+			{ +1.0f, +1.0f, -1.0f, 1.0f },
+			{ +1.0f, +1.0f, -1.0f, 1.0f },
+			{ +1.0f, -1.0f, -1.0f, 1.0f },
+			{ +1.0f, -1.0f, +1.0f, 1.0f },
+			{ +1.0f, +1.0f, +1.0f, 1.0f },
+			{ -1.0f, +1.0f, +1.0f, 1.0f },
+			{ -1.0f, -1.0f, +1.0f, 1.0f },
+			{ -1.0f, -1.0f, -1.0f, 1.0f },
+			{ -1.0f, +1.0f, -1.0f, 1.0f },
+			{ -1.0f, +1.0f, +1.0f, 1.0f },
+			{ -1.0f, +1.0f, -1.0f, 1.0f },
+			{ +1.0f, +1.0f, -1.0f, 1.0f },
+			{ +1.0f, +1.0f, +1.0f, 1.0f },
+			{ +1.0f, -1.0f, +1.0f, 1.0f },
+			{ +1.0f, -1.0f, -1.0f, 1.0f },
+			{ -1.0f, -1.0f, -1.0f, 1.0f },
+			{ -1.0f, -1.0f, +1.0f, 1.0f }
+		};
+
+		WORD indices[36] =
+		{
+			0, 1, 2,
+			0, 2, 3,
+			4, 5, 6,
+			4, 6, 7,
+			8, 9, 10,
+			8, 10, 11,
+			12, 13, 14,
+			12, 14, 15,
+			16, 17, 18,
+			16, 18, 19,
+			20, 21, 22,
+			20, 22, 23
+			//2, 1, 0,
+			//3, 2, 0,
+			//6, 5, 4,
+			//7, 6, 4,
+			//10, 9, 8,
+			//11, 10, 8,
+			//14, 13, 12,
+			//15, 14, 12,
+			//18, 17, 16,
+			//19, 18, 16,
+			//22, 21, 20,
+			//23, 22, 20
+		};
+
+		graphicsFactory->CreateVertexBuffer("LineVB", USAGE::DEFAULT, 0, sizeof(Vector), vertices, 24);
+		graphicsFactory->CreateIndexBuffer("LineIB", USAGE::DEFAULT, 0, sizeof(WORD), indices, 36);
 	}
 
 	void GameEngine::Update()
@@ -541,6 +608,8 @@ namespace GameEngineSpace
 		if (bar > 1.0f)
 			bar = 0.0f;
 
+		mannequin->Update(Time::instance.deltaTime);
+
 		canvas->GetProgressBar("Progress Bar")->SetPercent(bar);
 
 		inputManager->LateUpdate();
@@ -574,7 +643,7 @@ namespace GameEngineSpace
 
 		/* Cube */
 		graphicsEngine->GraphicsDebugBeginEvent("Cube");
-		cube->Render(graphicsEngine, tick);
+		cube->Render(graphicsEngine);
 		graphicsEngine->GraphicsDebugEndEvent();
 
 		/* View world*/
@@ -613,9 +682,14 @@ namespace GameEngineSpace
 		pbrGenji->Render(graphicsEngine, tick);
 		graphicsEngine->GraphicsDebugEndEvent();
 
-		/* Genji */
-		graphicsEngine->GraphicsDebugBeginEvent("Genji");
+		/* Pillar */
+		graphicsEngine->GraphicsDebugBeginEvent("Pillar");
 		pillar->Render(graphicsEngine, tick);
+		graphicsEngine->GraphicsDebugEndEvent();
+
+		/* Mannequin */
+		graphicsEngine->GraphicsDebugBeginEvent("Mannequin");
+		mannequin->Render(graphicsEngine, tick);
 		graphicsEngine->GraphicsDebugEndEvent();
 
 		/* Pig */
@@ -631,7 +705,13 @@ namespace GameEngineSpace
 
 		/* PBR Cube */
 		graphicsEngine->GraphicsDebugBeginEvent("PBR Cube");
-		pbrCube->Render(graphicsEngine, tick);
+		pbrCube->Render(graphicsEngine);
+		graphicsEngine->GraphicsDebugEndEvent();
+
+		/* Line */
+		graphicsEngine->GraphicsDebugBeginEvent("Line Draw");
+		graphicsEngine->DrawLine(resourceManager->GetBuffer("LineVB"), resourceManager->GetBuffer("LineIB"), Vector{ 1.0f, 1.0f, 0.0f }, MatrixTranspose(MatrixTranslationFromVector({ -15.0f, 0.0f, 0.0f, 1.0f })));
+		graphicsEngine->DrawLine(resourceManager->GetBuffer("LineVB"), resourceManager->GetBuffer("LineIB"), Vector{ 1.0f, 0.0f, 0.0f }, MatrixTranspose(MatrixTranslationFromVector({ -20.0f, 0.0f, 0.0f, 1.0f })));
 		graphicsEngine->GraphicsDebugEndEvent();
 
 		static float depth = 0.0f;
@@ -655,7 +735,7 @@ namespace GameEngineSpace
 		if (Input::GetInstance()->GetInputState('V', KeyState::STAY) == true)
 		{
 			x += 0.01f;
-			
+
 		}
 
 		singlePosition.x = x;
@@ -708,6 +788,8 @@ namespace GameEngineSpace
 		delete genji;
 		delete pbrGenji;
 		delete pig;
+		delete pillar;
+		delete mannequin;
 
 		for (int i = 0; i < 10; i++)
 			delete pigs[i];

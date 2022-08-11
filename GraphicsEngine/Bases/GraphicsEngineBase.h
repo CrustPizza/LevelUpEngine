@@ -11,6 +11,7 @@
 #include "Bases/FactoryBase.h"
 #include "Bases/TextureBase.h"
 #include "Bases/MeshBase.h"
+#include "Define/GraphicsTopology.h"
 #include "../HeraclesMath/HeraclesMath.h"
 
 namespace GraphicsEngineSpace
@@ -35,6 +36,7 @@ namespace GraphicsEngineSpace
 
 		virtual bool DrawMesh(BufferBase* vertices, BufferBase* indices) abstract;
 		virtual bool DrawTextColor(std::string& text, Vector color, Vector position, float rotation = 0.0f, Vector scale = { 1.0f, 1.0f }) abstract;
+		virtual bool DrawLine(BufferBase* vertices, BufferBase* indices) abstract;
 
 		virtual bool SetUpShader(ShaderBase* shader) abstract;
 

@@ -40,13 +40,13 @@ namespace GraphicsEngineSpace
 		~ButtonUI() override;
 
 	public:
-		void SetDefaultTexture(TextureBase* texture);
-		void SetHoverTexture(TextureBase* texture);
-		void SetPressTexture(TextureBase* texture);
-		void SetButtonState(ButtonState state);
-		void SetClickEvent(std::function<void(void)> clickEvent);
+		virtual void SetDefaultTexture(TextureBase* texture);
+		virtual void SetHoverTexture(TextureBase* texture);
+		virtual void SetPressTexture(TextureBase* texture);
+		virtual void SetButtonState(ButtonState state);
+		virtual void SetClickEvent(std::function<void(void)> clickEvent);
 
-		ButtonState GetButtonState();
+		virtual ButtonState GetButtonState();
 
 		void Render(GraphicsEngineBase* engine);
 

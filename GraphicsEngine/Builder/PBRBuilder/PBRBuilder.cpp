@@ -3,7 +3,7 @@
 *	PBR Builder.cpp				*
 *								*
 *	Created : 2022/08/04		*
-*	Updated : 2022/08/05		*
+*	Updated : 2022/08/11		*
 *********************************/
 
 #include "PBRBuilder.h"
@@ -365,7 +365,9 @@ namespace GraphicsEngineSpace
 			pbrLayout->AddElements("NORMAL", 0, GraphicsFormat::Float_R32G32B32A32, 0, 16);
 			pbrLayout->AddElements("TEXCOORD", 0, GraphicsFormat::Float_R32G32B32A32, 0, 32);
 			pbrLayout->AddElements("BLENDWEIGHT", 0, GraphicsFormat::Float_R32G32B32A32, 0, 48);
-			pbrLayout->AddElements("BLENDINDICES", 0, GraphicsFormat::UINT_R8G8B8A8, 0, 64);
+			pbrLayout->AddElements("BLENDWEIGHT", 1, GraphicsFormat::Float_R32G32B32A32, 0, 64);
+			pbrLayout->AddElements("BLENDINDICES", 0, GraphicsFormat::UINT_R8G8B8A8, 0, 80);
+			pbrLayout->AddElements("BLENDINDICES", 1, GraphicsFormat::UINT_R8G8B8A8, 0, 84);
 
 			vertexShader = factory->CreateVertexShader("PBRSkinnedVS", "Shader/PBRModel/PBRModelVS.hlsl", "SkinnedMain", "vs_5_0", pbrLayout);
 
@@ -498,8 +500,10 @@ namespace GraphicsEngineSpace
 			Vector position;
 			Vector normal;
 			Vector texCoord;
-			Vector weights;
-			unsigned int weightsIndex;
+			Vector weights1;
+			Vector weights2;
+			unsigned int weightsIndex1;
+			unsigned int weightsIndex2;
 		};
 
 		prefab->CreateVertexBuffer<SkinnedPBRVertex>(factory, [&](const VertexData& data) -> SkinnedPBRVertex
@@ -508,8 +512,10 @@ namespace GraphicsEngineSpace
 				temp.position = data.position;
 				temp.normal = data.normal;
 				temp.texCoord = data.texCoord;
-				temp.weights = data.weights;
-				temp.weightsIndex = data.weightIndex;
+				temp.weights1 = data.weights1;
+				temp.weights2 = data.weights2;
+				temp.weightsIndex1 = data.weightIndex1;
+				temp.weightsIndex2 = data.weightIndex2;
 
 				return temp;
 			});

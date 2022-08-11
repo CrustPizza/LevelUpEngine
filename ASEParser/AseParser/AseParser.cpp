@@ -161,7 +161,9 @@ void ASEParser::SplitVertex()
 					{
 						vertex.vertices[index].normal[l] = normal.normals[i].vertexNormal[j][l];
 						vertex.vertices[index].weightIndex[l] = 0;
+						vertex.vertices[index].weightIndex[l + 4] = 0;
 						vertex.vertices[index].weights[l] = 0.0f;
+						vertex.vertices[index].weights[l + 4] = 0.0f;
 					}
 
 					vertex.vertices[index].textureIndex = face.faces[i].tIndex[j + 1];

@@ -8,10 +8,10 @@
 
 #include "Texture2DTypes.hlsli"
 
-/* View */
-cbuffer cbView : register( b1 )
+/* World View Projection Matrix */
+cbuffer cbWVPMatrix : register( b1 )
 {
-	matrix ViewProjection;
+	matrix WVPMatrix;
 }
 
 /* Input */
@@ -26,7 +26,7 @@ VS_Output main(VS_Input input)
 {
 	VS_Output output = (VS_Output)0;
 
-	output.Position = mul( input.Position, ViewProjection );
+	output.Position = mul( input.Position, WVPMatrix );
 	output.TexCoord = input.TexCoord;
 
 	return output;

@@ -135,6 +135,25 @@ namespace GraphicsEngineSpace
 		return graphicsEngine->DrawTextColor(text, color, position, rotation, scale);
 	}
 
+	bool GraphicsEngine::DrawLine(BufferBase* vertices, BufferBase* indices)
+	{
+		resourceManager->GetShader("LineVS")->SetUpShader();
+		resourceManager->GetShader("LinePS")->SetUpShader();
+		resourceManager->GetBuffer("ColorCB")->SetUpBuffer(6, const_cast<Vector*>(&Vector::One), ShaderType::PIXEL);
+
+		return graphicsEngine->DrawLine(vertices, indices);
+	}
+
+	bool GraphicsEngine::DrawLine(BufferBase* vertices, BufferBase* indices, const Vector& color, const Matrix& worldTransform)
+	{
+		resourceManager->GetShader("LineVS")->SetUpShader();
+		resourceManager->GetShader("LinePS")->SetUpShader();
+		resourceManager->GetBuffer("WorldMatrixCB")->SetUpBuffer(0, const_cast<Matrix*>(&worldTransform), ShaderType::VERTEX);
+		resourceManager->GetBuffer("ColorCB")->SetUpBuffer(6, const_cast<Vector*>(&color), ShaderType::PIXEL);
+
+		return graphicsEngine->DrawLine(vertices, indices);
+	}
+
 	bool GraphicsEngine::SetUpShader(ShaderBase* shader)
 	{
 		return graphicsEngine->SetUpShader(shader);

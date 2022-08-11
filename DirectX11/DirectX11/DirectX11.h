@@ -78,6 +78,10 @@ namespace DX11
 		// Back
 		RenderTexture* backScreen;
 
+		// MRT
+		RenderTexture* depthBuffer;
+
+
 		// Factory
 		Factory* factory;
 
@@ -109,9 +113,9 @@ namespace DX11
 		bool DrawSpriteOn3D(Texture* texture, long width, long height, const HeraclesMath::Matrix& worldViewProjection) override;
 		bool DrawSpriteOn3D(Texture* texture, long width, long height, const HeraclesMath::Matrix& worldViewProjection, const HeraclesMath::Vector texCoord[3]) override;
 
-
 		bool DrawMesh(BufferBase* vertices, BufferBase* indices) override;
 		bool DrawTextColor(std::string& text, HeraclesMath::Vector color, HeraclesMath::Vector position, float rotation, HeraclesMath::Vector scale) override;
+		bool DrawLine(BufferBase* vertices, BufferBase* indices) override;
 
 		bool SetUpShader(ShaderBase* shader) override;
 

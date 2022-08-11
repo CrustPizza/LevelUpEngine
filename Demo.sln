@@ -95,6 +95,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Texture2D", "Texture2D", "{
 		OutPut\Shader\Texture2D\Texture2DVS.hlsl = OutPut\Shader\Texture2D\Texture2DVS.hlsl
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Line", "Line", "{90A12493-2426-481D-84DA-BA982C17816E}"
+	ProjectSection(SolutionItems) = preProject
+		OutPut\Shader\Line\LinePS.hlsl = OutPut\Shader\Line\LinePS.hlsl
+		OutPut\Shader\Line\LineTypes.hlsli = OutPut\Shader\Line\LineTypes.hlsli
+		OutPut\Shader\Line\LineVS.hlsl = OutPut\Shader\Line\LineVS.hlsl
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -166,6 +173,7 @@ Global
 		{0F84F62A-E50A-4C89-B719-03BBA7904D02} = {A6DD9502-1C76-4BC1-92AB-C28AB3A946D9}
 		{BEA331B6-4946-4145-823E-93B15A971977} = {A6DD9502-1C76-4BC1-92AB-C28AB3A946D9}
 		{35DC8FC6-F69E-43C3-869F-C147158191DC} = {A6DD9502-1C76-4BC1-92AB-C28AB3A946D9}
+		{90A12493-2426-481D-84DA-BA982C17816E} = {A6DD9502-1C76-4BC1-92AB-C28AB3A946D9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {83918DE7-1E59-4741-A17B-97563249EE37}

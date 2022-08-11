@@ -38,7 +38,6 @@ namespace GraphicsEngineSpace
 		};
 
 		ModelBase* const model;
-		float totalAnimationTime;
 
 		ShaderBase* vertexShader;
 		ShaderBase* pixelShader;
@@ -51,7 +50,6 @@ namespace GraphicsEngineSpace
 	public:
 		PrefabBase(ModelBase* model, const ConstantBufferSetting& matrixBuffer)
 			: model(model)
-			, totalAnimationTime(0.0f)
 			, vertexShader(nullptr)
 			, pixelShader(nullptr)
 			, matrixBuffer(matrixBuffer)
@@ -70,22 +68,24 @@ namespace GraphicsEngineSpace
 			if (model == nullptr)
 				return;
 
-			if (model->SetAnimationKey(animationKey) == true)
-				totalAnimationTime = 0.0f;
+			model->SetAnimationKey(animationKey);
 		}
 
 		template <typename T>
 		void CreateVertexBuffer(FactoryBase* factory, std::function<T(const VertexData&)> vertexConstructor);
 
-		void Render(GraphicsEngineBase* engine, const Matrix& worldTransform, float tick = 0.0f)
+		bool PrepareRender(const Matrix& worldTransform, float animationTime)
 		{
 			if (model == nullptr)
 				assert(0);
 
-			totalAnimationTime += tick;
+			return model->PrepareRender(worldTransform, animationTime);
+		}
 
-			if (model->PrepareRender(worldTransform, totalAnimationTime) == true)
-				totalAnimationTime = 0.0f;
+		void Render(GraphicsEngineBase* engine)
+		{
+			if (model == nullptr)
+				assert(0);
 
 			if (vertexShader != nullptr)
 				vertexShader->SetUpShader();

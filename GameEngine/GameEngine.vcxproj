@@ -167,6 +167,7 @@
     <ClCompile Include="Application\Application.cpp" />
     <ClCompile Include="Application\Windows\WindowConstructor.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
+    <ClCompile Include="Object\Mannequin\Mannequin.cpp" />
     <ClCompile Include="Object\Cube\Cube.cpp" />
     <ClCompile Include="Factory\Factory.cpp" />
     <ClCompile Include="GameEngineMain.cpp" />
@@ -185,6 +186,7 @@
     <ClInclude Include="Application\Application.h" />
     <ClInclude Include="Application\Windows\WindowConstructor.h" />
     <ClInclude Include="Camera\Camera.h" />
+    <ClInclude Include="Object\Mannequin\Mannequin.h" />
     <ClInclude Include="Object\Cube\Cube.h" />
     <ClInclude Include="Factory\Factory.h" />
     <ClInclude Include="GameEngineFramework.h" />

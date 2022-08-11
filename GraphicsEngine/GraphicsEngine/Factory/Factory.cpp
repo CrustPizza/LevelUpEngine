@@ -46,6 +46,7 @@ namespace GraphicsEngineSpace
 #endif
 
 		ModelBase* newModel = aseBuilder.CreateModel(path, this, animationKey, SwapOrder::XZY);
+		newModel->SetName(name);
 
 		if (newModel == nullptr)
 			return nullptr;
@@ -728,6 +729,7 @@ namespace GraphicsEngineSpace
 	{
 		/* Matrix Buffer */
 		CreateConstantBuffer("MatrixCB", USAGE::DEFAULT, 0, sizeof(Matrix) * 2);
+		CreateConstantBuffer("WorldMatrixCB", USAGE::DEFAULT, 0, sizeof(Matrix));
 
 		/* View Buffer*/
 		CreateConstantBuffer("ViewProjectionCB", USAGE::DEFAULT, 0, sizeof(Matrix));
@@ -742,6 +744,9 @@ namespace GraphicsEngineSpace
 
 		/* Bone Matrix Buffer */
 		CreateConstantBuffer("BoneMatrixCB", USAGE::DEFAULT, 0, sizeof(Matrix) * 64);
+
+		/* Color Buffer */
+		CreateConstantBuffer("ColorCB", USAGE::DEFAULT, 0, sizeof(Vector));
 
 		/* Sampler */
 		CreateSampler("LinearSampler", FilterOption::LINEAR);
@@ -761,6 +766,16 @@ namespace GraphicsEngineSpace
 		CreatePixelShader("BasicModelPS", "Shader/BasicModel/BasicModelPS.hlsl", "main", "ps_5_0");
 
 		resourceManager->SubLayout("BasicLayout");
+
+		/* Line Shader */
+		LayoutBase* lineLayout = CreateLayout("LineLayout");
+
+		lineLayout->AddElements("POSITION", 0, GraphicsFormat::Float_R32G32B32A32, 0, 0);
+
+		CreateVertexShader("LineVS", "Shader/Line/LineVS.hlsl", "main", "vs_5_0", lineLayout);
+		CreatePixelShader("LinePS", "Shader/Line/LinePS.hlsl", "main", "ps_5_0");
+
+		resourceManager->SubLayout("LineLayout");
 
 		/* Legacy Model Shader */
 		LayoutBase* legacyLayout = CreateLayout("LegacyLayout");
@@ -783,7 +798,9 @@ namespace GraphicsEngineSpace
 		skinningLayout->AddElements("TEXCOORD", 0, GraphicsFormat::Float_R32G32B32A32, 0, 32);
 		skinningLayout->AddElements("TANGENT", 0, GraphicsFormat::Float_R32G32B32A32, 0, 48);
 		skinningLayout->AddElements("BLENDWEIGHT", 0, GraphicsFormat::Float_R32G32B32A32, 0, 64);
-		skinningLayout->AddElements("BLENDINDICES", 0, GraphicsFormat::UINT_R8G8B8A8, 0, 80);
+		skinningLayout->AddElements("BLENDWEIGHT", 1, GraphicsFormat::Float_R32G32B32A32, 0, 80);
+		skinningLayout->AddElements("BLENDINDICES", 0, GraphicsFormat::UINT_R8G8B8A8, 0, 96);
+		skinningLayout->AddElements("BLENDINDICES", 1, GraphicsFormat::UINT_R8G8B8A8, 0, 100);
 
 		CreateVertexShader("SkinningModelVS", "Shader/SkinningModel/SkinningModelVS.hlsl", "main", "vs_5_0", skinningLayout);
 
@@ -821,7 +838,9 @@ namespace GraphicsEngineSpace
 		pbrSkinnedLayout->AddElements("NORMAL", 0, GraphicsFormat::Float_R32G32B32A32, 0, 16);
 		pbrSkinnedLayout->AddElements("TEXCOORD", 0, GraphicsFormat::Float_R32G32B32A32, 0, 32);
 		pbrSkinnedLayout->AddElements("BLENDWEIGHT", 0, GraphicsFormat::Float_R32G32B32A32, 0, 48);
-		pbrSkinnedLayout->AddElements("BLENDINDICES", 0, GraphicsFormat::UINT_R8G8B8A8, 0, 64);
+		pbrSkinnedLayout->AddElements("BLENDWEIGHT", 1, GraphicsFormat::Float_R32G32B32A32, 0, 64);
+		pbrSkinnedLayout->AddElements("BLENDINDICES", 0, GraphicsFormat::UINT_R8G8B8A8, 0, 80);
+		pbrSkinnedLayout->AddElements("BLENDINDICES", 1, GraphicsFormat::UINT_R8G8B8A8, 0, 84);
 
 		CreateVertexShader("PBRSkinnedVS", "Shader/PBRModel/PBRModelVS.hlsl", "SkinnedMain", "vs_5_0", pbrSkinnedLayout);
 
@@ -830,6 +849,5 @@ namespace GraphicsEngineSpace
 		CreatePixelShader("PBRConstVarPS", "Shader/PBRModel/PBRModelPS.hlsl", "ConstVarMain", "ps_5_0");
 		CreatePixelShader("PBRAlbedoPS", "Shader/PBRModel/PBRModelPS.hlsl", "AlbedoMain", "ps_5_0");
 		CreatePixelShader("PBRAlbedoNormalPS", "Shader/PBRModel/PBRModelPS.hlsl", "AlbedoNormalMain", "ps_5_0");
-
 	}
 }

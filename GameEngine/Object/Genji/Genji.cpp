@@ -99,7 +99,8 @@ namespace GameEngineSpace
 			break;
 		}
 
-		prefab->Render(engine, transform.GetWorldTransform(), tick);
+		prefab->PrepareRender(transform.GetWorldTransform(), tick);
+		prefab->Render(engine);
 	}
 
 	void Genji::SetMetallic(float metallic)

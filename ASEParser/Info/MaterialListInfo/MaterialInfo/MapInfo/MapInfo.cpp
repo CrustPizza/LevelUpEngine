@@ -70,16 +70,16 @@ void MapInfo::SetData(std::ifstream& data)
 		{
 			int index = 0;
 
+			while (temp.back() == '\"' || temp.back() == ' ' || temp.back() == '\t')
+				temp.pop_back();
+
 			while (temp[index] == '\"' || temp[index] == ' ')
 				index++;
 
 			if (index != 0)
-				temp = temp.substr(index);
-
-			if (temp.back() == '\"')
-				temp.pop_back();
-
-			bitmap = temp;
+				bitmap = temp.substr(index);
+			else
+				bitmap = temp;
 
 			break;
 		}

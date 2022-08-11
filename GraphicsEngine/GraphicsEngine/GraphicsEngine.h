@@ -57,7 +57,12 @@ namespace GraphicsEngineSpace
 
 		bool DrawMesh(BufferBase* vertices, BufferBase* indices) override;
 		bool DrawTextColor(std::string& text, Vector color, Vector position, float rotation = 0.0f, Vector scale = { 1.0f, 1.0f }) override;
+		
+		virtual bool DrawLine(BufferBase* vertices, BufferBase* indices, const Vector& color, const Matrix& worldTransform = Matrix::Identity);
+	private:
+		bool DrawLine(BufferBase* vertices, BufferBase* indices) override;
 
+	public:
 		bool SetUpShader(ShaderBase* shader) override;
 		bool SetUpShader(const std::string& name);
 

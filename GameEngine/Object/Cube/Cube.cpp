@@ -66,7 +66,8 @@ namespace GameEngineSpace
 
 	void Cube::Render(GraphicsEngineSpace::GraphicsEngineBase* engine, float tick)
 	{
-		prefab->Render(engine, transform.GetWorldTransform(), tick);
+		prefab->PrepareRender(transform.GetWorldTransform(), tick);
+		prefab->Render(engine);
 	}
 
 	void Cube::SetLight(const Vector& dir, const Vector& color, int index)

@@ -136,7 +136,7 @@ namespace GraphicsEngineSpace
 
         if (result == textUIList.end())
             return nullptr;
-        
+
         return result->second;
     }
 
@@ -187,7 +187,7 @@ namespace GraphicsEngineSpace
 
         for (auto iter : buttonUIList)
         {
-            if (iter.second == nullptr)
+            if (iter.second == nullptr || iter.second->isEnable != true)
                 continue;
 
             auto buttonScreenPosition = iter.second->GetScreenPosition();
@@ -211,6 +211,9 @@ namespace GraphicsEngineSpace
                 minZ = buttonScreenPosition.z;
             }
         }
+
+        if (collidedButton == nullptr)
+            return nullptr;
 
         if (isClicked == true)
         {
@@ -251,11 +254,15 @@ namespace GraphicsEngineSpace
                 delete iter.second;
         }
 
+        textUIList.clear();
+
         for (auto iter : canvasList)
         {
             if (iter.second != nullptr)
                 delete iter.second;
         }
+
+        canvasList.clear();
 
         for (auto iter : buttonUIList)
         {
@@ -263,16 +270,24 @@ namespace GraphicsEngineSpace
                 delete iter.second;
         }
 
+        buttonUIList.clear();
+
         for (auto iter : textureUIList)
         {
             if (iter.second != nullptr)
                 delete iter.second;
         }
 
+        textureUIList.clear();
+
         for (auto iter : progressBarList)
         {
             if (iter.second != nullptr)
                 delete iter.second;
         }
+
+        progressBarList.clear();
+
+        child.clear();
     }
 }

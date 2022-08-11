@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="Bases\LightBase.h" />
     <ClInclude Include="Bases\UIBase.h" />
+    <ClInclude Include="Define\GraphicsTopology.h" />
     <ClInclude Include="Object\ButtonUI\ButtonUI.h" />
     <ClInclude Include="Object\Canvas\Canvas.h" />
     <ClInclude Include="Object\DirectionalLight\DirectionalLight.h" />

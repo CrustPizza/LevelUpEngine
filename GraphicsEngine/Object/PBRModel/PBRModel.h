@@ -50,7 +50,8 @@ namespace GraphicsEngineSpace
 		virtual void SetMetallic(float metallic);
 		virtual void SetRoughness(float roughness);
 
-		virtual void Render(GraphicsEngineBase* engine, const Matrix& worldTransform, float tick);
+		virtual bool PrepareRender(const Matrix& worldTransform, float animationTime);
+		virtual void Render(GraphicsEngineBase* engine);
 
 		template <typename T>
 		void CreateVertexBuffer(FactoryBase* factory, std::function<T(const VertexData&)> vertexConstructor);

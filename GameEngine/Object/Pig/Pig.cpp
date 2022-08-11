@@ -74,8 +74,8 @@ namespace GameEngineSpace
 				temp.normal = data.normal;
 				temp.texCoord = { data.texCoord.x, data.texCoord.y, 0.0f, 0.0f };
 				temp.tangent = data.tangent;
-				temp.weights = data.weights;
-				temp.weightsIndex = data.weightIndex;
+				temp.weights = data.weights1;
+				temp.weightsIndex = data.weightIndex1;
 
 				return temp;
 			});
@@ -132,7 +132,8 @@ namespace GameEngineSpace
 		//else
 		//	prefab->SetAnimationKey("Idle");
 
-		prefab->Render(engine, transform.GetWorldTransform(), tick);
+		prefab->PrepareRender(transform.GetWorldTransform(), tick);
+		prefab->Render(engine);
 		//pbrModel->Render(engine);
 	}
 

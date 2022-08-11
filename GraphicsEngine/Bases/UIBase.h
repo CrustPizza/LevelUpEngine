@@ -58,8 +58,8 @@ namespace GraphicsEngineSpace
 
 	protected:
 		UIBase()
-			: anchor{ HorizontalLocation::CENTER, VerticalLocation::MIDDLE }
-			, pivot{ HorizontalLocation::CENTER, VerticalLocation::MIDDLE }
+			: anchor{ HorizontalLocation::LEFT, VerticalLocation::TOP }
+			, pivot{ HorizontalLocation::LEFT, VerticalLocation::TOP }
 			, width(0.0f)
 			, height(0.0f)
 			, parent(nullptr)

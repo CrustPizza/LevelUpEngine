@@ -71,7 +71,8 @@ namespace GameEngineSpace
 			break;
 		}
 
-		prefab->Render(engine, transform.GetWorldTransform(), tick);
+		prefab->PrepareRender(transform.GetWorldTransform(), tick);
+		prefab->Render(engine);
 	}
 
 	void Pillar::SetMetallic(float metallic)

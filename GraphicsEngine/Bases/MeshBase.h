@@ -29,8 +29,10 @@ namespace GraphicsEngineSpace
 		Vector	normal;
 		Vector	texCoord;
 		int		materialIndex;
-		int		weightIndex;
-		Vector	weights;
+		Vector	weights1;
+		Vector	weights2;
+		unsigned int	weightIndex1;
+		unsigned int	weightIndex2;
 		Vector	tangent;
 		Vector	binormal;
 	};

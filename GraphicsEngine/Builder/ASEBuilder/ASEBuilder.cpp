@@ -582,12 +582,16 @@ namespace GraphicsEngineSpace
 				vertices[i].texCoord[1] = 1.0f - texture.tVertex[vertex.vertices[i].textureIndex].y;
 			}
 
-			vertices[i].weightIndex = 0;
+			vertices[i].weightIndex1 = 0;
+			vertices[i].weightIndex2 = 0;
 
 			for (int j = 0; j < 4; j++)
 			{
-				vertices[i].weightIndex |= (vertex.vertices[i].weightIndex[j] & 0xff) << (8 * j);
-				vertices[i].weights[j] = vertex.vertices[i].weights[j];
+				vertices[i].weightIndex1 |= (vertex.vertices[i].weightIndex[j] & 0xff) << (8 * j);
+				vertices[i].weights1[j] = vertex.vertices[i].weights[j];
+
+				vertices[i].weightIndex2 |= (vertex.vertices[i].weightIndex[j + 4] & 0xff) << (8 * j);
+				vertices[i].weights2[j] = vertex.vertices[i].weights[j + 4];
 			}
 
 			vertices[i].tangent = { 0.0f, 0.0f, 0.0f, 0.0f };
@@ -825,12 +829,7 @@ namespace GraphicsEngineSpace
 		// Animation Rot
 		for (const auto& iter : controlInfo.rotSample)
 		{
-			Vector quaternion = ConvertRotationAxisAngleToQuaternion({ iter.r[xyzSwap[0]], iter.r[xyzSwap[1]], iter.r[xyzSwap[2]] }, iter.w);
-
-			if (newAnimation->rotations.empty() == true)
-				angle = quaternion;
-			else
-				angle = QuaternionMultiply(angle, quaternion);
+			angle = ConvertRotationAxisAngleToQuaternion({ iter.r[xyzSwap[0]], iter.r[xyzSwap[1]], iter.r[xyzSwap[2]] }, iter.w);
 
 			float tick = (iter.tick / static_cast<float>(sceneInfo.tick) - sceneInfo.firstFrame) * (1.0f / sceneInfo.frameSpeed);
 
