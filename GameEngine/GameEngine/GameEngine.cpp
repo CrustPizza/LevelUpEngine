@@ -183,12 +183,25 @@ namespace GameEngineSpace
 		pbrGenji = new Genji;
 		pbrGenji->Init(graphicsFactory, genjiModel);
 
-		ModelBase* mannequinModel = graphicsFactory->CreateModelFromASEFile("ASEMannequin", "Resources/Model/Paladin_idle.ase", "Idle");
-		mannequinModel = graphicsFactory->CreateAnimationFromASEFile("ASEMannequin", "Resources/Model/Paladin_run.ase", "Run");
-		mannequinModel = graphicsFactory->CreateAnimationFromASEFile("ASEMannequin", "Resources/Model/Paladin_slash.ase", "Slash");
+		//ModelBase* mannequinModel = graphicsFactory->CreateModelFromASEFile("ASEEly", "Resources/Model/Ely_idle.ase", "Idle");
+		//mannequinModel = graphicsFactory->CreateAnimationFromASEFile("ASEEly", "Resources/Model/Ely_run.ase", "Run");
+		//mannequinModel = graphicsFactory->CreateAnimationFromASEFile("ASEEly", "Resources/Model/Ely_attack.ase", "Attack");
+
+		ModelBase* mannequinModel = graphicsFactory->CreateModelFromASEFile("ASEPaladin", "Resources/Model/Paladin_idle.ase", "Idle");
+		mannequinModel = graphicsFactory->CreateAnimationFromASEFile("ASEPaladin", "Resources/Model/Paladin_run.ase", "Run");
+		mannequinModel = graphicsFactory->CreateAnimationFromASEFile("ASEPaladin", "Resources/Model/Paladin_slash.ase", "Slash");
+		//mannequinModel->SetRotation({ 0.0f, 180.0f, 0.0f });
 
 		mannequin = new Mannequin;
 		mannequin->Init(graphicsFactory, mannequinModel);
+
+		ModelBase* elyModel = graphicsFactory->CreateModelFromASEFile("ASEEly", "Resources/Model/Ely_idle.ase", "Idle");
+		elyModel = graphicsFactory->CreateAnimationFromASEFile("ASEEly", "Resources/Model/Ely_run.ase", "Run");
+		elyModel = graphicsFactory->CreateAnimationFromASEFile("ASEEly", "Resources/Model/Ely_attack.ase", "Attack");
+		//mannequinModel->SetRotation({ 0.0f, 180.0f, 0.0f });
+
+		ely = new Ely;
+		ely->Init(graphicsFactory, elyModel); 
 		//mannequin->AddForce({ -15.0f, 10.0f, -20.0f });
 
 		vertexShader = resourceManager->GetShader("SkinningModelVS");
@@ -263,7 +276,7 @@ namespace GameEngineSpace
 		spriteAnim->SetHeight(2.0f);
 
 		spriteAnim1 = graphicsFactory->CreateSpriteAnimation("SpriteAnimation1");
-		spriteAnim1->SetTexture(graphicsFactory->CreateTexture("Explosion2", "Resources/Effect/explosion2.png"), 1920, 1440, 8, 6, 0.05f);
+		spriteAnim1->SetTexture(graphicsFactory->CreateTexture("Explosion2", "Resources/Effect/explosion2.png"), 1920, 1440, 8, 6, 0.01f);
 		spriteAnim1->SetLoop(true);
 		spriteAnim1->SetPosition({ 0.0f, 10.0f, 0.0f, 1.0f });
 		spriteAnim1->SetWidth(2.0f);
@@ -400,6 +413,7 @@ namespace GameEngineSpace
 		genji->Update(Time::instance.deltaTime);
 		pbrGenji->Update(Time::instance.deltaTime);
 		pillar->Update(Time::instance.deltaTime);
+		ely->Update(Time::instance.deltaTime);
 
 		static float metallic = 0.5f;
 
@@ -692,6 +706,11 @@ namespace GameEngineSpace
 		mannequin->Render(graphicsEngine, tick);
 		graphicsEngine->GraphicsDebugEndEvent();
 
+		/* Mannequin */
+		graphicsEngine->GraphicsDebugBeginEvent("Ely");
+		ely->Render(graphicsEngine, tick);
+		graphicsEngine->GraphicsDebugEndEvent();
+
 		/* Pig */
 		graphicsEngine->GraphicsDebugBeginEvent("Pig");
 		pig->Render(graphicsEngine, tick);
@@ -790,6 +809,7 @@ namespace GameEngineSpace
 		delete pig;
 		delete pillar;
 		delete mannequin;
+		delete ely;
 
 		for (int i = 0; i < 10; i++)
 			delete pigs[i];

@@ -585,6 +585,8 @@ namespace GraphicsEngineSpace
 			vertices[i].weightIndex1 = 0;
 			vertices[i].weightIndex2 = 0;
 
+			float sum = 0.0f;
+
 			for (int j = 0; j < 4; j++)
 			{
 				vertices[i].weightIndex1 |= (vertex.vertices[i].weightIndex[j] & 0xff) << (8 * j);
@@ -592,6 +594,18 @@ namespace GraphicsEngineSpace
 
 				vertices[i].weightIndex2 |= (vertex.vertices[i].weightIndex[j + 4] & 0xff) << (8 * j);
 				vertices[i].weights2[j] = vertex.vertices[i].weights[j + 4];
+
+				sum += vertex.vertices[i].weights[j];
+				sum += vertex.vertices[i].weights[j + 4];
+			}
+
+			if (sum > 1.0f)
+			{
+				for (int j = 0; j < 4; j++)
+				{
+					vertices[i].weights1[j] /= sum;
+					vertices[i].weights2[j] /= sum;
+				}
 			}
 
 			vertices[i].tangent = { 0.0f, 0.0f, 0.0f, 0.0f };

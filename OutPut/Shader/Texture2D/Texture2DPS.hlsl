@@ -9,13 +9,33 @@
 #include "Texture2DTypes.hlsli"
 
 /* Texture Map */
-Texture2D Texture : register( t0 );
+Texture2D Texture : register(t0);
 
 /* Sampler */
-sampler   Sampler : register( s0 );
+sampler   Sampler : register(s0);
+
+/* PS Output */
+struct PS_Output
+{
+	float4 screen	: SV_TARGET0;
+	float4 depth	: SV_TARGET1;
+	float4 albedo	: SV_TARGET2;
+	float4 normal	: SV_TARGET3;
+	float4 worldPos	: SV_TARGET4;
+};
 
 /* PS Main */
-float4 main(VS_Output input) : SV_TARGET0
+PS_Output main(VS_Output input)
 {
-	return Texture.Sample( Sampler, input.TexCoord );
+	PS_Output output = (PS_Output)0;
+
+	float4 color = Texture.Sample(Sampler, input.TexCoord);
+
+	output.screen = color;
+	output.depth = input.Position.z;
+	output.albedo = color;
+	output.normal = 0;
+	output.worldPos = float4(input.Position.xyz, 1.0f);
+
+	return output;
 }

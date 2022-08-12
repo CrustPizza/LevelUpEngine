@@ -75,7 +75,9 @@ namespace GraphicsEngineSpace
 		void EndRender() override;
 		void Release() override;
 
-		virtual void DebugRender(int fps, float deltaTime);
+		virtual void DebugRender(int fps, float deltaTime, bool showMRT = true);
+	private:
+		void DebugRender() override;
 	};
 
 	extern "C"

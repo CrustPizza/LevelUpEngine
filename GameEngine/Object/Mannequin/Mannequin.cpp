@@ -17,7 +17,8 @@ namespace GameEngineSpace
 		, velocity{}
 		, animationTime(0.0f)
 	{
-
+		transform.position = { 0.0f, 0.0f, -5.0f };
+		transform.scale = { 0.1f, 0.1f, 0.1f };
 	}
 
 	Mannequin::~Mannequin()
@@ -35,12 +36,15 @@ namespace GameEngineSpace
 		pbrModel->SetRoughness(0.2f);
 
 		prefab = pbrModel->GetPrefab();
+		prefab->SetRotation({ -90.0f, 180.0f, 0.0f });
 		this->model = model;
 		this->model->SetAnimationKey("Idle");
 	}
 
 	void Mannequin::Update(float tick)
 	{
+		transform.rotation.y += 0.1f;
+
 		transform.UpdateWorldTransform();
 
 		if (Move() == true)

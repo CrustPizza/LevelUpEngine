@@ -47,8 +47,18 @@ cbuffer cbMaterial : register( b3 )
 	float4 MaterialSpecular;
 }
 
+/* PS Output */
+struct PS_Output
+{
+	float4 screen	: SV_TARGET0;
+	float4 depth	: SV_TARGET1;
+	float4 albedo	: SV_TARGET2;
+	float4 normal	: SV_TARGET3;
+	float4 worldPos	: SV_TARGET4;
+};
+
 /* PS Main */
-float4 main(VS_Output input) : SV_TARGET0
+PS_Output main(VS_Output input)
 {
 	float3 N = normalize( input.Normal );
 	float3 T = input.Tangent;
@@ -117,5 +127,13 @@ float4 main(VS_Output input) : SV_TARGET0
 
 	DiffuseColor.a = 1.0f;
 
-	return DiffuseColor;
+	PS_Output output = (PS_Output)0;
+
+	output.screen = DiffuseColor;
+	output.depth = input.Position.z;
+	output.albedo = DiffuseMap.Sample(Sampler, input.TexCoord);
+	output.normal = float4(input.Normal, 1.0f);
+	output.worldPos = float4(input.WorldPos, 1.0f);
+
+	return output;
 }

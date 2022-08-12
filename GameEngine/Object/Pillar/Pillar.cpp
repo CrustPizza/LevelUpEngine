@@ -39,6 +39,8 @@ namespace GameEngineSpace
 
 	void Pillar::Update(float tick)
 	{
+		transform.rotation.y += 0.1f;
+
 		transform.UpdateWorldTransform();
 	}
 

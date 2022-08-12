@@ -62,8 +62,8 @@ PS_Output ConstVarMain(VS_Default_Output input)
 	float3 color = LightSurface(ViewVector, Normal, 3, LightColor, LightDirection, Albedo, Roughness, Metallic, AO );
 
 	output.screen = float4(color, Alpha);
-	output.depth = input.Position.z / input.Position.w;
-	output.albedo = DiffuseMap.Sample( Sampler, input.TexCoord );
+	output.depth = input.Position.z;
+	output.albedo = float4(Albedo, 1.0f);
 	output.normal = float4(Normal, 1.0f);
 	output.worldPos = float4(input.WorldPos, 1.0f);
 
@@ -83,8 +83,8 @@ PS_Output AlbedoMain(VS_Default_Output input)
 	float3 color = LightSurface( ViewVector, Normal, 3, LightColor, LightDirection, AlbedoColor, Roughness, Metallic, AO );
 
 	output.screen = float4(color, Alpha);
-	output.depth = input.Position.z / input.Position.w;
-	output.albedo = DiffuseMap.Sample(Sampler, input.TexCoord);
+	output.depth = input.Position.z;
+	output.albedo = float4(AlbedoColor, 1.0f);
 	output.normal = float4(Normal, 1.0f);
 	output.worldPos = float4(input.WorldPos, 1.0f);
 
@@ -113,8 +113,8 @@ PS_Output AlbedoNormalMain(VS_Normal_Output input)
 	float3 color = LightSurface( ViewVector, Normal, 3, LightColor, LightDirection, AlbedoColor, Roughness, Metallic, AO );
 
 	output.screen = float4(color, Alpha);
-	output.depth = input.Position.z / input.Position.w;
-	output.albedo = DiffuseMap.Sample(Sampler, input.TexCoord);
+	output.depth = input.Position.z;
+	output.albedo = float4(AlbedoColor, 1.0f);
 	output.normal = float4(Normal, 1.0f);
 	output.worldPos = float4(input.WorldPos, 1.0f);
 

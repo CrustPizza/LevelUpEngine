@@ -93,15 +93,8 @@ namespace GraphicsEngineSpace
 
 	void Transform::UpdateLocalTransform()
 	{
-		Vector rad =
-		{
-			ConvertDegreeToRadian(rotation[0]),
-			ConvertDegreeToRadian(rotation[1]),
-			ConvertDegreeToRadian(rotation[2]),
-		};
-
 		Matrix scaleMatrix = MatrixScalingFromVector(scale);
-		Matrix rotationMatrix = MatrixRotationFromVector(rad);
+		Matrix rotationMatrix = MatrixRotationFromVector(ConvertDegreeToRadian(rotation));
 		Matrix translationMatrix = MatrixTranslationFromVector(position);
 
 		localTransform = scaleMatrix * rotationMatrix * translationMatrix;

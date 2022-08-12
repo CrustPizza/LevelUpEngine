@@ -680,6 +680,39 @@ namespace DX11
 		delete combine;
 	}
 
+	void DirectX11::DebugRender()
+	{
+		backScreen->OMSetRenderTarget(deviceContext, depthView);
+
+		ID3D11ShaderResourceView* null[] = { nullptr };
+
+		auto depthSRV = depthBuffer->GetShaderResourceView();
+
+		spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, nullptr, nullptr, depthState);
+		spriteBatch->Draw(depthSRV, RECT{ static_cast<long>(viewPort.Width * 0.8f), 0, static_cast<long>(viewPort.Width), static_cast<long>(viewPort.Height * 0.25f) });
+		spriteBatch->End();
+
+		auto albedoSRV = albedoBuffer->GetShaderResourceView();
+
+		spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, nullptr, nullptr, depthState);
+		spriteBatch->Draw(albedoSRV, RECT{ static_cast<long>(viewPort.Width * 0.8f), static_cast<long>(viewPort.Height * 0.25f), static_cast<long>(viewPort.Width), static_cast<long>(viewPort.Height * 0.5f) });
+		spriteBatch->End();
+
+		auto normalSRV = normalBuffer->GetShaderResourceView();
+
+		spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, nullptr, nullptr, depthState);
+		spriteBatch->Draw(normalSRV, RECT{ static_cast<long>(viewPort.Width * 0.8f), static_cast<long>(viewPort.Height * 0.5f), static_cast<long>(viewPort.Width), static_cast<long>(viewPort.Height * 0.75f) });
+		spriteBatch->End();
+
+		auto worldPosSRV = worldPosBuffer->GetShaderResourceView();
+
+		spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, nullptr, nullptr, depthState);
+		spriteBatch->Draw(worldPosSRV, RECT{ static_cast<long>(viewPort.Width * 0.8f), static_cast<long>(viewPort.Height * 0.75f), static_cast<long>(viewPort.Width), static_cast<long>(viewPort.Height) });
+		spriteBatch->End();
+
+		deviceContext->PSSetShaderResources(0, 1, null);
+	}
+
 	DirectX11DeclSpec DirectX11* CreateDirectX11()
 	{
 		return new DirectX11;

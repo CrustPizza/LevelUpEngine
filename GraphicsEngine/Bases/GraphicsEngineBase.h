@@ -48,5 +48,7 @@ namespace GraphicsEngineSpace
 		virtual void PostProcess() abstract;
 		virtual void EndRender() abstract;
 		virtual void Release() abstract;
+
+		virtual void DebugRender() abstract;
 	};
 }

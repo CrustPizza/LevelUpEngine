@@ -62,6 +62,7 @@ namespace GraphicsEngineSpace
 		void SetPixelShader(ShaderBase* shader) { this->pixelShader = shader; }
 		void AddOnceBuffer(const ConstantBufferSetting& buffer) { onceBuffer.push_back(buffer); }
 		void SetMaterialBuffer(const ConstantBufferSetting& materialBuffer) { this->materialBuffer = materialBuffer; }
+		void SetRotation(const Vector& rotation) { model->SetRotation(rotation); }
 
 		void SetAnimationKey(const std::string& animationKey)
 		{

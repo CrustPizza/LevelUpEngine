@@ -157,13 +157,27 @@ void ASEParser::SplitVertex()
 					vertex.vertices[index].next = -2;
 
 					// 해당 버텍스에서 사용할 노말, 텍스쳐 저장
-					for (int l = 0; l < 4; l++)
+					if (normal.normals.size() > i)
 					{
-						vertex.vertices[index].normal[l] = normal.normals[i].vertexNormal[j][l];
-						vertex.vertices[index].weightIndex[l] = 0;
-						vertex.vertices[index].weightIndex[l + 4] = 0;
-						vertex.vertices[index].weights[l] = 0.0f;
-						vertex.vertices[index].weights[l + 4] = 0.0f;
+						for (int l = 0; l < 4; l++)
+						{
+							vertex.vertices[index].normal[l] = normal.normals[i].vertexNormal[j][l];
+							vertex.vertices[index].weightIndex[l] = 0;
+							vertex.vertices[index].weightIndex[l + 4] = 0;
+							vertex.vertices[index].weights[l] = 0.0f;
+							vertex.vertices[index].weights[l + 4] = 0.0f;
+						}
+					}
+					else
+					{
+						for (int l = 0; l < 4; l++)
+						{
+							vertex.vertices[index].normal[l] = 0.0f;
+							vertex.vertices[index].weightIndex[l] = 0;
+							vertex.vertices[index].weightIndex[l + 4] = 0;
+							vertex.vertices[index].weights[l] = 0.0f;
+							vertex.vertices[index].weights[l + 4] = 0.0f;
+						}
 					}
 
 					vertex.vertices[index].textureIndex = face.faces[i].tIndex[j + 1];
@@ -210,6 +224,13 @@ void ASEParser::SplitVertex()
 						}
 					}
 
+					if (vertex.vertices[index].materialID != face.faces[i].materialID)
+					{
+						index = vertex.vertices[index].next;
+
+						goto Retry;
+					}
+
 					// 여기에 들어온다면 텍스쳐와 노말이 같은 버텍스가 있다는 뜻
 					flag = false;
 
@@ -221,8 +242,16 @@ void ASEParser::SplitVertex()
 				{
 					vertex.vertices.push_back(vertex.vertices[prev]);
 
-					for (int l = 0; l < 4; l++)
-						vertex.vertices.back().normal[l] = normal.normals[i].vertexNormal[j][l];
+					if (normal.normals.size() > i)
+					{
+						for (int l = 0; l < 4; l++)
+							vertex.vertices.back().normal[l] = normal.normals[i].vertexNormal[j][l];
+					}
+					else
+					{
+						for (int l = 0; l < 4; l++)
+							vertex.vertices.back().normal[l] = 0.0f;
+					}
 					vertex.vertices.back().textureIndex = face.faces[i].tIndex[j + 1];
 
 					vertex.vertices[prev].next = static_cast<unsigned int>(vertex.vertices.size()) - 1;

@@ -86,6 +86,8 @@ namespace GameEngineSpace
 
 	void Pig::Update(float tick)
 	{
+		transform.rotation.y += 0.1f;
+
 		transform.UpdateWorldTransform();
 
 		if (Move() == true)

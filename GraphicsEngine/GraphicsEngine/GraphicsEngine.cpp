@@ -226,7 +226,7 @@ namespace GraphicsEngineSpace
 			FreeLibrary(graphicsDLL);
 	}
 
-	void GraphicsEngine::DebugRender(int fps, float deltaTime)
+	void GraphicsEngine::DebugRender(int fps, float deltaTime, bool showMRT)
 	{
 		std::string fpsStr = "FPS : ";
 		fpsStr += std::to_string(fps);
@@ -236,6 +236,11 @@ namespace GraphicsEngineSpace
 
 		graphicsEngine->DrawTextColor(fpsStr, Vector{ 1.0f, 1.0f, 0.0f, }, Vector{ 10.0f, 10.0f }, 0.0f, Vector{ 1.5f, 1.5f });
 		graphicsEngine->DrawTextColor(dtStr, Vector{ 1.0f, 1.0f, 0.0f, }, Vector{ 10.0f, 40.0f }, 0.0f, Vector{ 1.5f, 1.5f });
+		graphicsEngine->DebugRender();
+	}
+
+	void GraphicsEngine::DebugRender()
+	{
 	}
 
 	GraphicsEngineDeclSpec GraphicsEngine* CreateGraphicsEngine()

@@ -104,7 +104,7 @@ VS_Default_Output SkinnedMain(VS_Skinning_Input input)
 		input.Weights2.x,
 		input.Weights2.y,
 		input.Weights2.z,
-		1.0f - input.Weights1.x - input.Weights1.y - input.Weights1.z - input.Weights1.w - input.Weights2.x - input.Weights2.y - input.Weights2.z
+		input.Weights2.w
 	};
 
 	uint  index[8] =
@@ -130,7 +130,7 @@ VS_Default_Output SkinnedMain(VS_Skinning_Input input)
 
 	output.WorldPos = pos;
 	output.Position = mul( float4( pos, 1.0f ), ViewProjection );
-	output.Normal = normalize( mul( normal, (float3x3)WorldInvTranspose ) );
+	output.Normal = normalize( mul( normalize(normal), (float3x3)WorldInvTranspose ) );
 	output.Diffuse = float4( Albedo, Alpha );
 	output.TexCoord = input.TexCoord.xy;
 

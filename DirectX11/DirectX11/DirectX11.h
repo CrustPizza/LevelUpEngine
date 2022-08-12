@@ -133,6 +133,8 @@ namespace DX11
 		void PostProcess()	override;
 		void EndRender()	override;
 		void Release()		override;
+
+		void DebugRender() override;
 	};
 
 	extern "C"

@@ -42,6 +42,7 @@
     <ClCompile Include="Manager\Time\Time.cpp" />
     <ClCompile Include="Object\Pillar\Pillar.cpp" />
     <ClCompile Include="Object\Mannequin\Mannequin.cpp" />
+    <ClCompile Include="Object\Ely\Ely.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameEngineFramework.h" />
@@ -85,6 +86,7 @@
     <ClInclude Include="Manager\Time\Time.h" />
     <ClInclude Include="Object\Pillar\Pillar.h" />
     <ClInclude Include="Object\Mannequin\Mannequin.h" />
+    <ClInclude Include="Object\Ely\Ely.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Application">

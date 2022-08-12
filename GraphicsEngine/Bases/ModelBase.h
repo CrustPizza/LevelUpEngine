@@ -62,10 +62,12 @@ element->SetupAttachment(parent);
 		std::string animationKey;
 
 		Matrix* boneMatrix;
+		Matrix rotationMatrix;
 
 	public:
 		ModelBase()
-			: boneMatrix(nullptr) {}
+			: boneMatrix(nullptr)
+			, rotationMatrix(Matrix::Identity) {}
 		virtual ~ModelBase()
 		{
 			RELEASE_VECTOR(meshes);
@@ -110,9 +112,21 @@ element->SetupAttachment(parent);
 					timeReset = false;
 			}
 
+			if (timeReset == true)
+			{
+				for (auto iter : helpers)
+					iter->UpdateAnimation(animationKey, 0.0f);
+
+				for (auto iter : meshes)
+					iter->UpdateAnimation(animationKey, 0.0f);
+
+				for (auto iter : bones)
+					iter->UpdateAnimation(animationKey, 0.0f);
+			}
+
 			Transform* transform = &emptyObject.GetTransform();
 
-			transform->SetWorldTransform(worldTransform);
+			transform->SetWorldTransform(rotationMatrix * worldTransform);
 
 			for (auto* iter : emptyObject.GetChild())
 				iter->PrepareRender();
@@ -132,6 +146,8 @@ element->SetupAttachment(parent);
 		const std::vector<BoneBase*>& GetBones() { return bones; }
 		const std::map<int, MaterialBase*>& GetMaterials() { return materials; }
 		Matrix* GetBoneMatrix() { return boneMatrix; }
+
+		void SetRotation(const Vector& rotation) { this->rotationMatrix = MatrixRotationFromVector(ConvertDegreeToRadian(rotation)); }
 
 	private:
 		void SetHierarchy()

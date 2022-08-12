@@ -16,6 +16,7 @@
 #include "Object/Pig/Pig.h"
 #include "Object/Pillar/Pillar.h"
 #include "Object/Mannequin/Mannequin.h"
+#include "Object/Ely/Ely.h"
 
 namespace GameEngineSpace
 {
@@ -80,6 +81,7 @@ namespace GameEngineSpace
 
 		Pillar* pillar;
 		Mannequin* mannequin;
+		Ely* ely;
 
 	public:
 		GameEngine();
