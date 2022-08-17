@@ -14,6 +14,7 @@ struct VS_Default_Output
 	float3 Normal   : NORMAL;
 	float2 TexCoord : TEXCOORD0;
 	float4 Diffuse  : COLOR1;
+	float4 ShadowDepth : COLOR2;
 };
 
 struct VS_Normal_Output
@@ -24,4 +25,5 @@ struct VS_Normal_Output
 	float2 TexCoord : TEXCOORD0;
 	float4 Diffuse  : COLOR1;
 	float3 Tangent  : TANGENT0;
+	float4 ShadowDepth : COLOR2;
 };

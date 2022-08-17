@@ -7,11 +7,11 @@
 *********************************/
 
 /* IBL Texture */
-TextureCube<float3> Radiance   : register(t4);
-TextureCube<float3> Irradiance : register(t5);
+TextureCube<float3> Radiance   : register( t4 );
+TextureCube<float3> Irradiance : register( t5 );
 
 /* Sampler */
-sampler   Sampler    : register(s0);
+sampler   Sampler    : register( s0 );
 
 /* Math Variable */
 static const float PI = 3.14159265f;

@@ -30,6 +30,7 @@ struct VS_Input
 VS_Output main(VS_Input input)
 {
 	VS_Output output = (VS_Output)0;
+
 	output.Pos = mul( input.Pos, World );
 	output.Pos = mul( output.Pos, ViewProjection );
 

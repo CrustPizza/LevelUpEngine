@@ -15,6 +15,7 @@
 namespace GraphicsEngineSpace
 {
 	using HeraclesMath::Vector;
+	using HeraclesMath::Matrix;
 
 	class LightBase : public ResourceBase<LightBase>
 	{
@@ -26,6 +27,7 @@ namespace GraphicsEngineSpace
 		Vector diffuse;
 		Vector ambient;
 		float specularPower;
+		Vector position;
 
 	public:
 		LightBase()
@@ -33,7 +35,8 @@ namespace GraphicsEngineSpace
 			, color{ 1.0f, 1.0f, 1.0f, 0.0f }
 			, diffuse{ 1.0f, 1.0f, 1.0f, 0.0f }
 			, ambient{ 0.3f, 0.3f, 0.3f, 1.0f }
-			, specularPower(16.0f) {}
+			, specularPower(16.0f)
+			, position{ 0.0f, 0.0f, 0.0f, 1.0f } {}
 		virtual ~LightBase() = default;
 
 		virtual void SetBuffer(BufferBase* buffer) abstract;

@@ -134,6 +134,9 @@ namespace GraphicsEngineSpace
 		// Mesh
 		const std::vector<GeometryInfo>& geometries = aseParser->GetGeoMetries();
 
+		Vector minPos = { FLT_MAX, FLT_MAX, FLT_MAX, 1.0f };
+		Vector maxPos = { FLT_MIN, FLT_MIN, FLT_MIN, 1.0f };
+
 		for (auto& iter : geometries)
 		{
 			MeshBase* newMesh = CreateMesh(iter);
@@ -141,6 +144,15 @@ namespace GraphicsEngineSpace
 			newMesh->indexBuffer = factory->CreateIndexBuffer(newMesh->GetName() + "_IB", USAGE::DEFAULT, 0, sizeof(WORD), indices, indicesSize);
 
 			newModel->meshes.push_back(newMesh);
+
+			for (int i = 0; i < 3; i++)
+			{
+				if (minPos[i] > newMesh->boundingBoxMin[i])
+					minPos[i] = newMesh->boundingBoxMin[i];
+
+				if (maxPos[i] < newMesh->boundingBoxMax[i])
+					maxPos[i] = newMesh->boundingBoxMax[i];
+			}
 
 			if (useAnimation != true)
 				continue;
@@ -163,6 +175,9 @@ namespace GraphicsEngineSpace
 
 			MeshBase* skin = newModel->meshes[i];
 			newModel->meshes.erase(newModel->meshes.begin() + i);
+
+			minPos = skin->boundingBoxMin;
+			maxPos = skin->boundingBoxMax;
 
 			for (auto& iter : geometries[i].boneInfo.boneList)
 			{
@@ -204,6 +219,9 @@ namespace GraphicsEngineSpace
 
 			break;
 		}
+
+		newModel->boundingBoxMin = minPos;
+		newModel->boundingBoxMax = maxPos;
 
 		newModel->SetHierarchy();
 		SetOriginalLocation(newModel);
@@ -505,6 +523,9 @@ namespace GraphicsEngineSpace
 
 	MeshBase* ASEBuilder::CreateMesh(const GeometryInfo& geometry)
 	{
+		Vector minPos = { FLT_MAX, FLT_MAX, FLT_MAX, 1.0f };
+		Vector maxPos = { FLT_MIN, FLT_MIN, FLT_MIN, 1.0f };
+
 		MeshBase* newMesh = new MeshBase;
 
 		if (newMesh == nullptr)
@@ -558,6 +579,11 @@ namespace GraphicsEngineSpace
 			// Position
 			for (int j = 0; j < 3; j++)
 			{
+				if (tempVertex[j] < minPos[j])
+					minPos[j] = tempVertex[j];
+				else if (tempVertex[j] > maxPos[j])
+					maxPos[j] = tempVertex[j];
+
 				vertices[i].position[j] =
 					invWorld[0][j] * tempVertex[0] +
 					invWorld[1][j] * tempVertex[1] +
@@ -685,6 +711,9 @@ namespace GraphicsEngineSpace
 			//float sign = dotResult.m128_f32[0] < 0 ? -1.0f : 1.0f;
 			//b *= sign;
 		}
+
+		newMesh->boundingBoxMin = minPos;
+		newMesh->boundingBoxMax = maxPos;
 
 		return newMesh;
 	}

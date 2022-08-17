@@ -55,31 +55,6 @@ namespace GameEngineSpace
 	{
 		using namespace GraphicsEngineSpace;
 
-		auto& materials = prefab->GetMaterials();
-		//auto materials = pbrModel->GetPrefab()->GetMaterials();
-
-		for (auto iter : materials)
-		{
-			auto materialData = iter.second->GetMaterialData();
-			auto maps = materialData.maps;
-
-			for (int i = 0; i < maps.size(); i++)
-			{
-				if (maps[i].type == MapType::DIFFUSE)
-				{
-					if (maps[i].map != nullptr)
-						maps[i].map->SetUpTexture(0, ShaderType::PIXEL);
-				}
-				else if (maps[i].type == MapType::NORMAL)
-				{
-					if (maps[i].map != nullptr)
-						maps[i].map->SetUpTexture(1, ShaderType::PIXEL);
-				}
-			}
-
-			break;
-		}
-
 		animationTime += tick;
 
 		if (prefab->PrepareRender(transform.GetWorldTransform(), animationTime) == true)

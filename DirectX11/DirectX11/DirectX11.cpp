@@ -46,13 +46,15 @@ namespace DX11
 		, depth(nullptr)
 		, depthView(nullptr)
 
+		, shadowDepth(nullptr)
+		, shadowDepthView(nullptr)
+
 		, blendState(nullptr)
 		, depthState(nullptr)
 
 		, viewPort{}
 
 		, spriteBatch(nullptr)
-		, spriteFont(nullptr)
 		, effect2D(nullptr)
 
 		, backBufferFormat(DXGI_FORMAT_B8G8R8A8_UNORM)
@@ -65,6 +67,8 @@ namespace DX11
 		, albedoBuffer(nullptr)
 		, normalBuffer(nullptr)
 		, worldPosBuffer(nullptr)
+
+		, shadowDepthBuffer(nullptr)
 
 		, factory(nullptr)
 
@@ -164,6 +168,9 @@ namespace DX11
 		worldPosBuffer = new RenderTexture(backBufferFormat);
 		worldPosBuffer->SetDevice(d3dDevice);
 
+		shadowDepthBuffer = new RenderTexture(backBufferFormat);
+		shadowDepthBuffer->SetDevice(d3dDevice);
+
 		if (OnResize(width, height) != true)
 			return false;
 
@@ -188,11 +195,11 @@ namespace DX11
 
 		// Factory
 		factory = new Factory(d3dDevice, deviceContext);
+		factory->SetDepthState(depthState);
 
 		// Sprite
 		spriteBatch = new DirectX::SpriteBatch(deviceContext);
-		spriteFont = new DirectX::SpriteFont(d3dDevice, _T("Font/gulim9k.spritefont"));
-		spriteFont->SetLineSpacing(14.0f);
+		factory->SetSpriteBatch(spriteBatch);
 
 		effect2D = new Effect2D(deviceContext);
 		effect2D->Init(factory);
@@ -215,7 +222,14 @@ namespace DX11
 
 	FactoryBase* const DirectX11::CreateFactory()
 	{
-		return new Factory(d3dDevice, deviceContext);
+		if (factory == nullptr)
+		{
+			factory = new Factory(d3dDevice, deviceContext);
+			factory->SetDepthState(depthState);
+			factory->SetSpriteBatch(spriteBatch);
+		}
+
+		return factory;
 	}
 
 	bool DirectX11::OnResize(UINT width, UINT height)
@@ -230,6 +244,8 @@ namespace DX11
 		RELEASE_PTR(renderTargetView);
 		RELEASE_PTR(depth);
 		RELEASE_PTR(depthView);
+		RELEASE_PTR(shadowDepth);
+		RELEASE_PTR(shadowDepthView);
 		RELEASE_PTR(depthState);
 		RELEASE_PTR(blendState);
 
@@ -267,6 +283,13 @@ namespace DX11
 		if (FAILED(hr))
 			return false;
 
+		descDepth.Width = width * 2;
+		descDepth.Height = width * 2;
+
+		hr = d3dDevice->CreateTexture2D(&descDepth, nullptr, &shadowDepth);
+		if (FAILED(hr))
+			return false;
+
 		// Create the depth stencil view
 		D3D11_DEPTH_STENCIL_VIEW_DESC descDSV = {};
 		descDSV.Format = descDepth.Format;
@@ -274,6 +297,10 @@ namespace DX11
 		descDSV.Texture2D.MipSlice = 0;
 
 		hr = d3dDevice->CreateDepthStencilView(depth, &descDSV, &depthView);
+		if (FAILED(hr))
+			return false;
+
+		hr = d3dDevice->CreateDepthStencilView(shadowDepth, &descDSV, &shadowDepthView);
 		if (FAILED(hr))
 			return false;
 
@@ -308,11 +335,20 @@ namespace DX11
 		// RS == Rasterizer Stage
 		deviceContext->RSSetViewports(1, &viewPort);
 
+		// 그려질 화면의 영역 결정
+		shadowViewPort.Width = static_cast<FLOAT>(width * 2);
+		shadowViewPort.Height = static_cast<FLOAT>(width * 2);
+		shadowViewPort.MinDepth = 0.0f;
+		shadowViewPort.MaxDepth = 1.0f;
+		shadowViewPort.TopLeftX = 0;
+		shadowViewPort.TopLeftY = 0;
+
 		backScreen->OnResize(width, height);
 		depthBuffer->OnResize(width, height);
 		albedoBuffer->OnResize(width, height);
 		normalBuffer->OnResize(width, height);
 		worldPosBuffer->OnResize(width, height);
+		shadowDepthBuffer->OnResize(width * 2, width * 2);
 
 		return true;
 	}
@@ -460,14 +496,18 @@ namespace DX11
 
 	bool DirectX11::DrawTextColor(std::string& text, HeraclesMath::Vector color, HeraclesMath::Vector position, float rotation, HeraclesMath::Vector scale)
 	{
-		if (spriteBatch == nullptr || spriteFont == nullptr)
-			return false;
-
-		spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, nullptr, nullptr, depthState);
-		spriteFont->DrawString(spriteBatch, text.c_str(), DirectX::XMVECTOR{ position.x, position.y }, DirectX::XMVECTOR{ color.x, color.y, color.z }, HeraclesMath::ConvertDegreeToRadian(rotation), DirectX::g_XMZero, DirectX::XMVECTOR{ scale.x, scale.y }, DirectX::SpriteEffects_None, position.z);
-		spriteBatch->End();
 
 		return true;
+	}
+
+	bool DirectX11::DrawTextColor(const std::string& fontName, std::string& text, HeraclesMath::Vector color, HeraclesMath::Vector position, float rotation, HeraclesMath::Vector scale)
+	{
+		return false;
+	}
+
+	bool DirectX11::DrawTextColor(const std::string& fontName, std::wstring& text, HeraclesMath::Vector color, HeraclesMath::Vector position, float rotation, HeraclesMath::Vector scale)
+	{
+		return false;
 	}
 
 	bool DirectX11::DrawLine(BufferBase* vertices, BufferBase* indices)
@@ -491,6 +531,11 @@ namespace DX11
 		deviceContext->DrawIndexed(indicesSize, 0, 0);
 
 		return true;
+	}
+
+	bool DirectX11::SetFontName(const std::string& fontName)
+	{
+		return false;
 	}
 
 	bool DirectX11::SetUpShader(ShaderBase* shader)
@@ -525,6 +570,39 @@ namespace DX11
 		annotationCount--;
 
 		return true;
+	}
+
+	void DirectX11::BeginShadowRender()
+	{
+		annotation->BeginEvent(_T("Shadow Map"));
+
+		deviceContext->ClearDepthStencilView(shadowDepthView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+		shadowDepthBuffer->ClearRenderTargetView(deviceContext, shadowDepthView, DirectX::Colors::Black);
+		shadowDepthBuffer->OMSetRenderTarget(deviceContext, shadowDepthView);
+		deviceContext->RSSetViewports(1, &shadowViewPort);
+	}
+
+	void DirectX11::EndShadowRender()
+	{
+		annotation->EndEvent();
+
+		ID3D11RenderTargetView* mrt[] =
+		{
+			backScreen->GetRenderTargetView(),
+			depthBuffer->GetRenderTargetView(),
+			albedoBuffer->GetRenderTargetView(),
+			normalBuffer->GetRenderTargetView(),
+			worldPosBuffer->GetRenderTargetView()
+		};
+
+		deviceContext->OMSetRenderTargets(ARRAYSIZE(mrt), mrt, depthView);
+
+		deviceContext->ClearDepthStencilView(depthView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+		auto shadowMapSRV = shadowDepthBuffer->GetShaderResourceView();
+		deviceContext->PSSetShaderResources(2, 1, &shadowMapSRV);
+		deviceContext->OMSetDepthStencilState(depthState, 0);
+		deviceContext->RSSetViewports(1, &viewPort);
+		deviceContext->OMSetBlendState(blendState, nullptr, 0xff);
 	}
 
 	bool DirectX11::CreateBackScreen()
@@ -604,38 +682,12 @@ namespace DX11
 	{
 		annotation->BeginEvent(_T("Present"));
 
-		backScreen->OMSetRenderTarget(deviceContext, depthView);
-
-		ID3D11ShaderResourceView* null[] = { nullptr };
-
-		auto depthSRV = depthBuffer->GetShaderResourceView();
-
-		spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, nullptr, nullptr, depthState);
-		spriteBatch->Draw(depthSRV, RECT{ static_cast<long>(viewPort.Width * 0.8f), 0, static_cast<long>(viewPort.Width), static_cast<long>(viewPort.Height * 0.25f )});
-		spriteBatch->End();
-
-		auto albedoSRV = albedoBuffer->GetShaderResourceView();
-
-		spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, nullptr, nullptr, depthState);
-		spriteBatch->Draw(albedoSRV, RECT{ static_cast<long>(viewPort.Width * 0.8f), static_cast<long>(viewPort.Height * 0.25f), static_cast<long>(viewPort.Width), static_cast<long>(viewPort.Height * 0.5f )});
-		spriteBatch->End();
-
-		auto normalSRV = normalBuffer->GetShaderResourceView();
-
-		spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, nullptr, nullptr, depthState);
-		spriteBatch->Draw(normalSRV, RECT{ static_cast<long>(viewPort.Width * 0.8f), static_cast<long>(viewPort.Height * 0.5f), static_cast<long>(viewPort.Width), static_cast<long>(viewPort.Height * 0.75f )});
-		spriteBatch->End();
-
-		auto worldPosSRV = worldPosBuffer->GetShaderResourceView();
-
-		spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, nullptr, nullptr, depthState);
-		spriteBatch->Draw(worldPosSRV, RECT{ static_cast<long>(viewPort.Width * 0.8f), static_cast<long>(viewPort.Height * 0.75f), static_cast<long>(viewPort.Width), static_cast<long>(viewPort.Height)});
-		spriteBatch->End();
-
-		deviceContext->PSSetShaderResources(0, 1, null);
-
 		deviceContext->OMSetRenderTargets(1, &renderTargetView, depthView);
 		deviceContext->CopyResource(renderTarget, backScreen->GetRenderTarget());
+
+		ID3D11ShaderResourceView* null[] = { nullptr, nullptr, nullptr };
+
+		deviceContext->PSSetShaderResources(0, 3, null);
 
 		swapChain->Present(0, 0);
 
@@ -658,11 +710,13 @@ namespace DX11
 		RELEASE_PTR(depth);
 		RELEASE_PTR(depthView);
 
+		RELEASE_PTR(shadowDepth);
+		RELEASE_PTR(shadowDepthView);
+
 		RELEASE_PTR(blendState);
 		RELEASE_PTR(depthState);
 
 		delete spriteBatch;
-		delete spriteFont;
 		delete effect2D;
 
 		DELETE_RELEASE_PTR(backScreen);
@@ -670,6 +724,7 @@ namespace DX11
 		DELETE_RELEASE_PTR(albedoBuffer);
 		DELETE_RELEASE_PTR(normalBuffer);
 		DELETE_RELEASE_PTR(worldPosBuffer);
+		DELETE_RELEASE_PTR(shadowDepthBuffer);
 
 		delete factory;
 
@@ -689,28 +744,39 @@ namespace DX11
 		auto depthSRV = depthBuffer->GetShaderResourceView();
 
 		spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, nullptr, nullptr, depthState);
-		spriteBatch->Draw(depthSRV, RECT{ static_cast<long>(viewPort.Width * 0.8f), 0, static_cast<long>(viewPort.Width), static_cast<long>(viewPort.Height * 0.25f) });
+		spriteBatch->Draw(depthSRV, RECT{ static_cast<long>(viewPort.Width * 0.8f), 0, static_cast<long>(viewPort.Width), static_cast<long>(viewPort.Height * 0.20f) });
 		spriteBatch->End();
 
 		auto albedoSRV = albedoBuffer->GetShaderResourceView();
 
 		spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, nullptr, nullptr, depthState);
-		spriteBatch->Draw(albedoSRV, RECT{ static_cast<long>(viewPort.Width * 0.8f), static_cast<long>(viewPort.Height * 0.25f), static_cast<long>(viewPort.Width), static_cast<long>(viewPort.Height * 0.5f) });
+		spriteBatch->Draw(albedoSRV, RECT{ static_cast<long>(viewPort.Width * 0.8f), static_cast<long>(viewPort.Height * 0.20f), static_cast<long>(viewPort.Width), static_cast<long>(viewPort.Height * 0.4f) });
 		spriteBatch->End();
 
 		auto normalSRV = normalBuffer->GetShaderResourceView();
 
 		spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, nullptr, nullptr, depthState);
-		spriteBatch->Draw(normalSRV, RECT{ static_cast<long>(viewPort.Width * 0.8f), static_cast<long>(viewPort.Height * 0.5f), static_cast<long>(viewPort.Width), static_cast<long>(viewPort.Height * 0.75f) });
+		spriteBatch->Draw(normalSRV, RECT{ static_cast<long>(viewPort.Width * 0.8f), static_cast<long>(viewPort.Height * 0.4f), static_cast<long>(viewPort.Width), static_cast<long>(viewPort.Height * 0.6f) });
 		spriteBatch->End();
 
 		auto worldPosSRV = worldPosBuffer->GetShaderResourceView();
 
 		spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, nullptr, nullptr, depthState);
-		spriteBatch->Draw(worldPosSRV, RECT{ static_cast<long>(viewPort.Width * 0.8f), static_cast<long>(viewPort.Height * 0.75f), static_cast<long>(viewPort.Width), static_cast<long>(viewPort.Height) });
+		spriteBatch->Draw(worldPosSRV, RECT{ static_cast<long>(viewPort.Width * 0.8f), static_cast<long>(viewPort.Height * 0.6f), static_cast<long>(viewPort.Width), static_cast<long>(viewPort.Height * 0.8f) });
+		spriteBatch->End();
+
+		auto shadowDepthSRV = shadowDepthBuffer->GetShaderResourceView();
+
+		spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, nullptr, nullptr, depthState);
+		spriteBatch->Draw(shadowDepthSRV, RECT{ static_cast<long>(viewPort.Width * 0.8f), static_cast<long>(viewPort.Height * 0.8f), static_cast<long>(viewPort.Width), static_cast<long>(viewPort.Height) });
 		spriteBatch->End();
 
 		deviceContext->PSSetShaderResources(0, 1, null);
+	}
+
+	void DirectX11::AddRenderQueue(const RenderData& renderData)
+	{
+
 	}
 
 	DirectX11DeclSpec DirectX11* CreateDirectX11()

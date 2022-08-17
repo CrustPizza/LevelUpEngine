@@ -25,6 +25,7 @@ namespace GraphicsEngineSpace
 		RELEASE_MAP(prefabList);
 		RELEASE_MAP(samplerList);
 		RELEASE_MAP(skyBoxList);
+		RELEASE_MAP(fontList);
 		RELEASE_MAP(PBRModelList);
 		RELEASE_MAP(IBLTextureList);
 		RELEASE_MAP(lightList);
@@ -124,6 +125,18 @@ namespace GraphicsEngineSpace
 			return false;
 
 		skyBoxList[name] = skyBox;
+
+		return true;
+	}
+
+	bool ResourceManager::AddFont(const std::string& name, FontBase* font)
+	{
+		auto result = FindGraphicsResource(fontList, name);
+
+		if (result != nullptr)
+			return false;
+
+		fontList[name] = font;
 
 		return true;
 	}
@@ -300,6 +313,18 @@ namespace GraphicsEngineSpace
 		return dynamic_cast<SkyBoxBase*>(result);
 	}
 
+	FontBase* const ResourceManager::GetFont(const std::string& name)
+	{
+		auto result = FindGraphicsResource(fontList, name);
+
+		if (result == nullptr)
+			return nullptr;
+
+		result->GetRefCount()++;
+
+		return dynamic_cast<FontBase*>(result);
+	}
+
 	PBRModel* const ResourceManager::GetPBRModel(const std::string& name)
 	{
 		auto result = FindGraphicsResource(PBRModelList, name);
@@ -358,5 +383,21 @@ namespace GraphicsEngineSpace
 		result->GetRefCount()++;
 
 		return dynamic_cast<SpriteAnimation*>(result);
+	}
+
+	DirectionalLight* const ResourceManager::GetDirectionalLight()
+	{
+		for (auto& iter : lightList)
+		{
+			if (iter.second == nullptr)
+				continue;
+
+			DirectionalLight* dLight = dynamic_cast<DirectionalLight*>(iter.second);
+
+			if (dLight != nullptr)
+				return dLight;
+		}
+
+		return nullptr;
 	}
 }

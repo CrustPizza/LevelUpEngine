@@ -9,6 +9,7 @@
 #pragma once
 
 #include "Bases/LightBase.h"
+#include "../HeraclesMath/HeraclesMath.h"
 
 namespace GraphicsEngineSpace
 {

@@ -16,6 +16,9 @@ namespace GraphicsEngineSpace
 		, graphicsEngine(nullptr)
 		, factory(nullptr)
 		, resourceManager(nullptr)
+		, fontName("굴림")
+		, width(0)
+		, height(0)
 	{
 
 	}
@@ -65,6 +68,8 @@ namespace GraphicsEngineSpace
 		}
 
 		graphicsEngine = dxEngine;
+		this->width = width;
+		this->height = height;
 
 		return true;
 	}
@@ -96,6 +101,8 @@ namespace GraphicsEngineSpace
 
 	bool GraphicsEngine::OnResize(UINT width, UINT height)
 	{
+		this->width = width;
+		this->height = height;
 
 		return graphicsEngine->OnResize(width, height);
 	}
@@ -132,7 +139,27 @@ namespace GraphicsEngineSpace
 
 	bool GraphicsEngine::DrawTextColor(std::string& text, Vector color, Vector position, float rotation, Vector scale)
 	{
-		return graphicsEngine->DrawTextColor(text, color, position, rotation, scale);
+		return resourceManager->GetFont(fontName)->DrawTextColor(text, color, position, rotation, scale);
+	}
+
+	bool GraphicsEngine::DrawTextColor(const std::string& fontName, std::string& text, Vector color, Vector position, float rotation, Vector scale)
+	{
+		FontBase* font = resourceManager->GetFont(fontName);
+
+		if (font == nullptr)
+			return false;
+
+		return font->DrawTextColor(text, color, position, rotation, scale);
+	}
+
+	bool GraphicsEngine::DrawTextColor(const std::string& fontName, std::wstring& text, Vector color, Vector position, float rotation, Vector scale)
+	{
+		FontBase* font = resourceManager->GetFont(fontName);
+
+		if (font == nullptr)
+			return false;
+
+		return font->DrawTextColor(text, color, position, rotation, scale);
 	}
 
 	bool GraphicsEngine::DrawLine(BufferBase* vertices, BufferBase* indices)
@@ -152,6 +179,18 @@ namespace GraphicsEngineSpace
 		resourceManager->GetBuffer("ColorCB")->SetUpBuffer(6, const_cast<Vector*>(&color), ShaderType::PIXEL);
 
 		return graphicsEngine->DrawLine(vertices, indices);
+	}
+
+	bool GraphicsEngine::SetFontName(const std::string& fontName)
+	{
+		FontBase* font = resourceManager->GetFont(fontName);
+
+		if (font == nullptr)
+			return false;
+
+		this->fontName = fontName;
+
+		return true;
 	}
 
 	bool GraphicsEngine::SetUpShader(ShaderBase* shader)
@@ -188,6 +227,16 @@ namespace GraphicsEngineSpace
 		return graphicsEngine->GraphicsDebugEndEvent();
 	}
 
+	void GraphicsEngine::BeginShadowRender()
+	{
+
+	}
+
+	void GraphicsEngine::EndShadowRender()
+	{
+
+	}
+
 	void GraphicsEngine::BeginRender()
 	{
 		graphicsEngine->BeginRender();
@@ -195,7 +244,66 @@ namespace GraphicsEngineSpace
 
 	void GraphicsEngine::Render()
 	{
-		graphicsEngine->Render();
+		DirectionalLight* dLight = resourceManager->GetDirectionalLight();
+
+		if (dLight != nullptr)
+		{
+			graphicsEngine->BeginShadowRender();
+
+			resourceManager->GetShader("ShadowMapPS")->SetUpShader();
+
+			Vector position = Vector::Backward * MatrixRotationFromVector(dLight->rotation);
+			position *= 10.0f;
+
+			Matrix lightProjection = OrthographicOffCenterMatrix(position.x - 100, position.x + 100, position.y - 100, position.y + 100, position.z - 100, position.z + 150);
+			//Matrix lightProjection = OrthographicMatrix(300, 300, 0.01f, 500.0f);
+
+			Matrix lightViewProjection = ViewMatrix(position, dLight->rotation) * lightProjection;
+			lightViewProjection = MatrixTranspose(lightViewProjection);
+
+			resourceManager->GetBuffer("LightViewProjectionCB")->SetUpBuffer(7, &lightViewProjection, ShaderType::VERTEX);
+
+			for (auto& iter : renderQueue)
+			{
+				if (iter.prefab != nullptr)
+				{
+					graphicsEngine->GraphicsDebugBeginEvent(iter.prefab->model->GetName() + "_Shadow");
+					iter.prefab->PrepareRender(iter.worldTransform, iter.animationTime);
+
+					if (iter.prefab->isSkinning == true)
+					{
+						resourceManager->GetShader("ShadowSkinningMapVS")->SetUpShader();
+						resourceManager->GetBuffer("BoneMatrixCB")->SetUpBuffer(3, iter.prefab->model->GetBoneMatrix(), ShaderType::VERTEX);
+					}
+					else
+					{
+						resourceManager->GetShader("ShadowMapVS")->SetUpShader();
+					}
+
+					iter.prefab->ShadowRender(graphicsEngine);
+					graphicsEngine->GraphicsDebugEndEvent();
+				}
+			}
+
+			graphicsEngine->EndShadowRender();
+		}
+
+		graphicsEngine->GraphicsDebugBeginEvent("Render");
+
+		for (auto& iter : renderQueue)
+		{
+			if (iter.prefab != nullptr)
+			{
+				graphicsEngine->GraphicsDebugBeginEvent(iter.prefab->model->GetName());
+				iter.prefab->PrepareRender(iter.worldTransform, iter.animationTime);
+				iter.prefab->RenderImpl(graphicsEngine);
+				graphicsEngine->GraphicsDebugEndEvent();
+			}
+		}
+
+		renderQueue.clear();
+
+		graphicsEngine->GraphicsDebugEndEvent();
 	}
 
 	void GraphicsEngine::PostProcess()
@@ -234,9 +342,40 @@ namespace GraphicsEngineSpace
 		std::string dtStr = "DeltaTime : ";
 		dtStr += std::to_string(deltaTime);
 
-		graphicsEngine->DrawTextColor(fpsStr, Vector{ 1.0f, 1.0f, 0.0f, }, Vector{ 10.0f, 10.0f }, 0.0f, Vector{ 1.5f, 1.5f });
-		graphicsEngine->DrawTextColor(dtStr, Vector{ 1.0f, 1.0f, 0.0f, }, Vector{ 10.0f, 40.0f }, 0.0f, Vector{ 1.5f, 1.5f });
-		graphicsEngine->DebugRender();
+		DrawTextColor(fpsStr, Vector{ 1.0f, 1.0f, 0.0f, }, Vector{ 10.0f, 10.0f }, 0.0f, Vector{ 1.5f, 1.5f });
+		DrawTextColor(dtStr, Vector{ 1.0f, 1.0f, 0.0f, }, Vector{ 10.0f, 40.0f }, 0.0f, Vector{ 1.5f, 1.5f });
+
+		std::wstring fontTest = L"ColonnaMT 1234 가나다라";
+		DrawTextColor("ColonnaMT", fontTest, Vector{ 1.0f, 0.0f, 0.0f, 1.0f }, Vector{ 10.0f, 70.0f }, 0.0f, Vector{ 3.0f, 3.0f });
+
+		fontTest = L"EBS-Bold 1234 가나다라";
+		DrawTextColor("EBS-Bold", fontTest, Vector{ 1.0f, 0.0f, 0.0f, 1.0f }, Vector{ 10.0f, 120.0f }, 0.0f, Vector{ 3.0f, 3.0f });
+
+		fontTest = L"EBS-Light 1234 가나다라";
+		DrawTextColor("EBS-Light", fontTest, Vector{ 1.0f, 0.0f, 0.0f, 1.0f }, Vector{ 10.0f, 170.0f }, 0.0f, Vector{ 3.0f, 3.0f });
+		
+		fontTest = L"EBS-Medium 1234 가나다라";
+		DrawTextColor("EBS-Medium", fontTest, Vector{ 1.0f, 0.0f, 0.0f, 1.0f }, Vector{ 10.0f, 220.0f }, 0.0f, Vector{ 3.0f, 3.0f });
+
+		fontTest = L"H2MJRE 1234 가나다라";
+		DrawTextColor("H2MJRE", fontTest, Vector{ 1.0f, 0.0f, 0.0f, 1.0f }, Vector{ 10.0f, 270.0f }, 0.0f, Vector{ 3.0f, 3.0f });
+
+		fontTest = L"NotoSansBold 1234 가나다라";
+		DrawTextColor("NotoSansBold", fontTest, Vector{ 1.0f, 0.0f, 0.0f, 1.0f }, Vector{ 10.0f, 320.0f }, 0.0f, Vector{ 3.0f, 3.0f });
+
+		fontTest = L"NotoSansMedium 1234 가나다라";
+		DrawTextColor("NotoSansMedium", fontTest, Vector{ 1.0f, 0.0f, 0.0f, 1.0f }, Vector{ 10.0f, 370.0f }, 0.0f, Vector{ 3.0f, 3.0f });
+
+		fontTest = L"NotoSansRegular 1234 가나다라";
+		DrawTextColor("NotoSansRegular", fontTest, Vector{ 1.0f, 0.0f, 0.0f, 1.0f }, Vector{ 10.0f, 420.0f }, 0.0f, Vector{ 3.0f, 3.0f });
+			
+		if (showMRT == true)
+			graphicsEngine->DebugRender();
+	}
+
+	void GraphicsEngine::AddRenderQueue(const RenderData& renderData)
+	{
+		renderQueue.push_back(renderData);
 	}
 
 	void GraphicsEngine::DebugRender()

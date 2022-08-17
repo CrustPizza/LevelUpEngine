@@ -9,7 +9,7 @@
 #include "SkyBoxTypes.hlsli"
 
 /* View */
-cbuffer cbView : register(b0)
+cbuffer cbView : register( b0 )
 {
 	matrix ViewProjection;
 }

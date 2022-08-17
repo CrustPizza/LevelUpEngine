@@ -207,7 +207,8 @@ namespace GameEngineSpace
 		vertexShader = resourceManager->GetShader("SkinningModelVS");
 		BufferBase* boneBuffer = resourceManager->GetBuffer("BoneMatrixCB");
 
-		ModelBase* pigModel = graphicsFactory->CreateModelFromASEFile("ASEPig", "Resources/Model/babypig_idle_6x.ASE", "Idle");
+		ModelBase* pigModel = graphicsFactory->CreateModelFromASEFile("ASEPig", "Resources/Model/Heracles_idle.ase", "Idle");
+		//pigModel = graphicsFactory->CreateAnimationFromASEFile("ASEPig", "Resources/Model/Heracles_idle.ase", "Idle");
 		//ModelBase* pigIdleAnimation = graphicsFactory->CreateAnimationFromASEFile("ASEPig", "Resources/Model/babypig_walk_6x.ASE", "Walk");
 
 		pig = new Pig;
@@ -468,7 +469,7 @@ namespace GameEngineSpace
 		else
 			pig->Update(Time::instance.deltaTime);
 
-		dLight->rotation.y += 1.0f * Time::instance.deltaTime;
+		dLight->rotation.y += 15.0f * Time::instance.deltaTime;
 
 		//pig->LookAt(-camera.GetWorldPosition());
 
@@ -690,6 +691,11 @@ namespace GameEngineSpace
 		/* IBL */
 		ibl->SetUpIBL(4, 4, 5, ShaderType::PIXEL);
 
+		/* PBR Cube */
+		graphicsEngine->GraphicsDebugBeginEvent("PBR Cube");
+		pbrCube->Render(graphicsEngine);
+		graphicsEngine->GraphicsDebugEndEvent();
+
 		/* Genji */
 		graphicsEngine->GraphicsDebugBeginEvent("Genji");
 		genji->Render(graphicsEngine, tick);
@@ -707,25 +713,22 @@ namespace GameEngineSpace
 		graphicsEngine->GraphicsDebugEndEvent();
 
 		/* Mannequin */
-		graphicsEngine->GraphicsDebugBeginEvent("Ely");
-		ely->Render(graphicsEngine, tick);
-		graphicsEngine->GraphicsDebugEndEvent();
+		//graphicsEngine->GraphicsDebugBeginEvent("Ely");
+		//ely->Render(graphicsEngine, tick);
+		//graphicsEngine->GraphicsDebugEndEvent();
 
 		/* Pig */
 		graphicsEngine->GraphicsDebugBeginEvent("Pig");
 		pig->Render(graphicsEngine, tick);
-
+		
 		for (int i = 0; i < 10; i++)
 		{
 			pigs[i]->Render(graphicsEngine, tick * i);
 		}
-
+		
 		graphicsEngine->GraphicsDebugEndEvent();
 
-		/* PBR Cube */
-		graphicsEngine->GraphicsDebugBeginEvent("PBR Cube");
-		pbrCube->Render(graphicsEngine);
-		graphicsEngine->GraphicsDebugEndEvent();
+		graphicsEngine->Render();
 
 		/* Line */
 		graphicsEngine->GraphicsDebugBeginEvent("Line Draw");
@@ -778,8 +781,6 @@ namespace GameEngineSpace
 		spriteAnim7->Render(graphicsEngine, camera.GetView() * camera.GetProjection(), camera.GetWorldPosition(), tick);
 		spriteAnim8->Render(graphicsEngine, camera.GetView() * camera.GetProjection(), camera.GetWorldPosition(), tick);
 		graphicsEngine->GraphicsDebugEndEvent();
-
-		graphicsEngine->Render();
 
 		/* Post Process */
 		if (Input::GetInstance()->GetInputState(VK_TAB, KeyState::TOGGLE) == true)

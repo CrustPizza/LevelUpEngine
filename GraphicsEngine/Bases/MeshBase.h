@@ -44,9 +44,14 @@ namespace GraphicsEngineSpace
 		BufferBase* indexBuffer;
 		std::map<std::string, AnimationBase*> animations;
 
+		Vector boundingBoxMin;
+		Vector boundingBoxMax;
+
 	public:
 		MeshBase()
-			: indexBuffer(nullptr) {}
+			: indexBuffer(nullptr)
+			, boundingBoxMin{ 0.0f, 0.0f, 0.0f, 1.0f }
+			, boundingBoxMax{ 0.0f, 0.0f, 0.0f, 1.0f } {}
 		virtual ~MeshBase()
 		{
 			for (auto iter : animations)
@@ -73,7 +78,7 @@ namespace GraphicsEngineSpace
 		std::map<std::string, AnimationBase*>& GetAnimation() { return animations; }
 
 	protected:
-		bool SetIndexBuffer(BufferBase* indexBuffer) { this->indexBuffer = indexBuffer;	}
+		bool SetIndexBuffer(BufferBase* indexBuffer) { this->indexBuffer = indexBuffer; }
 
 		friend ASEBuilder;
 	};

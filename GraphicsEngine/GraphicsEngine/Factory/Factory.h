@@ -38,6 +38,7 @@ namespace GraphicsEngineSpace
 		BufferBase* CreateConstantBuffer(const std::string& name, USAGE usage, UINT CPUflag, UINT typeSize) override;
 
 		SamplerBase* CreateSampler(const std::string& name, FilterOption filter) override;
+		FontBase* CreateFontObject(const std::string& name, const std::string& path) override;
 
 		virtual PrefabBase* CreatePrefab(const std::string& name, ModelBase* model, BufferBase* matrixBuffer, UINT slot);
 		virtual SkyBoxBase* CreateSkyBox(const std::string& name);

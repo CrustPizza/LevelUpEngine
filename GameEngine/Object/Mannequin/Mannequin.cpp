@@ -36,7 +36,6 @@ namespace GameEngineSpace
 		pbrModel->SetRoughness(0.2f);
 
 		prefab = pbrModel->GetPrefab();
-		prefab->SetRotation({ -90.0f, 180.0f, 0.0f });
 		this->model = model;
 		this->model->SetAnimationKey("Idle");
 	}
@@ -54,31 +53,6 @@ namespace GameEngineSpace
 	void Mannequin::Render(GraphicsEngineSpace::GraphicsEngineBase* engine, float tick)
 	{
 		using namespace GraphicsEngineSpace;
-
-		auto& materials = prefab->GetMaterials();
-		//auto materials = pbrModel->GetPrefab()->GetMaterials();
-
-		for (auto iter : materials)
-		{
-			auto materialData = iter.second->GetMaterialData();
-			auto maps = materialData.maps;
-
-			for (int i = 0; i < maps.size(); i++)
-			{
-				if (maps[i].type == MapType::DIFFUSE)
-				{
-					if (maps[i].map != nullptr)
-						maps[i].map->SetUpTexture(0, ShaderType::PIXEL);
-				}
-				else if (maps[i].type == MapType::NORMAL)
-				{
-					if (maps[i].map != nullptr)
-						maps[i].map->SetUpTexture(1, ShaderType::PIXEL);
-				}
-			}
-
-			break;
-		}
 
 		animationTime += tick;
 

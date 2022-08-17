@@ -13,7 +13,7 @@ Texture2D<float4> Texture : register( t0 );
 sampler Sampler : register( s0 );
 
 /* Parameter */
-cbuffer ThresholdValue : register (b0)
+cbuffer ThresholdValue : register ( b0 )
 {
 	float Threshold;
 }

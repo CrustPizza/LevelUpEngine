@@ -69,6 +69,15 @@ namespace DX11
 		combine->Init(factory, device, format, spriteBatch);
 	}
 
+	void Blur::Clear()
+	{
+		const FLOAT color[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+		verticalBlur->ClearRenderTargetView(deviceContext, nullptr, color);
+		horizontalBlur->ClearRenderTargetView(deviceContext, nullptr, color);
+		downSampler->GetRenderTexture()->ClearRenderTargetView(deviceContext, nullptr, color);
+		combine->Clear();
+	}
+
 	void Blur::operator()(RenderTexture* blurTarget, float theta, ID3D11DepthStencilState* depthState)
 	{
 		long width = blurTarget->GetWidth() / 2;

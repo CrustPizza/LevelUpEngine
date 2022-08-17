@@ -194,6 +194,7 @@ namespace HeraclesMath
 	Matrix MatrixLookAt(const Vector& eyePosition, const Vector& eyeDirection, const Vector& upDirection);
 
 	Matrix OrthographicMatrix(float ViewWidth, float ViewHeight, float nearZ, float farZ);
+	Matrix OrthographicOffCenterMatrix(float left, float right, float bottom, float top, float nearZ, float farZ);
 	Matrix PerspectiveMatrix(float fovY, float aspectRatio, float nearZ, float farZ);
 	Matrix ViewMatrix(Vector position, Vector rotation);
 
@@ -249,19 +250,19 @@ namespace HeraclesMath
 		auto* pWork = reinterpret_cast<unsigned int*>(&result);
 
 		const unsigned int i0 = permuteX & 3;
-		const unsigned int vi0 = permuteX >> 2;
+		const unsigned int vi0 = (permuteX >> 2);
 		pWork[0] = aPtr[vi0][i0];
 
 		const unsigned int i1 = permuteY & 3;
-		const unsigned int vi1 = permuteY >> 2;
+		const unsigned int vi1 = (permuteY >> 2);
 		pWork[1] = aPtr[vi1][i1];
 
 		const unsigned int i2 = permuteZ & 3;
-		const unsigned int vi2 = permuteZ >> 2;
+		const unsigned int vi2 = (permuteZ >> 2);
 		pWork[2] = aPtr[vi2][i2];
 
 		const unsigned int i3 = permuteW & 3;
-		const unsigned int vi3 = permuteW >> 2;
+		const unsigned int vi3 = (permuteW >> 2);
 		pWork[3] = aPtr[vi3][i3];
 
 		return result;

@@ -25,7 +25,6 @@ namespace GraphicsEngineSpace
 		};
 
 	public:
-		Vector position;
 		float intensity;
 
 	public:

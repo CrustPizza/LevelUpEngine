@@ -52,6 +52,7 @@ namespace DX11
 		~Blur();
 
 		void Init(Factory* factory, ID3D11Device* device, DXGI_FORMAT format, DirectX::SpriteBatch* spriteBatch);
+		void Clear();
 
 		void operator ()(RenderTexture* blurTarget, float theta, ID3D11DepthStencilState* depthState = nullptr);
 

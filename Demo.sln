@@ -102,6 +102,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Line", "Line", "{90A12493-2
 		OutPut\Shader\Line\LineVS.hlsl = OutPut\Shader\Line\LineVS.hlsl
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shadow", "Shadow", "{E5826178-1D46-4520-B81A-5E942B381FED}"
+	ProjectSection(SolutionItems) = preProject
+		OutPut\Shader\Shadow\ShadowPS.hlsl = OutPut\Shader\Shadow\ShadowPS.hlsl
+		OutPut\Shader\Shadow\ShadowTypes.hlsli = OutPut\Shader\Shadow\ShadowTypes.hlsli
+		OutPut\Shader\Shadow\ShadowVS.hlsl = OutPut\Shader\Shadow\ShadowVS.hlsl
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -174,6 +181,7 @@ Global
 		{BEA331B6-4946-4145-823E-93B15A971977} = {A6DD9502-1C76-4BC1-92AB-C28AB3A946D9}
 		{35DC8FC6-F69E-43C3-869F-C147158191DC} = {A6DD9502-1C76-4BC1-92AB-C28AB3A946D9}
 		{90A12493-2426-481D-84DA-BA982C17816E} = {A6DD9502-1C76-4BC1-92AB-C28AB3A946D9}
+		{E5826178-1D46-4520-B81A-5E942B381FED} = {A6DD9502-1C76-4BC1-92AB-C28AB3A946D9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {83918DE7-1E59-4741-A17B-97563249EE37}

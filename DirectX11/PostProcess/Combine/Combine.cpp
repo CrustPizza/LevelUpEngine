@@ -47,6 +47,12 @@ namespace DX11
 		combineTexture->SetDevice(device);
 	}
 
+	void Combine::Clear()
+	{
+		const FLOAT color[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+		combineTexture->ClearRenderTargetView(deviceContext, nullptr, color);
+	}
+
 	void Combine::operator()(RenderTexture* dest, ID3D11ShaderResourceView* src, ID3D11DepthStencilState* depthState)
 	{
 		ID3D11ShaderResourceView* null[] = { nullptr, nullptr };

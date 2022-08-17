@@ -7,7 +7,6 @@
 *********************************/
 
 #include "Factory.h"
-#include "Bases/PrefabBase.h"
 #include "Builder/ASEBuilder/ASEBuilder.h"
 #include "Builder/PBRBuilder/PBRBuilder.h"
 
@@ -22,8 +21,7 @@ namespace GraphicsEngineSpace
 
 	Factory::~Factory()
 	{
-		if (graphicsFactory != nullptr)
-			delete graphicsFactory;
+
 	}
 
 	ModelBase* Factory::CreateModelFromASEFile(const std::string& name, const std::string& path, const std::string& animationKey)
@@ -259,6 +257,26 @@ namespace GraphicsEngineSpace
 		}
 
 		return resourceManager->GetSampler(name);
+	}
+
+	FontBase* Factory::CreateFontObject(const std::string& name, const std::string& path)
+	{
+		if (graphicsFactory == nullptr || resourceManager == nullptr)
+			return nullptr;
+
+		FontBase* newFont = graphicsFactory->CreateFontObject(name, path);
+
+		if (newFont == nullptr)
+			return nullptr;
+
+		if (resourceManager->AddFont(name, newFont) != true)
+		{
+			newFont->Release();
+
+			return nullptr;
+		}
+
+		return resourceManager->GetFont(name);
 	}
 
 	PrefabBase* Factory::CreatePrefab(const std::string& name, ModelBase* model, BufferBase* matrixBuffer, UINT slot)
@@ -727,12 +745,24 @@ namespace GraphicsEngineSpace
 
 	void Factory::InitDefaultData()
 	{
+		/* Font */
+		CreateFontObject("±¼¸²", "Font/gulim9k.spritefont");
+		CreateFontObject("ColonnaMT", "Font/colonnaMT.spritefont");
+		CreateFontObject("EBS-Bold", "Font/ebsBold.spritefont");
+		CreateFontObject("EBS-Light", "Font/ebsLight.spritefont");
+		CreateFontObject("EBS-Medium", "Font/ebsMedium.spritefont");
+		CreateFontObject("H2MJRE", "Font/h2mjre.spritefont");
+		CreateFontObject("NotoSansBold", "Font/NotoSansCJK_KR_Bold.spritefont");
+		CreateFontObject("NotoSansMedium", "Font/NotoSansCJK_KR_Medium.spritefont");
+		CreateFontObject("NotoSansRegular", "Font/NotoSansCJK_KR_Regular.spritefont");
+
 		/* Matrix Buffer */
 		CreateConstantBuffer("MatrixCB", USAGE::DEFAULT, 0, sizeof(Matrix) * 2);
 		CreateConstantBuffer("WorldMatrixCB", USAGE::DEFAULT, 0, sizeof(Matrix));
 
 		/* View Buffer*/
 		CreateConstantBuffer("ViewProjectionCB", USAGE::DEFAULT, 0, sizeof(Matrix));
+		CreateConstantBuffer("LightViewProjectionCB", USAGE::DEFAULT, 0, sizeof(Matrix));
 		CreateConstantBuffer("ViewWorldPosCB", USAGE::DEFAULT, 0, sizeof(Vector));
 
 		/* Material Buffer */
@@ -849,5 +879,25 @@ namespace GraphicsEngineSpace
 		CreatePixelShader("PBRConstVarPS", "Shader/PBRModel/PBRModelPS.hlsl", "ConstVarMain", "ps_5_0");
 		CreatePixelShader("PBRAlbedoPS", "Shader/PBRModel/PBRModelPS.hlsl", "AlbedoMain", "ps_5_0");
 		CreatePixelShader("PBRAlbedoNormalPS", "Shader/PBRModel/PBRModelPS.hlsl", "AlbedoNormalMain", "ps_5_0");
+
+		/* Shadow Map Shader */
+		LayoutBase* shadowLayout = CreateLayout("ShadowMapLayout");
+
+		shadowLayout->AddElements("POSITION", 0, GraphicsFormat::Float_R32G32B32A32, 0, 0);
+
+		CreateVertexShader("ShadowMapVS", "Shader/Shadow/ShadowVS.hlsl", "BasicMain", "vs_5_0", shadowLayout);
+		CreatePixelShader("ShadowMapPS", "Shader/Shadow/ShadowPS.hlsl", "main", "ps_5_0");
+
+		resourceManager->SubLayout("ShadowMapLayout");
+
+		LayoutBase* shadowSkinningLayout = CreateLayout("ShadowSkinningLayout");
+
+		shadowSkinningLayout->AddElements("POSITION", 0, GraphicsFormat::Float_R32G32B32A32, 0, 0);
+		shadowSkinningLayout->AddElements("BLENDWEIGHT", 0, GraphicsFormat::Float_R32G32B32A32, 0, 16);
+		shadowSkinningLayout->AddElements("BLENDWEIGHT", 1, GraphicsFormat::Float_R32G32B32A32, 0, 32);
+		shadowSkinningLayout->AddElements("BLENDINDICES", 0, GraphicsFormat::UINT_R8G8B8A8, 0, 48);
+		shadowSkinningLayout->AddElements("BLENDINDICES", 1, GraphicsFormat::UINT_R8G8B8A8, 0, 52);
+
+		CreateVertexShader("ShadowSkinningMapVS", "Shader/Shadow/ShadowVS.hlsl", "SkinningMain", "vs_5_0", shadowSkinningLayout);
 	}
 }

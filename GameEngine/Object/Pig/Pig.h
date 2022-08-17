@@ -35,6 +35,8 @@ namespace GameEngineSpace
 		Vector velocity;
 		bool animSwitch;
 
+		float animationTime;
+
 	public:
 		Pig();
 		~Pig();

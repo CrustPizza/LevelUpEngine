@@ -64,10 +64,15 @@ element->SetupAttachment(parent);
 		Matrix* boneMatrix;
 		Matrix rotationMatrix;
 
+		Vector boundingBoxMin;
+		Vector boundingBoxMax;
+
 	public:
 		ModelBase()
 			: boneMatrix(nullptr)
-			, rotationMatrix(Matrix::Identity) {}
+			, rotationMatrix(Matrix::Identity)
+			, boundingBoxMin{ 0.0f, 0.0f, 0.0f, 1.0f }
+			, boundingBoxMax{ 0.0f, 0.0f, 0.0f, 1.0f } {}
 		virtual ~ModelBase()
 		{
 			RELEASE_VECTOR(meshes);
@@ -78,6 +83,16 @@ element->SetupAttachment(parent);
 
 			if (boneMatrix != nullptr)
 				delete boneMatrix;
+		}
+
+		Vector GetBoundingBoxCenter()
+		{
+			return (boundingBoxMin + boundingBoxMax) / 2.0f;
+		}
+
+		Vector GetBoundingBoxScale()
+		{
+			return boundingBoxMax - boundingBoxMin;
 		}
 
 		bool SetAnimationKey(const std::string& animationKey)
@@ -147,7 +162,7 @@ element->SetupAttachment(parent);
 		const std::map<int, MaterialBase*>& GetMaterials() { return materials; }
 		Matrix* GetBoneMatrix() { return boneMatrix; }
 
-		void SetRotation(const Vector& rotation) { this->rotationMatrix = MatrixRotationFromVector(ConvertDegreeToRadian(rotation)); }
+		void SetRotation(const Vector& rotation) { this->rotationMatrix = MatrixRotationFromVector(rotation); }
 
 	private:
 		void SetHierarchy()

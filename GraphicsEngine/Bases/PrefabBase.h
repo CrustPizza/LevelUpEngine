@@ -19,8 +19,12 @@
 #include "Bases/FactoryBase.h"
 #include "Bases/GraphicsEngineBase.h"
 
+#include <Windows.h>
+
 namespace GraphicsEngineSpace
 {
+	class GraphicsEngine;
+
 	struct ConstantBufferSetting
 	{
 		BufferBase* buffer;
@@ -42,10 +46,16 @@ namespace GraphicsEngineSpace
 		ShaderBase* vertexShader;
 		ShaderBase* pixelShader;
 
+		std::vector<BufferBase*> shadowVertexBuffers;
 		std::vector<BufferBase*> vertexBuffers;
 		std::vector<ConstantBufferSetting> onceBuffer;
 		const ConstantBufferSetting matrixBuffer;
 		ConstantBufferSetting materialBuffer;
+
+		Matrix worldTransform;
+		float animationTime;
+
+		bool isSkinning;
 
 	public:
 		PrefabBase(ModelBase* model, const ConstantBufferSetting& matrixBuffer)
@@ -53,7 +63,10 @@ namespace GraphicsEngineSpace
 			, vertexShader(nullptr)
 			, pixelShader(nullptr)
 			, matrixBuffer(matrixBuffer)
-			, materialBuffer{} {}
+			, materialBuffer{}
+			, worldTransform(Matrix::Identity)
+			, animationTime(0.0f)
+			, isSkinning(false) {}
 		virtual ~PrefabBase() = default;
 
 		const std::map<int, MaterialBase*>& GetMaterials() { return model->GetMaterials(); }
@@ -63,6 +76,7 @@ namespace GraphicsEngineSpace
 		void AddOnceBuffer(const ConstantBufferSetting& buffer) { onceBuffer.push_back(buffer); }
 		void SetMaterialBuffer(const ConstantBufferSetting& materialBuffer) { this->materialBuffer = materialBuffer; }
 		void SetRotation(const Vector& rotation) { model->SetRotation(rotation); }
+		void SetSkinning(bool isSkinning) { this->isSkinning = isSkinning; }
 
 		void SetAnimationKey(const std::string& animationKey)
 		{
@@ -80,10 +94,39 @@ namespace GraphicsEngineSpace
 			if (model == nullptr)
 				assert(0);
 
+			this->worldTransform = worldTransform;
+			this->animationTime = animationTime;
+
 			return model->PrepareRender(worldTransform, animationTime);
 		}
 
 		void Render(GraphicsEngineBase* engine)
+		{
+			GraphicsEngineBase::RenderData temp;
+
+			temp.worldTransform = worldTransform;
+			temp.animationTime = animationTime;
+			temp.prefab = this;
+
+			engine->AddRenderQueue(temp);
+		}
+
+		void ShadowRender(GraphicsEngineBase* engine)
+		{
+			const std::vector<MeshBase*>& meshes = model->GetMeshes();
+
+			for (int i = 0; i < meshes.size(); i++)
+			{
+				cbMatrix cb;
+				cb.worldTransform = MatrixTranspose(meshes[i]->GetTransform().GetWorldTransform());
+
+				matrixBuffer.buffer->SetUpBuffer(matrixBuffer.slot, &cb, ShaderType::VERTEX);
+
+				engine->DrawMesh(shadowVertexBuffers[i], meshes[i]->GetIndexBuffer());
+			}
+		}
+
+		void RenderImpl(GraphicsEngineBase* engine)
 		{
 			if (model == nullptr)
 				assert(0);
@@ -93,6 +136,42 @@ namespace GraphicsEngineSpace
 
 			if (pixelShader != nullptr)
 				pixelShader->SetUpShader();
+
+			auto& materials = model->GetMaterials();
+			//auto materials = pbrModel->GetPrefab()->GetMaterials();
+
+			struct MaterialCB
+			{
+				HeraclesMath::Vector ambient;
+				HeraclesMath::Vector diffuse;
+				HeraclesMath::Vector specular;
+			} material;
+
+			for (auto iter : materials)
+			{
+				auto materialData = iter.second->GetMaterialData();
+				auto maps = materialData.maps;
+
+				material.ambient = materialData.ambient;
+				material.diffuse = materialData.diffuse;
+				material.specular = materialData.specular;
+
+				for (int i = 0; i < maps.size(); i++)
+				{
+					if (maps[i].type == MapType::DIFFUSE)
+					{
+						if (maps[i].map != nullptr)
+							maps[i].map->SetUpTexture(0, ShaderType::PIXEL);
+					}
+					else if (maps[i].type == MapType::NORMAL)
+					{
+						if (maps[i].map != nullptr)
+							maps[i].map->SetUpTexture(1, ShaderType::PIXEL);
+					}
+				}
+
+				break;
+			}
 
 			for (int i = 0; i < onceBuffer.size(); i++)
 				onceBuffer[i].buffer->SetUpBuffer(onceBuffer[i].slot, onceBuffer[i].data, onceBuffer[i].type);
@@ -113,6 +192,8 @@ namespace GraphicsEngineSpace
 				engine->DrawMesh(vertexBuffers[i], meshes[i]->GetIndexBuffer());
 			}
 		}
+
+		friend GraphicsEngine;
 	};
 
 	template<typename T>
@@ -123,18 +204,64 @@ namespace GraphicsEngineSpace
 
 		const std::vector<MeshBase*>& meshes = model->GetMeshes();
 
+		struct SkinningData
+		{
+			Vector position;
+			Vector weights1;
+			Vector weights2;
+			unsigned int weightIndex1;
+			unsigned int weightIndex2;
+		};
+
 		for (int i = 0; i < meshes.size(); i++)
 		{
 			std::vector<T> vertices;
+			std::vector<Vector> shadowVertices;
+			std::vector<SkinningData> shadowSkinningVertices;
+
 			const std::vector<VertexData>& vertexData = meshes[i]->GetVertexData();
 
 			for (int j = 0; j < vertexData.size(); j++)
+			{
 				vertices.push_back(vertexConstructor(vertexData[j]));
+
+				if (isSkinning == true)
+				{
+					SkinningData temp;
+
+					temp.position = vertexData[j].position;
+					temp.weights1 = vertexData[j].weights1;
+					temp.weights2 = vertexData[j].weights2;
+					temp.weightIndex1 = vertexData[j].weightIndex1;
+					temp.weightIndex2 = vertexData[j].weightIndex2;
+
+					shadowSkinningVertices.push_back(temp);
+				}
+				else
+				{
+					shadowVertices.push_back(vertexData[j].position);
+				}
+			}
 
 			BufferBase* vertexBuffer = factory->CreateVertexBuffer(
 				meshes[i]->GetName() + "VB", USAGE::DEFAULT, 0, sizeof(T), vertices.data(), vertices.size());
 
 			vertexBuffers.push_back(vertexBuffer);
+
+			if (isSkinning == true)
+			{
+				BufferBase* shadowVertexBuffer = factory->CreateVertexBuffer(
+					"Shadow" + meshes[i]->GetName() + "VB", USAGE::DEFAULT, 0, sizeof(SkinningData), shadowSkinningVertices.data(), shadowSkinningVertices.size());
+
+				shadowVertexBuffers.push_back(shadowVertexBuffer);
+			}
+			else
+			{
+				BufferBase* shadowVertexBuffer = factory->CreateVertexBuffer(
+					"Shadow" + meshes[i]->GetName() + "VB", USAGE::DEFAULT, 0, sizeof(Vector), shadowVertices.data(), shadowVertices.size());
+
+				shadowVertexBuffers.push_back(shadowVertexBuffer);
+			}
 		}
 	}
 }

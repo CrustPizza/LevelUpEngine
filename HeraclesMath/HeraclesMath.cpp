@@ -911,6 +911,21 @@ namespace HeraclesMath
 		};
 	}
 
+	Matrix OrthographicOffCenterMatrix(float left, float right, float bottom, float top, float nearZ, float farZ)
+	{
+		float reciprocalWidth = 1.0f / (right - left);
+		float reciprocalHeight = 1.0f / (top - bottom);
+		float fRange = 1.0f / (farZ - nearZ);
+
+		return Matrix
+		{
+			2.0f * reciprocalWidth, 0.0f, 0.0f, 0.0f,
+			0.0f, 2.0f * reciprocalHeight, 0.0f, 0.0f,
+			0.0f, 0.0f, fRange, 0.0f,
+			-(left + right) * reciprocalWidth, -(top + bottom) * reciprocalHeight, -fRange * nearZ, 1.0f
+		};
+	}
+
 	Matrix PerspectiveMatrix(float fovY, float aspectRatio, float nearZ, float farZ)
 	{
 		// 마소 XMMatrixPerspectiveFovLH 함수 참조
@@ -934,14 +949,7 @@ namespace HeraclesMath
 
 	Matrix ViewMatrix(Vector position, Vector rotation)
 	{
-		Vector radian =
-		{
-			ConvertDegreeToRadian(rotation.x),
-			ConvertDegreeToRadian(rotation.y),
-			ConvertDegreeToRadian(rotation.z)
-		};
-
-		Matrix temp = MatrixRotationFromVector(radian);
+		Matrix temp = MatrixRotationFromVector(rotation);
 
 		Vector right = temp[0];
 		Vector up = temp[1];
@@ -973,7 +981,7 @@ namespace HeraclesMath
 
 	Matrix MatrixRotationFromVector(Vector rotation)
 	{
-		Vector quaternion = ConvertEulerToQuaternion(rotation);
+		Vector quaternion = ConvertEulerToQuaternion(ConvertDegreeToRadian(rotation));
 
 		return QuaternionToRotationMatrix(quaternion);
 	}

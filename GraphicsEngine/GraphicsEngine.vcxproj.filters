@@ -212,6 +212,7 @@
     <ClInclude Include="Object\ProgressBar\ProgressBar.h" />
     <ClInclude Include="Object\ButtonUI\ButtonUI.h" />
     <ClInclude Include="Define\GraphicsTopology.h" />
+    <ClInclude Include="Bases\FontBase.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

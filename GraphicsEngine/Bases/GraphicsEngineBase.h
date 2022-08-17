@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include <vector>
 #include "Bases/FactoryBase.h"
 #include "Bases/TextureBase.h"
 #include "Bases/MeshBase.h"
@@ -20,6 +21,17 @@ namespace GraphicsEngineSpace
 
 	class GraphicsEngineBase
 	{
+	public:
+		struct RenderData
+		{
+			Matrix worldTransform;
+			float animationTime;
+			PrefabBase* prefab;
+		};
+
+	protected:
+		std::vector<RenderData> renderQueue;
+
 	public:
 		GraphicsEngineBase() = default;
 		virtual ~GraphicsEngineBase() = default;
@@ -36,12 +48,18 @@ namespace GraphicsEngineSpace
 
 		virtual bool DrawMesh(BufferBase* vertices, BufferBase* indices) abstract;
 		virtual bool DrawTextColor(std::string& text, Vector color, Vector position, float rotation = 0.0f, Vector scale = { 1.0f, 1.0f }) abstract;
+		virtual bool DrawTextColor(const std::string& fontName, std::string& text, Vector color, Vector position, float rotation = 0.0f, Vector scale = { 1.0f, 1.0f }) abstract;
+		virtual bool DrawTextColor(const std::string& fontName, std::wstring& text, Vector color, Vector position, float rotation = 0.0f, Vector scale = { 1.0f, 1.0f }) abstract;
 		virtual bool DrawLine(BufferBase* vertices, BufferBase* indices) abstract;
 
+		virtual bool SetFontName(const std::string& fontName) abstract;
 		virtual bool SetUpShader(ShaderBase* shader) abstract;
 
 		virtual bool GraphicsDebugBeginEvent(const std::string& name) abstract;
 		virtual bool GraphicsDebugEndEvent() abstract;
+
+		virtual void BeginShadowRender() abstract;
+		virtual void EndShadowRender() abstract;
 
 		virtual void BeginRender() abstract;
 		virtual void Render() abstract;
@@ -50,5 +68,7 @@ namespace GraphicsEngineSpace
 		virtual void Release() abstract;
 
 		virtual void DebugRender() abstract;
+
+		virtual void AddRenderQueue(const RenderData& renderData) abstract;
 	};
 }

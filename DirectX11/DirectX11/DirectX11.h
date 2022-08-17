@@ -59,14 +59,17 @@ namespace DX11
 		ID3D11Texture2D*		depth;			// µª½º ÅØ½ºÃÄ
 		ID3D11DepthStencilView*	depthView;		// µª½º ºä
 
+		ID3D11Texture2D*		shadowDepth;	
+		ID3D11DepthStencilView*	shadowDepthView;
+
 		ID3D11BlendState*			blendState;
 		ID3D11DepthStencilState*	depthState;
 
 		D3D11_VIEWPORT viewPort;
+		D3D11_VIEWPORT shadowViewPort;
 
 		// Sprite
 		DirectX::SpriteBatch*	spriteBatch;
-		DirectX::SpriteFont*	spriteFont;
 		Effect2D*				effect2D;
 
 		// Properties
@@ -83,6 +86,9 @@ namespace DX11
 		RenderTexture* albedoBuffer;
 		RenderTexture* normalBuffer;
 		RenderTexture* worldPosBuffer;
+
+		// Shadow
+		RenderTexture* shadowDepthBuffer;
 
 		// Factory
 		Factory* factory;
@@ -117,12 +123,18 @@ namespace DX11
 
 		bool DrawMesh(BufferBase* vertices, BufferBase* indices) override;
 		bool DrawTextColor(std::string& text, HeraclesMath::Vector color, HeraclesMath::Vector position, float rotation, HeraclesMath::Vector scale) override;
+		bool DrawTextColor(const std::string& fontName, std::string& text, HeraclesMath::Vector color, HeraclesMath::Vector position, float rotation = 0.0f, HeraclesMath::Vector scale = { 1.0f, 1.0f }) override;
+		bool DrawTextColor(const std::string& fontName, std::wstring& text, HeraclesMath::Vector color, HeraclesMath::Vector position, float rotation = 0.0f, HeraclesMath::Vector scale = { 1.0f, 1.0f }) override;
 		bool DrawLine(BufferBase* vertices, BufferBase* indices) override;
 
+		bool SetFontName(const std::string& fontName) override;
 		bool SetUpShader(ShaderBase* shader) override;
 
 		bool GraphicsDebugBeginEvent(const std::string& name) override;
 		bool GraphicsDebugEndEvent() override;
+
+		void BeginShadowRender() override;
+		void EndShadowRender() override;
 
 	private:
 		bool CreateBackScreen();
@@ -135,6 +147,8 @@ namespace DX11
 		void Release()		override;
 
 		void DebugRender() override;
+
+		void AddRenderQueue(const RenderData& renderData) override;
 	};
 
 	extern "C"

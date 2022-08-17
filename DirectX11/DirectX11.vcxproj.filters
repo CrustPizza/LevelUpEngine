@@ -148,6 +148,7 @@
     <ClInclude Include="DXObject\Effect2D\Effect2D.h">
       <Filter>DXObject\Effect2D</Filter>
     </ClInclude>
+    <ClInclude Include="DXObject\D3DFont\D3DFont.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DirectX11\DirectX11.cpp">
@@ -217,6 +218,7 @@
     <ClCompile Include="DXObject\Effect2D\Effect2D.cpp">
       <Filter>DXObject\Effect2D</Filter>
     </ClCompile>
+    <ClCompile Include="DXObject\D3DFont\D3DFont.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

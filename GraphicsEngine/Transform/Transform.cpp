@@ -94,7 +94,7 @@ namespace GraphicsEngineSpace
 	void Transform::UpdateLocalTransform()
 	{
 		Matrix scaleMatrix = MatrixScalingFromVector(scale);
-		Matrix rotationMatrix = MatrixRotationFromVector(ConvertDegreeToRadian(rotation));
+		Matrix rotationMatrix = MatrixRotationFromVector(rotation);
 		Matrix translationMatrix = MatrixTranslationFromVector(position);
 
 		localTransform = scaleMatrix * rotationMatrix * translationMatrix;

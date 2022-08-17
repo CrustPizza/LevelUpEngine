@@ -210,6 +210,7 @@ namespace GraphicsEngineSpace
 		newPBRModel->GetPrefab()->AddOnceBuffer(boneMatrixElements);
 
 		/* Vertex Buffer */
+		newPBRModel->GetPrefab()->SetSkinning(true);
 		CreateSkinnedVB(factory, newPBRModel->GetPrefab());
 
 		return newPBRModel;
@@ -267,6 +268,7 @@ namespace GraphicsEngineSpace
 		newPBRModel->GetPrefab()->AddOnceBuffer(boneMatrixElements);
 
 		/* Vertex Buffer */
+		newPBRModel->GetPrefab()->SetSkinning(true);
 		CreateSkinnedVB(factory, newPBRModel->GetPrefab());
 
 		return newPBRModel;
@@ -502,8 +504,8 @@ namespace GraphicsEngineSpace
 			Vector texCoord;
 			Vector weights1;
 			Vector weights2;
-			unsigned int weightsIndex1;
-			unsigned int weightsIndex2;
+			unsigned int weightIndex1;
+			unsigned int weightIndex2;
 		};
 
 		prefab->CreateVertexBuffer<SkinnedPBRVertex>(factory, [&](const VertexData& data) -> SkinnedPBRVertex
@@ -514,8 +516,8 @@ namespace GraphicsEngineSpace
 				temp.texCoord = data.texCoord;
 				temp.weights1 = data.weights1;
 				temp.weights2 = data.weights2;
-				temp.weightsIndex1 = data.weightIndex1;
-				temp.weightsIndex2 = data.weightIndex2;
+				temp.weightIndex1 = data.weightIndex1;
+				temp.weightIndex2 = data.weightIndex2;
 
 				return temp;
 			});

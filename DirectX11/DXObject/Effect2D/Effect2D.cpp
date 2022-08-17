@@ -138,7 +138,7 @@ namespace DX11
 		vertexBuffer->SetUpBuffer(0, nullptr, ShaderType::NONE);
 		indexBuffer->SetUpBuffer(0, nullptr, ShaderType::NONE);
 
-		viewProjCB->SetUpBuffer(1, transformMatrix, ShaderType::VERTEX);
+		viewProjCB->SetUpBuffer(4, transformMatrix, ShaderType::VERTEX);
 		deviceContext->PSSetShaderResources(0, 1, &texture);
 
 		deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

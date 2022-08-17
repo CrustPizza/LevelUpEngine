@@ -9,7 +9,7 @@
 #include "Texture2DTypes.hlsli"
 
 /* World View Projection Matrix */
-cbuffer cbWVPMatrix : register( b1 )
+cbuffer cbWVPMatrix : register( b4 )
 {
 	matrix WVPMatrix;
 }

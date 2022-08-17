@@ -34,6 +34,12 @@ cbuffer cbBoneMatrix : register ( b3 )
 	matrix BoneMatrix[64];
 }
 
+/* Light View Projection */
+cbuffer cbLightViewProjection : register( b7 )
+{
+	matrix LightViewProjection;
+}
+
 /* Input */
 struct VS_Basic_Input
 {
@@ -71,6 +77,7 @@ VS_Default_Output BasicMain(VS_Basic_Input input)
 	output.Normal = normalize( mul( input.Normal.xyz, (float3x3)WorldInvTranspose ) );
 	output.Diffuse = float4( Albedo, Alpha );
 	output.TexCoord = input.TexCoord.xy;
+	output.ShadowDepth = mul( float4( output.WorldPos, 1.0f ), LightViewProjection );
 
 	return output;
 }
@@ -86,6 +93,7 @@ VS_Normal_Output NormalMain(VS_Normal_Input input)
 	output.Diffuse = float4( Albedo, Alpha );
 	output.TexCoord = input.TexCoord.xy;
 	output.Tangent = mul( input.Tangent.xyz, (float3x3)World );
+	output.ShadowDepth = mul( float4( output.WorldPos, 1.0f ), LightViewProjection );
 
 	return output;
 }
@@ -133,6 +141,7 @@ VS_Default_Output SkinnedMain(VS_Skinning_Input input)
 	output.Normal = normalize( mul( normalize(normal), (float3x3)WorldInvTranspose ) );
 	output.Diffuse = float4( Albedo, Alpha );
 	output.TexCoord = input.TexCoord.xy;
+	output.ShadowDepth = mul( float4( output.WorldPos, 1.0f ), LightViewProjection );
 
 	return output;
 }

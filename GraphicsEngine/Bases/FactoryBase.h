@@ -23,6 +23,7 @@ namespace GraphicsEngineSpace
 	class BufferBase;
 	class PrefabBase;
 	class SamplerBase;
+	class FontBase;
 
 	class FactoryBase
 	{
@@ -41,5 +42,6 @@ namespace GraphicsEngineSpace
 		virtual BufferBase* CreateConstantBuffer(const std::string& name, USAGE usage, UINT CPUflag, UINT typeSize) abstract;
 	
 		virtual SamplerBase* CreateSampler(const std::string& name, FilterOption filter) abstract;
+		virtual FontBase* CreateFontObject(const std::string& name, const std::string& path) abstract;
 	};
 }

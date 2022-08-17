@@ -6,6 +6,9 @@
 *	Updated : 2022/07/26		*
 *********************************/
 
+#include <tchar.h>
+#include <atlstr.h>
+
 #include "Factory.h"
 
 #include "Builder/BufferBuilder/BufferBuilder.h"
@@ -22,6 +25,8 @@
 #include "DXObject/Buffer/IndexBuffer/IndexBuffer.h"
 #include "DXObject/Buffer/ConstantBuffer/ConstantBuffer.h"
 
+#include "DXObject/D3DFont/D3DFont.h"
+
 #include "FormatConverter/FormatConverter.h"
 
 namespace DX11
@@ -29,6 +34,8 @@ namespace DX11
 	Factory::Factory(ID3D11Device* device, ID3D11DeviceContext* deviceContext)
 		: device(device)
 		, deviceContext(deviceContext)
+		, spriteBatch(nullptr)
+		, depthState(nullptr)
 	{
 
 	}
@@ -36,6 +43,16 @@ namespace DX11
 	Factory::~Factory()
 	{
 
+	}
+
+	void Factory::SetSpriteBatch(DirectX::SpriteBatch* spriteBatch)
+	{
+		this->spriteBatch = spriteBatch;
+	}
+
+	void Factory::SetDepthState(ID3D11DepthStencilState* depthState)
+	{
+		this->depthState = depthState;
 	}
 
 	TextureBase* Factory::CreateTexture(const std::string& name, const std::string& path)
@@ -106,5 +123,18 @@ namespace DX11
 		SamplerBase* newSampler = builder.CreateSampler(GetDxFilter(filter));
 
 		return newSampler;
+	}
+
+	FontBase* Factory::CreateFontObject(const std::string& name, const std::string& path)
+	{
+		TCHAR buffer[256] = {};
+
+		_tcscpy_s(buffer, CA2T(path.c_str()));
+
+		DirectX::SpriteFont* dxFont = new DirectX::SpriteFont(device, buffer);
+		dxFont->SetLineSpacing(14.0f);
+		D3DFont* newFont = new D3DFont(spriteBatch, dxFont, depthState);
+
+		return newFont;
 	}
 }

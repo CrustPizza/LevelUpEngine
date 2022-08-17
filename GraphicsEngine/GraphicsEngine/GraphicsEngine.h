@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include <vector>
 #include <Windows.h>
 #include "GraphicsEngine/Factory/Factory.h"
 #include "Bases/GraphicsEngineBase.h"
@@ -37,6 +38,11 @@ namespace GraphicsEngineSpace
 		// Factory에서 만든 객체들을 ResourceManager에서 관리한다.
 		ResourceManager* resourceManager;
 
+		std::string fontName;
+
+		UINT width;
+		UINT height;
+
 	public:
 		GraphicsEngine();
 		~GraphicsEngine() override;
@@ -57,17 +63,23 @@ namespace GraphicsEngineSpace
 
 		bool DrawMesh(BufferBase* vertices, BufferBase* indices) override;
 		bool DrawTextColor(std::string& text, Vector color, Vector position, float rotation = 0.0f, Vector scale = { 1.0f, 1.0f }) override;
-		
+		bool DrawTextColor(const std::string& fontName, std::string& text, Vector color, Vector position, float rotation = 0.0f, Vector scale = { 1.0f, 1.0f }) override;
+		bool DrawTextColor(const std::string& fontName, std::wstring& text, Vector color, Vector position, float rotation = 0.0f, Vector scale = { 1.0f, 1.0f }) override;
+
 		virtual bool DrawLine(BufferBase* vertices, BufferBase* indices, const Vector& color, const Matrix& worldTransform = Matrix::Identity);
 	private:
 		bool DrawLine(BufferBase* vertices, BufferBase* indices) override;
 
 	public:
+		bool SetFontName(const std::string& fontName) override;
 		bool SetUpShader(ShaderBase* shader) override;
 		bool SetUpShader(const std::string& name);
 
 		bool GraphicsDebugBeginEvent(const std::string& name) override;
 		bool GraphicsDebugEndEvent() override;
+
+		void BeginShadowRender() override;
+		void EndShadowRender() override;
 
 		void BeginRender() override;
 		void Render() override;
@@ -76,8 +88,13 @@ namespace GraphicsEngineSpace
 		void Release() override;
 
 		virtual void DebugRender(int fps, float deltaTime, bool showMRT = true);
+
+		void AddRenderQueue(const RenderData& renderData) override;
+
 	private:
 		void DebugRender() override;
+
+		friend PrefabBase;
 	};
 
 	extern "C"

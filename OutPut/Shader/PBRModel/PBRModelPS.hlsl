@@ -12,6 +12,7 @@
 /* Texture Map */
 Texture2D DiffuseMap : register( t0 );
 Texture2D NormalMap  : register( t1 );
+Texture2D ShadowMap	 : register( t2 );
 
 /* View */
 cbuffer cbView : register( b0 )
@@ -61,6 +62,16 @@ PS_Output ConstVarMain(VS_Default_Output input)
 
 	float3 color = LightSurface(ViewVector, Normal, 3, LightColor, LightDirection, Albedo, Roughness, Metallic, AO );
 
+	float2 shadowTexCoord = input.ShadowDepth.xy / input.ShadowDepth.w;
+	shadowTexCoord.y *= -1;
+	shadowTexCoord = shadowTexCoord * 0.5f + 0.5f;
+	float depthFormShadowMap = ShadowMap.Sample( Sampler, shadowTexCoord ).r;
+	
+	if (depthFormShadowMap + 0.004f <= input.ShadowDepth.z)
+	{
+		color *= 0.5f;
+	}
+
 	output.screen = float4(color, Alpha);
 	output.depth = input.Position.z;
 	output.albedo = float4(Albedo, 1.0f);
@@ -81,6 +92,16 @@ PS_Output AlbedoMain(VS_Default_Output input)
 	const float3 AlbedoColor = DiffuseMap.Sample( Sampler, input.TexCoord ).xyz;
 
 	float3 color = LightSurface( ViewVector, Normal, 3, LightColor, LightDirection, AlbedoColor, Roughness, Metallic, AO );
+
+	float2 shadowTexCoord = input.ShadowDepth.xy / input.ShadowDepth.w;
+	shadowTexCoord.y *= -1;
+	shadowTexCoord = shadowTexCoord * 0.5f + 0.5f;
+	float depthFormShadowMap = ShadowMap.Sample(Sampler, shadowTexCoord).r;
+
+	if (depthFormShadowMap + 0.004f <= input.ShadowDepth.z)
+	{
+		color *= 0.5f;
+	}
 
 	output.screen = float4(color, Alpha);
 	output.depth = input.Position.z;
@@ -111,6 +132,16 @@ PS_Output AlbedoNormalMain(VS_Normal_Output input)
 	const float3 AlbedoColor = DiffuseMap.Sample( Sampler, input.TexCoord ).xyz;
 
 	float3 color = LightSurface( ViewVector, Normal, 3, LightColor, LightDirection, AlbedoColor, Roughness, Metallic, AO );
+
+	float2 shadowTexCoord = input.ShadowDepth.xy / input.ShadowDepth.w;
+	shadowTexCoord.y *= -1;
+	shadowTexCoord = shadowTexCoord * 0.5f + 0.5f;
+	float depthFormShadowMap = ShadowMap.Sample(Sampler, shadowTexCoord).r;
+
+	if (depthFormShadowMap + 0.004f <= input.ShadowDepth.z)
+	{
+		color *= 0.5f;
+	}
 
 	output.screen = float4(color, Alpha);
 	output.depth = input.Position.z;

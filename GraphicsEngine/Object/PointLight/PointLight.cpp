@@ -11,8 +11,7 @@
 namespace GraphicsEngineSpace
 {
 	PointLight::PointLight()
-		: position{ 0.0f, 0.0f, 0.0f, 0.0f }
-		, intensity(10.0f)
+		: intensity(10.0f)
 	{
 
 	}

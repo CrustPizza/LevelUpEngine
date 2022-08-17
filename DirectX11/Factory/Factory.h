@@ -3,11 +3,12 @@
 *	Factory.h					*
 *								*
 *	Created : 2022/06/17		*
-*	Updated : 2022/07/26		*
+*	Updated : 2022/08/17		*
 *********************************/
 
 #pragma once
 
+#include <d3d11_1.h>
 #include <string>
 #include "DXObject/DXObjectBase.h"
 #include "DXObject/RenderTexture/RenderTexture.h"
@@ -21,6 +22,7 @@ namespace DX11
 	using GraphicsEngineSpace::ShaderBase;
 	using GraphicsEngineSpace::BufferBase;
 	using GraphicsEngineSpace::SamplerBase;
+	using GraphicsEngineSpace::FontBase;
 	using GraphicsEngineSpace::USAGE;
 	using GraphicsEngineSpace::FilterOption;
 
@@ -28,10 +30,15 @@ namespace DX11
 	{
 		ID3D11Device* device;
 		ID3D11DeviceContext* deviceContext;
+		DirectX::SpriteBatch* spriteBatch;
+		ID3D11DepthStencilState* depthState;
 
 	public:
 		Factory(ID3D11Device* device, ID3D11DeviceContext* deviceContext);
 		~Factory();
+
+		void SetSpriteBatch(DirectX::SpriteBatch* spriteBatch);
+		void SetDepthState(ID3D11DepthStencilState* depthState);
 
 		TextureBase* CreateTexture(const std::string& name, const std::string& path) override;
 		LayoutBase* CreateLayout(const std::string& name) override;
@@ -44,5 +51,6 @@ namespace DX11
 		BufferBase* CreateConstantBuffer(const std::string& name, USAGE usage, UINT CPUflag, UINT typeSize) override;
 
 		SamplerBase* CreateSampler(const std::string& name, FilterOption filter) override;
+		FontBase* CreateFontObject(const std::string& name, const std::string& path) override;
 	};
 }

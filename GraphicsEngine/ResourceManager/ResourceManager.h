@@ -19,6 +19,8 @@
 #include "Bases/PrefabBase.h"
 #include "Bases/SamplerBase.h"
 #include "Bases/SkyBoxBase.h"
+#include "Bases/FontBase.h"
+
 #include "Object/PBRModel/PBRModel.h"
 #include "Object/IBLTexture/IBLTexture.h"
 #include "Object/PointLight/PointLight.h"
@@ -53,6 +55,8 @@ namespace GraphicsEngineSpace
 		std::map<std::string, PrefabBase*>	prefabList;
 		std::map<std::string, SamplerBase*>	samplerList;
 		std::map<std::string, SkyBoxBase*>	skyBoxList;
+		std::map<std::string, FontBase*>	fontList;
+
 		std::map<std::string, PBRModel*>	PBRModelList;
 		std::map<std::string, IBLTexture*>	IBLTextureList;
 		std::map<std::string, LightBase*>	lightList;
@@ -72,6 +76,7 @@ namespace GraphicsEngineSpace
 		bool AddPrefab(const std::string& name, PrefabBase* prefab);
 		bool AddSampler(const std::string& name, SamplerBase* sampler);
 		bool AddSkyBox(const std::string& name, SkyBoxBase* skyBox);
+		bool AddFont(const std::string& name, FontBase* font);
 		bool AddPBRModel(const std::string& name, PBRModel* PBRModel);
 		bool AddIBLTexture(const std::string& name, IBLTexture* IBLTexture);
 		bool AddLight(const std::string& name, LightBase* light);
@@ -89,11 +94,14 @@ namespace GraphicsEngineSpace
 		virtual PrefabBase* const GetPrefab(const std::string& name);
 		virtual SamplerBase* const GetSampler(const std::string& name);
 		virtual SkyBoxBase* const GetSkyBox(const std::string& name);
+		virtual FontBase* const GetFont(const std::string& name);
 		virtual PBRModel* const GetPBRModel(const std::string& name);
 		virtual IBLTexture* const GetIBLTexture(const std::string& name);
 		virtual LightBase* const GetLight(const std::string& name);
 		virtual Canvas* const GetCanvas(const std::string& name);
 		virtual SpriteAnimation* const GetSpriteAnimation(const std::string& name);
+
+		virtual DirectionalLight* const GetDirectionalLight();
 
 	private:
 		template<typename T>

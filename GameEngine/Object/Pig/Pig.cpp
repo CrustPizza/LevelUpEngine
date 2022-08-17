@@ -15,8 +15,8 @@ namespace GameEngineSpace
 		: pbrModel(nullptr)
 		, prefab(nullptr)
 		, model(nullptr)
+		, animationTime(0.0f)
 	{
-
 	}
 
 	Pig::~Pig()
@@ -37,7 +37,8 @@ namespace GameEngineSpace
 		this->model = model;
 		this->model->SetAnimationKey("Idle");
 
-		transform.position.x += 2.0f;
+		transform.position.x += 5.0f;
+		transform.position.y += 5.0f;
 		transform.scale = { 0.1f, 0.1f, 0.1f };
 	}
 
@@ -100,41 +101,16 @@ namespace GameEngineSpace
 	{
 		using namespace GraphicsEngineSpace;
 
-		auto& materials = prefab->GetMaterials();
-		//auto materials = pbrModel->GetPrefab()->GetMaterials();
-
-		for (auto iter : materials)
-		{
-			auto materialData = iter.second->GetMaterialData();
-			auto maps = materialData.maps;
-
-			material.ambient = materialData.ambient;
-			material.diffuse = materialData.diffuse;
-			material.specular = materialData.specular;
-
-			for (int i = 0; i < maps.size(); i++)
-			{
-				if (maps[i].type == MapType::DIFFUSE)
-				{
-					if (maps[i].map != nullptr)
-						maps[i].map->SetUpTexture(0, ShaderType::PIXEL);
-				}
-				else if (maps[i].type == MapType::NORMAL)
-				{
-					if (maps[i].map != nullptr)
-						maps[i].map->SetUpTexture(1, ShaderType::PIXEL);
-				}
-			}
-
-			break;
-		}
-
 		//if (animSwitch == true)
 		//	prefab->SetAnimationKey("Walk");
 		//else
 		//	prefab->SetAnimationKey("Idle");
 
-		prefab->PrepareRender(transform.GetWorldTransform(), tick);
+		animationTime += tick;
+
+		if (prefab->PrepareRender(transform.GetWorldTransform(), animationTime) == true)
+			animationTime = 0.0f;
+
 		prefab->Render(engine);
 		//pbrModel->Render(engine);
 	}

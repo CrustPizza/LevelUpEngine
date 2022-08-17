@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bases\FontBase.h" />
     <ClInclude Include="Bases\LightBase.h" />
     <ClInclude Include="Bases\UIBase.h" />
     <ClInclude Include="Define\GraphicsTopology.h" />
