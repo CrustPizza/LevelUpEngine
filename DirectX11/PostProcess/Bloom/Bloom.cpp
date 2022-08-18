@@ -41,16 +41,16 @@ namespace DX11
 		combine->param.sourceIntensity = 1.0f;
 	}
 
-	void Bloom::operator()(RenderTexture* texture, ID3D11DepthStencilState* depthState)
+	void Bloom::operator()(RenderTexture* texture, ID3D11DepthStencilView* depthView, ID3D11DepthStencilState* depthState)
 	{
 		long width = texture->GetWidth();
 		long height = texture->GetHeight();
 
 		downSampler->OnResize(width / 2, height / 2);
 
-		auto downSRV1 = (*downSampler)(texture->GetShaderResourceView(), depthState);
+		auto downSRV1 = (*downSampler)(texture->GetShaderResourceView(), depthView, depthState);
 
-		(*blur)(downSampler->GetRenderTexture(), 4.0f, depthState);
-		(*combine)(texture, downSRV1, depthState);
+		(*blur)(downSampler->GetRenderTexture(), 4.0f, depthView, depthState);
+		(*combine)(texture, downSRV1, depthView, depthState);
 	}
 }

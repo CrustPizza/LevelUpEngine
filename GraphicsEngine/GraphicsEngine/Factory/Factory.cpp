@@ -69,6 +69,9 @@ namespace GraphicsEngineSpace
 		if (animationModel == nullptr)
 			return nullptr;
 
+		if (animationModel->IsAlreadyHaveAnimation(animationKey) == true)
+			return nullptr;
+
 #ifdef x64
 #ifdef _DEBUG
 		ASEBuilder aseBuilder("DLL/ASEParser_Debug_x64.dll", "CreateASEParser");
@@ -568,6 +571,27 @@ namespace GraphicsEngineSpace
 
 		return resourceManager->GetPBRModel(name);
 	}
+	PBRModel* Factory::CreateSkinningAlbedoNormalModel(const std::string& name, ModelBase* model)
+	{
+		if (graphicsFactory == nullptr || resourceManager == nullptr || model == nullptr)
+			return nullptr;
+
+		PBRBuilder builder;
+
+		PBRModel* newPBRModel = builder.CreateSkinningAlbedoNormalModel(name, this, model);
+
+		if (newPBRModel == nullptr)
+			return nullptr;
+
+		if (resourceManager->AddPBRModel(name, newPBRModel) != true)
+		{
+			newPBRModel->Release();
+
+			return nullptr;
+		}
+
+		return resourceManager->GetPBRModel(name);
+	}
 
 	IBLTexture* Factory::CreateIBLTexture(const std::string& name, const std::string& radiancePath, const std::string& irradiancePath)
 	{
@@ -879,6 +903,22 @@ namespace GraphicsEngineSpace
 		CreatePixelShader("PBRConstVarPS", "Shader/PBRModel/PBRModelPS.hlsl", "ConstVarMain", "ps_5_0");
 		CreatePixelShader("PBRAlbedoPS", "Shader/PBRModel/PBRModelPS.hlsl", "AlbedoMain", "ps_5_0");
 		CreatePixelShader("PBRAlbedoNormalPS", "Shader/PBRModel/PBRModelPS.hlsl", "AlbedoNormalMain", "ps_5_0");
+
+		// Skinning + Normal
+		LayoutBase* pbrSkinnedNormalLayout = CreateLayout("PBRSkinnedNormalLayout");
+
+		pbrSkinnedNormalLayout->AddElements("POSITION", 0, GraphicsFormat::Float_R32G32B32A32, 0, 0);
+		pbrSkinnedNormalLayout->AddElements("NORMAL", 0, GraphicsFormat::Float_R32G32B32A32, 0, 16);
+		pbrSkinnedNormalLayout->AddElements("TEXCOORD", 0, GraphicsFormat::Float_R32G32B32A32, 0, 32);
+		pbrSkinnedNormalLayout->AddElements("TANGENT", 0, GraphicsFormat::Float_R32G32B32A32, 0, 48);
+		pbrSkinnedNormalLayout->AddElements("BLENDWEIGHT", 0, GraphicsFormat::Float_R32G32B32A32, 0, 64);
+		pbrSkinnedNormalLayout->AddElements("BLENDWEIGHT", 1, GraphicsFormat::Float_R32G32B32A32, 0, 80);
+		pbrSkinnedNormalLayout->AddElements("BLENDINDICES", 0, GraphicsFormat::UINT_R8G8B8A8, 0, 96);
+		pbrSkinnedNormalLayout->AddElements("BLENDINDICES", 1, GraphicsFormat::UINT_R8G8B8A8, 0, 100);
+
+		CreateVertexShader("PBRSkinnedNormalVS", "Shader/PBRModel/PBRModelVS.hlsl", "SkinnedNormalMain", "vs_5_0", pbrSkinnedNormalLayout);
+
+		resourceManager->SubLayout("PBRSkinnedNormalLayout");
 
 		/* Shadow Map Shader */
 		LayoutBase* shadowLayout = CreateLayout("ShadowMapLayout");

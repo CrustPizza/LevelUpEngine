@@ -42,6 +42,6 @@ namespace DX11
 		void Init(Factory* factory, ID3D11Device* device, DXGI_FORMAT format, DirectX::SpriteBatch* spriteBatch);
 		void Clear();
 
-		void operator ()(RenderTexture* dest, ID3D11ShaderResourceView* src, ID3D11DepthStencilState* depthState = nullptr);
+		void operator ()(RenderTexture* dest, ID3D11ShaderResourceView* src, ID3D11DepthStencilView* depthView = nullptr, ID3D11DepthStencilState* depthState = nullptr);
 	};
 }

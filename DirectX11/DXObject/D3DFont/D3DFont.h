@@ -21,10 +21,10 @@ namespace DX11
 	{
 		DirectX::SpriteBatch* spriteBatch;
 		DirectX::SpriteFont* spriteFont;
-		ID3D11DepthStencilState* depthState;
+		ID3D11DepthStencilState** depthState;
 
 	public:
-		D3DFont(DirectX::SpriteBatch* spriteBatch, DirectX::SpriteFont* spriteFont, ID3D11DepthStencilState* depthState);
+		D3DFont(DirectX::SpriteBatch* spriteBatch, DirectX::SpriteFont* spriteFont, ID3D11DepthStencilState** depthState);
 		~D3DFont() override;
 
 		bool DrawTextColor(const std::string& text, Vector color, Vector position, float rotation, Vector scale) override;

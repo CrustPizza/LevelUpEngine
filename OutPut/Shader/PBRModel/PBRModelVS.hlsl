@@ -67,6 +67,18 @@ struct VS_Skinning_Input
 	uint4  WeightIndex2	: BLENDINDICES1;
 };
 
+struct VS_SkinningNormal_Input
+{
+	float4 Position		: POSITION;
+	float4 Normal		: NORMAL;
+	float4 TexCoord		: TEXCOORD0;
+	float4 Tangent		: TANGENT0;
+	float4 Weights1		: BLENDWEIGHT0;
+	float4 Weights2		: BLENDWEIGHT1;
+	uint4  WeightIndex1	: BLENDINDICES0;
+	uint4  WeightIndex2	: BLENDINDICES1;
+};
+
 /* VS Main - Basic */
 VS_Default_Output BasicMain(VS_Basic_Input input)
 {
@@ -138,9 +150,58 @@ VS_Default_Output SkinnedMain(VS_Skinning_Input input)
 
 	output.WorldPos = pos;
 	output.Position = mul( float4( pos, 1.0f ), ViewProjection );
-	output.Normal = normalize( mul( normalize(normal), (float3x3)WorldInvTranspose ) );
+	output.Normal = normalize( normal );
 	output.Diffuse = float4( Albedo, Alpha );
 	output.TexCoord = input.TexCoord.xy;
+	output.ShadowDepth = mul( float4( output.WorldPos, 1.0f ), LightViewProjection );
+
+	return output;
+}
+
+/* VS Main - Skinning Normal */
+VS_Normal_Output SkinnedNormalMain(VS_SkinningNormal_Input input)
+{
+	VS_Normal_Output output = (VS_Normal_Output)0;
+
+	float weight[8] =
+	{
+		input.Weights1.x,
+		input.Weights1.y,
+		input.Weights1.z,
+		input.Weights1.w,
+		input.Weights2.x,
+		input.Weights2.y,
+		input.Weights2.z,
+		input.Weights2.w
+	};
+
+	uint  index[8] =
+	{
+		input.WeightIndex1[0],
+		input.WeightIndex1[1],
+		input.WeightIndex1[2],
+		input.WeightIndex1[3],
+		input.WeightIndex2[0],
+		input.WeightIndex2[1],
+		input.WeightIndex2[2],
+		input.WeightIndex2[3]
+	};
+
+	float3 pos = 0.0f;
+	float3 normal = 0.0f;
+
+	for (int i = 0; i < 8; i++)
+	{
+		pos += weight[i] * mul( input.Position, BoneMatrix[index[i]] ).xyz;
+		normal += weight[i] * mul( input.Normal.xyz, (float3x3)BoneMatrix[index[i]] );
+	}
+
+	output.WorldPos = pos;
+	output.Position = mul( float4( pos, 1.0f ), ViewProjection );
+	output.Normal = normalize( normal );
+	output.Diffuse = float4( Albedo, Alpha );
+	output.TexCoord = input.TexCoord.xy;
+	output.Tangent = mul( input.Tangent.xyz, (float3x3)World );
 	output.ShadowDepth = mul( float4( output.WorldPos, 1.0f ), LightViewProjection );
 
 	return output;

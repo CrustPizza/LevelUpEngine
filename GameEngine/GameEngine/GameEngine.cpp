@@ -88,6 +88,8 @@ namespace GameEngineSpace
 				{
 					graphicsEngine->OnResize(width, height);
 					camera.UpdateProjectionMatrix(width, height);
+					canvas->SetWidth(width);
+					canvas->SetHeight(height);
 				});
 
 			app->SetOnMouseMove([&](float x, float y)
@@ -207,14 +209,17 @@ namespace GameEngineSpace
 		vertexShader = resourceManager->GetShader("SkinningModelVS");
 		BufferBase* boneBuffer = resourceManager->GetBuffer("BoneMatrixCB");
 
-		ModelBase* pigModel = graphicsFactory->CreateModelFromASEFile("ASEPig", "Resources/Model/Heracles_idle.ase", "Idle");
-		//pigModel = graphicsFactory->CreateAnimationFromASEFile("ASEPig", "Resources/Model/Heracles_idle.ase", "Idle");
+		ModelBase* pigModel = graphicsFactory->CreateModelFromASEFile("ASEPig", "Resources/Model/Heracles_idle.ase");
+		pigModel = graphicsFactory->CreateAnimationFromASEFile("ASEPig", "Resources/Model/Heracles_idle.ase", "Idle");
+		pigModel = graphicsFactory->CreateAnimationFromASEFile("ASEPig", "Resources/Model/Heracles_run.ase", "Run");
+		pigModel = graphicsFactory->CreateAnimationFromASEFile("ASEPig", "Resources/Model/Heracles_attack2.ase", "Attack2");
 		//ModelBase* pigIdleAnimation = graphicsFactory->CreateAnimationFromASEFile("ASEPig", "Resources/Model/babypig_walk_6x.ASE", "Walk");
 
 		pig = new Pig;
 		//pig->Init(graphicsFactory, pigModel, vertexShdaer, pixelShader, matrixBuffer, boneBuffer, materialBuffer);
 		pig->Init(graphicsFactory, pigModel);
 		pig->AddForce(Vector::UnitY * VectorReplicate(5));
+		pig->AddForce(-Vector::UnitZ * VectorReciprocal(10));
 
 		for (int i = 0; i < 10; i++)
 		{
@@ -246,7 +251,8 @@ namespace GameEngineSpace
 		t1->SetTexture(graphicsFactory->CreateTexture("Cat1", "Resources/UI/MainMenuTest.jpg"));
 		t2->SetTexture(graphicsFactory->CreateTexture("Cat2", "Resources/UI/ButtonTest1.jpg"));
 		text->SetText("BBBBBBBB");
-		pBar->SetTexture(graphicsFactory->CreateTexture("Bar", "Resources/UI/bars.png"));
+		pBar->SetFrontTexture(graphicsFactory->CreateTexture("HP_Bar_Front", "Resources/UI/HP_Bar.png"));
+		pBar->SetBackTexture(graphicsFactory->CreateTexture("HP_Bar_Back", "Resources/UI/HP_Bar_BG.png"));
 
 		t1->SetPosition({ 0.0f, 0.0f, 0.6f });
 		t2->SetPosition({ 0.0f, 0.0f, -0.1f });
@@ -260,14 +266,14 @@ namespace GameEngineSpace
 		//t1->SetEnable(false);
 		//t2->SetEnable(false);
 
-		pBar->SetAnchor({ HorizontalLocation::CENTER, VerticalLocation::TOP });
-		pBar->SetPivot({ HorizontalLocation::CENTER, VerticalLocation::TOP });
-		pBar->SetPosition({ 0.0f, 30.0f, 0.3f });
-		pBar->SetBackBarTexCoord(0.0f, 0.0f, 300.0f, 100.0f);
-		pBar->SetFrontBarTexCoord(0.0f, 200.0f, 300.0f, 100.0f);
-		pBar->SetWidth(300.0f);
-		pBar->SetHeight(100.0f);
-		pBar->SetScale({ 1.0f, 0.5f, 1.0f });
+		pBar->SetAnchor({ HorizontalLocation::LEFT, VerticalLocation::BOTTOM });
+		pBar->SetPivot({ HorizontalLocation::LEFT, VerticalLocation::BOTTOM });
+		pBar->SetPosition({ 10.0f, -10.0f, 0.3f });
+		pBar->SetBackBarTexCoord(0.0f, 0.0f, 470.0f, 72.0f);
+		pBar->SetFrontBarTexCoord(0.0f, 0.0f, 470.0f, 72.0f);
+		pBar->SetWidth(470.0f);
+		pBar->SetHeight(72.0f);
+		pBar->SetScale({ 1.0f, 1.0f, 1.0f });
 
 		spriteAnim = graphicsFactory->CreateSpriteAnimation("SpriteAnimation");
 		spriteAnim->SetTexture(graphicsFactory->CreateTexture("Explosion", "Resources/Effect/explosion.png"), 960, 382, 5, 2, 0.1f);
@@ -415,6 +421,9 @@ namespace GameEngineSpace
 		pbrGenji->Update(Time::instance.deltaTime);
 		pillar->Update(Time::instance.deltaTime);
 		ely->Update(Time::instance.deltaTime);
+
+		for (int i = 0; i < 10; i += 2)
+			pigs[i]->SetAnimKey("Idle");
 
 		static float metallic = 0.5f;
 

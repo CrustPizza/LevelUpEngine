@@ -59,6 +59,7 @@ element->SetupAttachment(parent);
 		std::map<int, MaterialBase*> materials;
 
 		ObjectBase emptyObject;
+		std::vector<std::string> animationKeys;
 		std::string animationKey;
 
 		Matrix* boneMatrix;
@@ -72,7 +73,8 @@ element->SetupAttachment(parent);
 			: boneMatrix(nullptr)
 			, rotationMatrix(Matrix::Identity)
 			, boundingBoxMin{ 0.0f, 0.0f, 0.0f, 1.0f }
-			, boundingBoxMax{ 0.0f, 0.0f, 0.0f, 1.0f } {}
+			, boundingBoxMax{ 0.0f, 0.0f, 0.0f, 1.0f }
+			, animationKey{} {}
 		virtual ~ModelBase()
 		{
 			RELEASE_VECTOR(meshes);
@@ -161,6 +163,17 @@ element->SetupAttachment(parent);
 		const std::vector<BoneBase*>& GetBones() { return bones; }
 		const std::map<int, MaterialBase*>& GetMaterials() { return materials; }
 		Matrix* GetBoneMatrix() { return boneMatrix; }
+
+		bool IsAlreadyHaveAnimation(const std::string& animationKey)
+		{
+			for (int i = 0; i < animationKeys.size(); i++)
+			{
+				if (animationKeys[i].compare(animationKey) == 0)
+					return true;
+			}
+
+			return false;
+		}
 
 		void SetRotation(const Vector& rotation) { this->rotationMatrix = MatrixRotationFromVector(rotation); }
 

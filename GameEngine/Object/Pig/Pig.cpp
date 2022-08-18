@@ -34,8 +34,8 @@ namespace GameEngineSpace
 		pbrModel->SetRoughness(0.0f);
 
 		prefab = pbrModel->GetPrefab();
+		prefab->SetAnimationKey("Attack2");
 		this->model = model;
-		this->model->SetAnimationKey("Idle");
 
 		transform.position.x += 5.0f;
 		transform.position.y += 5.0f;
@@ -48,8 +48,8 @@ namespace GameEngineSpace
 		prefab->SetVertexShader(vertexShader);
 		prefab->SetPixelShader(pixelShader);
 		prefab->SetMaterialBuffer({ materialBuffer, 3, &material, GraphicsEngineSpace::ShaderType::PIXEL });
+		prefab->SetAnimationKey("Idle");
 		this->model = model;
-		this->model->SetAnimationKey("Idle");
 
 		GraphicsEngineSpace::ConstantBufferSetting boneMatrixElements;
 		boneMatrixElements.buffer = boneBuffer;
@@ -87,7 +87,7 @@ namespace GameEngineSpace
 
 	void Pig::Update(float tick)
 	{
-		transform.rotation.y += 0.1f;
+		transform.rotation.y += 15.0f;
 
 		transform.UpdateWorldTransform();
 
@@ -185,5 +185,13 @@ namespace GameEngineSpace
 
 		pbrModel->SetLightDirection(dir, index);
 		pbrModel->SetLightColor(color, index);
+	}
+
+	void Pig::SetAnimKey(const std::string& animationName)
+	{
+		if (pbrModel == nullptr)
+			return;
+
+		pbrModel->GetPrefab()->SetAnimationKey(animationName);
 	}
 }

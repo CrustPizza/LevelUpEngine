@@ -133,7 +133,7 @@ namespace DX11
 
 		DirectX::SpriteFont* dxFont = new DirectX::SpriteFont(device, buffer);
 		dxFont->SetLineSpacing(14.0f);
-		D3DFont* newFont = new D3DFont(spriteBatch, dxFont, depthState);
+		D3DFont* newFont = new D3DFont(spriteBatch, dxFont, &depthState);
 
 		return newFont;
 	}

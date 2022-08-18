@@ -26,7 +26,8 @@ namespace GraphicsEngineSpace
 
 	class ProgressBar : public UIBase
 	{
-		TextureBase* texture;
+		TextureBase* frontBarTexture;
+		TextureBase* backBarTexture;
 
 		Rect front;
 		Rect back;
@@ -39,7 +40,8 @@ namespace GraphicsEngineSpace
 		~ProgressBar() override;
 
 	public:
-		virtual void SetTexture(TextureBase* texture);
+		virtual void SetFrontTexture(TextureBase* texture);
+		virtual void SetBackTexture(TextureBase* texture);
 		virtual void SetPercent(float percent);
 		virtual void SetDirection(Direction direction);
 

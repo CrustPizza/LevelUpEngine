@@ -255,8 +255,8 @@ namespace GraphicsEngineSpace
 			Vector position = Vector::Backward * MatrixRotationFromVector(dLight->rotation);
 			position *= 10.0f;
 
-			Matrix lightProjection = OrthographicOffCenterMatrix(position.x - 100, position.x + 100, position.y - 100, position.y + 100, position.z - 100, position.z + 150);
-			//Matrix lightProjection = OrthographicMatrix(300, 300, 0.01f, 500.0f);
+			Matrix lightProjection = OrthographicOffCenterMatrix(position.x - 200, position.x + 200, position.y - 200, position.y + 200, position.z - 200, position.z + 200);
+			//Matrix lightProjection = OrthographicMatrix(300, 300, -300, 300.0f);
 
 			Matrix lightViewProjection = ViewMatrix(position, dLight->rotation) * lightProjection;
 			lightViewProjection = MatrixTranspose(lightViewProjection);
@@ -345,30 +345,6 @@ namespace GraphicsEngineSpace
 		DrawTextColor(fpsStr, Vector{ 1.0f, 1.0f, 0.0f, }, Vector{ 10.0f, 10.0f }, 0.0f, Vector{ 1.5f, 1.5f });
 		DrawTextColor(dtStr, Vector{ 1.0f, 1.0f, 0.0f, }, Vector{ 10.0f, 40.0f }, 0.0f, Vector{ 1.5f, 1.5f });
 
-		std::wstring fontTest = L"ColonnaMT 1234 가나다라";
-		DrawTextColor("ColonnaMT", fontTest, Vector{ 1.0f, 0.0f, 0.0f, 1.0f }, Vector{ 10.0f, 70.0f }, 0.0f, Vector{ 3.0f, 3.0f });
-
-		fontTest = L"EBS-Bold 1234 가나다라";
-		DrawTextColor("EBS-Bold", fontTest, Vector{ 1.0f, 0.0f, 0.0f, 1.0f }, Vector{ 10.0f, 120.0f }, 0.0f, Vector{ 3.0f, 3.0f });
-
-		fontTest = L"EBS-Light 1234 가나다라";
-		DrawTextColor("EBS-Light", fontTest, Vector{ 1.0f, 0.0f, 0.0f, 1.0f }, Vector{ 10.0f, 170.0f }, 0.0f, Vector{ 3.0f, 3.0f });
-		
-		fontTest = L"EBS-Medium 1234 가나다라";
-		DrawTextColor("EBS-Medium", fontTest, Vector{ 1.0f, 0.0f, 0.0f, 1.0f }, Vector{ 10.0f, 220.0f }, 0.0f, Vector{ 3.0f, 3.0f });
-
-		fontTest = L"H2MJRE 1234 가나다라";
-		DrawTextColor("H2MJRE", fontTest, Vector{ 1.0f, 0.0f, 0.0f, 1.0f }, Vector{ 10.0f, 270.0f }, 0.0f, Vector{ 3.0f, 3.0f });
-
-		fontTest = L"NotoSansBold 1234 가나다라";
-		DrawTextColor("NotoSansBold", fontTest, Vector{ 1.0f, 0.0f, 0.0f, 1.0f }, Vector{ 10.0f, 320.0f }, 0.0f, Vector{ 3.0f, 3.0f });
-
-		fontTest = L"NotoSansMedium 1234 가나다라";
-		DrawTextColor("NotoSansMedium", fontTest, Vector{ 1.0f, 0.0f, 0.0f, 1.0f }, Vector{ 10.0f, 370.0f }, 0.0f, Vector{ 3.0f, 3.0f });
-
-		fontTest = L"NotoSansRegular 1234 가나다라";
-		DrawTextColor("NotoSansRegular", fontTest, Vector{ 1.0f, 0.0f, 0.0f, 1.0f }, Vector{ 10.0f, 420.0f }, 0.0f, Vector{ 3.0f, 3.0f });
-			
 		if (showMRT == true)
 			graphicsEngine->DebugRender();
 	}

@@ -14,7 +14,7 @@ Texture2D<float4> SourceTexture : register(t1);
 sampler Sampler : register(s0);
 
 /* Parameter */
-cbuffer CombineParameter : register (b0)
+cbuffer CombineParameter : register ( b8 )
 {
 	float BaseSaturation;
 	float SourceSaturation;

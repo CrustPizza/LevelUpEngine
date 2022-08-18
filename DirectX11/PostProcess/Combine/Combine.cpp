@@ -53,7 +53,7 @@ namespace DX11
 		combineTexture->ClearRenderTargetView(deviceContext, nullptr, color);
 	}
 
-	void Combine::operator()(RenderTexture* dest, ID3D11ShaderResourceView* src, ID3D11DepthStencilState* depthState)
+	void Combine::operator()(RenderTexture* dest, ID3D11ShaderResourceView* src, ID3D11DepthStencilView* depthView, ID3D11DepthStencilState* depthState)
 	{
 		ID3D11ShaderResourceView* null[] = { nullptr, nullptr };
 
@@ -62,12 +62,12 @@ namespace DX11
 
 		combineTexture->OnResize(width, height);
 
-		combineTexture->OMSetRenderTarget(deviceContext);
+		combineTexture->OMSetRenderTarget(deviceContext, depthView);
 		spriteBatch->Begin(DirectX::SpriteSortMode_Immediate, nullptr, nullptr, depthState, nullptr,
 			[=]()
 			{
 				shader->SetUpShader();
-				paramBuffer->SetUpBuffer(0, &param, ShaderType::PIXEL);
+				paramBuffer->SetUpBuffer(8, &param, ShaderType::PIXEL);
 				deviceContext->PSSetShaderResources(1, 1, &src);
 			});
 		spriteBatch->Draw(dest->GetShaderResourceView(), RECT{ 0, 0, width, height });

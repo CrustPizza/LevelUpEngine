@@ -80,7 +80,7 @@ VS_Output main(VS_Input input)
 
 	output.WorldPos = pos;
 	output.Position = mul( float4( pos, 1.0f ), ViewProjection );
-	output.Normal = normalize( mul( normal, (float3x3)WorldInvTranspose ) );
+	output.Normal = normalize( normal );
 	output.TexCoord = input.TexCoord.xy;
 	output.Tangent = mul( input.Tangent.xyz, (float3x3)World );
 

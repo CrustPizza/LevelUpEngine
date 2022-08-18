@@ -36,13 +36,13 @@ namespace GameEngineSpace
 		pbrModel->SetRoughness(0.2f);
 
 		prefab = pbrModel->GetPrefab();
+		prefab->SetAnimationKey("Idle");
 		this->model = model;
-		this->model->SetAnimationKey("Idle");
 	}
 
 	void Mannequin::Update(float tick)
 	{
-		transform.rotation.y += 0.1f;
+		transform.rotation.y += 15.0f;
 
 		transform.UpdateWorldTransform();
 
@@ -63,20 +63,20 @@ namespace GameEngineSpace
 
 			if (test1 == true)
 			{
-				model->SetAnimationKey("Run");
+				prefab->SetAnimationKey("Run");
 
 				test2 = true;
 				test1 = false;
 			}
 			else if (test2 == true)
 			{
-				model->SetAnimationKey("Slash");
+				prefab->SetAnimationKey("Slash");
 
 				test2 = false;
 			}
 			else
 			{
-				model->SetAnimationKey("Idle");
+				prefab->SetAnimationKey("Idle");
 
 				test1 = true;
 			}

@@ -67,12 +67,12 @@ namespace DX11
 		return downTexture;
 	}
 
-	ID3D11ShaderResourceView* DownSampling::operator()(ID3D11ShaderResourceView* src, ID3D11DepthStencilState* depthState)
+	ID3D11ShaderResourceView* DownSampling::operator()(ID3D11ShaderResourceView* src, ID3D11DepthStencilView* depthView, ID3D11DepthStencilState* depthState)
 	{
 		long width = downTexture->GetWidth();
 		long height = downTexture->GetHeight();
 
-		downTexture->OMSetRenderTarget(deviceContext);
+		downTexture->OMSetRenderTarget(deviceContext, depthView);
 		Draw(src, width, height, depthState);
 
 		return downTexture->GetShaderResourceView();
@@ -84,7 +84,7 @@ namespace DX11
 			[=]()
 			{
 				shader->SetUpShader();
-				threshBuffer->SetUpBuffer(0, &threshold, ShaderType::PIXEL);
+				threshBuffer->SetUpBuffer(8, &threshold, ShaderType::PIXEL);
 			});
 		spriteBatch->Draw(texture, RECT{ 0, 0, width, height });
 		spriteBatch->End();

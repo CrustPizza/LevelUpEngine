@@ -62,12 +62,15 @@ PS_Output ConstVarMain(VS_Default_Output input)
 
 	float3 color = LightSurface(ViewVector, Normal, 3, LightColor, LightDirection, Albedo, Roughness, Metallic, AO );
 
-	float2 shadowTexCoord = input.ShadowDepth.xy / input.ShadowDepth.w;
+	float NdotL = dot(Normal, -DLightDirection);
+	float4 shadowDepth = input.ShadowDepth + Normal * (1.0f - abs(NdotL));
+
+	float2 shadowTexCoord = shadowDepth.xy / shadowDepth.w;
 	shadowTexCoord.y *= -1;
 	shadowTexCoord = shadowTexCoord * 0.5f + 0.5f;
-	float depthFormShadowMap = ShadowMap.Sample( Sampler, shadowTexCoord ).r;
-	
-	if (depthFormShadowMap + 0.004f <= input.ShadowDepth.z)
+	float depthFormShadowMap = ShadowMap.Sample(Sampler, shadowTexCoord).r;
+
+	if (depthFormShadowMap + 0.004f < input.ShadowDepth.z)
 	{
 		color *= 0.5f;
 	}
@@ -93,12 +96,15 @@ PS_Output AlbedoMain(VS_Default_Output input)
 
 	float3 color = LightSurface( ViewVector, Normal, 3, LightColor, LightDirection, AlbedoColor, Roughness, Metallic, AO );
 
-	float2 shadowTexCoord = input.ShadowDepth.xy / input.ShadowDepth.w;
+	float NdotL = dot(Normal, -DLightDirection);
+	float4 shadowDepth = input.ShadowDepth + Normal * (1.0f - abs(NdotL));
+
+	float2 shadowTexCoord = shadowDepth.xy / shadowDepth.w;
 	shadowTexCoord.y *= -1;
 	shadowTexCoord = shadowTexCoord * 0.5f + 0.5f;
 	float depthFormShadowMap = ShadowMap.Sample(Sampler, shadowTexCoord).r;
 
-	if (depthFormShadowMap + 0.004f <= input.ShadowDepth.z)
+	if (depthFormShadowMap + 0.004f < input.ShadowDepth.z)
 	{
 		color *= 0.5f;
 	}
@@ -133,12 +139,15 @@ PS_Output AlbedoNormalMain(VS_Normal_Output input)
 
 	float3 color = LightSurface( ViewVector, Normal, 3, LightColor, LightDirection, AlbedoColor, Roughness, Metallic, AO );
 
-	float2 shadowTexCoord = input.ShadowDepth.xy / input.ShadowDepth.w;
+	float NdotL = dot( Normal, -DLightDirection );
+	float4 shadowDepth = input.ShadowDepth + Normal * (1.0f - abs(NdotL));
+
+	float2 shadowTexCoord = shadowDepth.xy / shadowDepth.w;
 	shadowTexCoord.y *= -1;
 	shadowTexCoord = shadowTexCoord * 0.5f + 0.5f;
 	float depthFormShadowMap = ShadowMap.Sample(Sampler, shadowTexCoord).r;
 
-	if (depthFormShadowMap + 0.004f <= input.ShadowDepth.z)
+	if (depthFormShadowMap + 0.004f < shadowDepth.z)
 	{
 		color *= 0.5f;
 	}

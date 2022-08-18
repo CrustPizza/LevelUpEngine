@@ -274,6 +274,64 @@ namespace GraphicsEngineSpace
 		return newPBRModel;
 	}
 
+	PBRModel* PBRBuilder::CreateSkinningAlbedoNormalModel(const std::string& name, Factory* factory, ModelBase* model)
+	{
+		PBRModel* newPBRModel = SetStandard(name, factory, model);
+
+		if (newPBRModel == nullptr)
+			return nullptr;
+
+		/* Vertex Shader */
+		ShaderBase* vertexShader = GetSkinnedNormalVS(factory);
+
+		/* Pixel Shader */
+		ShaderBase* pixelShader = GetAlebedoNormalMapPS(factory);
+
+		/* Parameter Buffer */
+
+		// VS Parameter
+		BufferBase* paramBuffer = GetVSParameterCB(factory);
+
+		ConstantBufferSetting vsParamBufferOption;
+
+		vsParamBufferOption.buffer = paramBuffer;
+		vsParamBufferOption.slot = 2;
+		vsParamBufferOption.type = ShaderType::VERTEX;
+		vsParamBufferOption.data = &newPBRModel->PBR_VSParameter;
+
+		// PS Parameter
+		paramBuffer = GetPSParameterCB(factory);
+
+		ConstantBufferSetting psParamBufferOption;
+
+		psParamBufferOption.buffer = paramBuffer;
+		psParamBufferOption.slot = 2;
+		psParamBufferOption.type = ShaderType::PIXEL;
+		psParamBufferOption.data = &newPBRModel->PBR_PSParameter;
+
+		// Bone Matrix Buffer
+		BufferBase* boneBuffer = GetBoneMatrixCB(factory);
+
+		ConstantBufferSetting boneMatrixElements;
+
+		boneMatrixElements.buffer = boneBuffer;
+		boneMatrixElements.slot = 3;
+		boneMatrixElements.type = ShaderType::VERTEX;
+		boneMatrixElements.data = model->GetBoneMatrix();
+
+		newPBRModel->GetPrefab()->SetVertexShader(vertexShader);
+		newPBRModel->GetPrefab()->SetPixelShader(pixelShader);
+		newPBRModel->GetPrefab()->AddOnceBuffer(vsParamBufferOption);
+		newPBRModel->GetPrefab()->AddOnceBuffer(psParamBufferOption);
+		newPBRModel->GetPrefab()->AddOnceBuffer(boneMatrixElements);
+
+		/* Vertex Buffer */
+		newPBRModel->GetPrefab()->SetSkinning(true);
+		CreateSkinnedVB(factory, newPBRModel->GetPrefab());
+
+		return newPBRModel;
+	}
+
 	PBRModel* PBRBuilder::SetStandard(const std::string& name, Factory* factory, ModelBase* model)
 	{
 		if (factory == nullptr)
@@ -372,6 +430,34 @@ namespace GraphicsEngineSpace
 			pbrLayout->AddElements("BLENDINDICES", 1, GraphicsFormat::UINT_R8G8B8A8, 0, 84);
 
 			vertexShader = factory->CreateVertexShader("PBRSkinnedVS", "Shader/PBRModel/PBRModelVS.hlsl", "SkinnedMain", "vs_5_0", pbrLayout);
+
+			pbrLayout->Release();
+
+			if (vertexShader == nullptr)
+				return nullptr;
+		}
+
+		return vertexShader;
+	}
+
+	ShaderBase* PBRBuilder::GetSkinnedNormalVS(Factory* factory)
+	{
+		ShaderBase* vertexShader = factory->resourceManager->GetShader("PBRSkinnedNormalVS");
+
+		if (vertexShader == nullptr)
+		{
+			LayoutBase* pbrLayout = factory->CreateLayout("PBRSkinnedNormalLayout");
+
+			pbrLayout->AddElements("POSITION", 0, GraphicsFormat::Float_R32G32B32A32, 0, 0);
+			pbrLayout->AddElements("NORMAL", 0, GraphicsFormat::Float_R32G32B32A32, 0, 16);
+			pbrLayout->AddElements("TEXCOORD", 0, GraphicsFormat::Float_R32G32B32A32, 0, 32);
+			pbrLayout->AddElements("TANGENT", 0, GraphicsFormat::Float_R32G32B32A32, 0, 48);
+			pbrLayout->AddElements("BLENDWEIGHT", 0, GraphicsFormat::Float_R32G32B32A32, 0, 64);
+			pbrLayout->AddElements("BLENDWEIGHT", 1, GraphicsFormat::Float_R32G32B32A32, 0, 80);
+			pbrLayout->AddElements("BLENDINDICES", 0, GraphicsFormat::UINT_R8G8B8A8, 0, 96);
+			pbrLayout->AddElements("BLENDINDICES", 1, GraphicsFormat::UINT_R8G8B8A8, 0, 100);
+
+			vertexShader = factory->CreateVertexShader("PBRSkinnedNormalVS", "Shader/PBRModel/PBRModelVS.hlsl", "SkinnedNormalMain", "vs_5_0", pbrLayout);
 
 			pbrLayout->Release();
 

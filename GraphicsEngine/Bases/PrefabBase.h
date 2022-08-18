@@ -19,8 +19,6 @@
 #include "Bases/FactoryBase.h"
 #include "Bases/GraphicsEngineBase.h"
 
-#include <Windows.h>
-
 namespace GraphicsEngineSpace
 {
 	class GraphicsEngine;
@@ -52,6 +50,7 @@ namespace GraphicsEngineSpace
 		const ConstantBufferSetting matrixBuffer;
 		ConstantBufferSetting materialBuffer;
 
+		std::string animationKey;
 		Matrix worldTransform;
 		float animationTime;
 
@@ -83,7 +82,7 @@ namespace GraphicsEngineSpace
 			if (model == nullptr)
 				return;
 
-			model->SetAnimationKey(animationKey);
+			this->animationKey = animationKey;
 		}
 
 		template <typename T>
@@ -97,6 +96,7 @@ namespace GraphicsEngineSpace
 			this->worldTransform = worldTransform;
 			this->animationTime = animationTime;
 
+			model->SetAnimationKey(animationKey);
 			return model->PrepareRender(worldTransform, animationTime);
 		}
 

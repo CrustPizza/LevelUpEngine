@@ -25,6 +25,7 @@ namespace GraphicsEngineSpace
 		PBRModel* CreateAlbedoNormalModel(const std::string& name, Factory* factory, ModelBase* model);
 		PBRModel* CreateSkinningModel(const std::string& name, Factory* factory, ModelBase* model);
 		PBRModel* CreateSkinningAlbedoModel(const std::string& name, Factory* factory, ModelBase* model);
+		PBRModel* CreateSkinningAlbedoNormalModel(const std::string& name, Factory* factory, ModelBase* model);
 
 	private:
 		PBRModel* SetStandard(const std::string& name, Factory* factory, ModelBase* model);
@@ -33,6 +34,7 @@ namespace GraphicsEngineSpace
 		ShaderBase* GetBasicVS(Factory* factory);
 		ShaderBase* GetNormalVS(Factory* factory);
 		ShaderBase* GetSkinnedVS(Factory* factory);
+		ShaderBase* GetSkinnedNormalVS(Factory* factory);
 
 		/* Pixel Shader */
 		ShaderBase* GetConstValuePS(Factory* factory);

@@ -11,7 +11,8 @@
 namespace GraphicsEngineSpace
 {
 	ProgressBar::ProgressBar()
-		: texture(nullptr)
+		: frontBarTexture(nullptr)
+		, backBarTexture(nullptr)
 		, front{}
 		, back{}
 		, dir(Direction::LEFT)
@@ -25,9 +26,14 @@ namespace GraphicsEngineSpace
 
 	}
 
-	void ProgressBar::SetTexture(TextureBase* texture)
+	void ProgressBar::SetFrontTexture(TextureBase* texture)
 	{
-		this->texture = texture;
+		this->frontBarTexture = texture;
+	}
+
+	void ProgressBar::SetBackTexture(TextureBase* texture)
+	{
+		this->backBarTexture = texture;
 	}
 
 	void ProgressBar::SetPercent(float percent)
@@ -76,7 +82,7 @@ namespace GraphicsEngineSpace
 			screenPosition.y + height * GetScale().y
 		};
 
-		engine->DrawSprite(texture->GetTexture(), dest, back, screenPosition.z);
+		engine->DrawSprite(backBarTexture->GetTexture(), dest, back, screenPosition.z);
 
 		Rect frontSrc = front;
 
@@ -117,7 +123,7 @@ namespace GraphicsEngineSpace
 
 		}
 
-		engine->DrawSprite(texture->GetTexture(), dest, frontSrc, screenPosition.z);
+		engine->DrawSprite(frontBarTexture->GetTexture(), dest, frontSrc, screenPosition.z);
 
 		for (auto* iter : child)
 		{

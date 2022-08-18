@@ -37,7 +37,7 @@ namespace DX11
 
 		RenderTexture* GetRenderTexture();
 
-		ID3D11ShaderResourceView* operator ()(ID3D11ShaderResourceView* src, ID3D11DepthStencilState* depthState = nullptr);
+		ID3D11ShaderResourceView* operator ()(ID3D11ShaderResourceView* src, ID3D11DepthStencilView* depthView = nullptr, ID3D11DepthStencilState* depthState = nullptr);
 
 	private:
 		void Draw(ID3D11ShaderResourceView* texture, long width, long height, ID3D11DepthStencilState* depthState);

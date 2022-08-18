@@ -171,6 +171,9 @@ namespace DX11
 		shadowDepthBuffer = new RenderTexture(backBufferFormat);
 		shadowDepthBuffer->SetDevice(d3dDevice);
 
+		// Factory
+		factory = new Factory(d3dDevice, deviceContext);
+
 		if (OnResize(width, height) != true)
 			return false;
 
@@ -192,10 +195,6 @@ namespace DX11
 			return false;
 
 		deviceContext->QueryInterface<ID3DUserDefinedAnnotation>(&annotation);
-
-		// Factory
-		factory = new Factory(d3dDevice, deviceContext);
-		factory->SetDepthState(depthState);
 
 		// Sprite
 		spriteBatch = new DirectX::SpriteBatch(deviceContext);
@@ -247,7 +246,6 @@ namespace DX11
 		RELEASE_PTR(shadowDepth);
 		RELEASE_PTR(shadowDepthView);
 		RELEASE_PTR(depthState);
-		RELEASE_PTR(blendState);
 
 		// 이하 리사이즈만 제외하고 생성 과정과 같음
 		hr = swapChain->ResizeBuffers(1, width, height, backBufferFormat, 0);
@@ -283,8 +281,8 @@ namespace DX11
 		if (FAILED(hr))
 			return false;
 
-		descDepth.Width = width * 2;
-		descDepth.Height = width * 2;
+		descDepth.Width = width * 5;
+		descDepth.Height = width * 5;
 
 		hr = d3dDevice->CreateTexture2D(&descDepth, nullptr, &shadowDepth);
 		if (FAILED(hr))
@@ -325,6 +323,8 @@ namespace DX11
 		if (FAILED(hr))
 			return false;
 
+		factory->SetDepthState(depthState);
+
 		// 그려질 화면의 영역 결정
 		viewPort.Width = static_cast<FLOAT>(width);
 		viewPort.Height = static_cast<FLOAT>(height);
@@ -336,8 +336,8 @@ namespace DX11
 		deviceContext->RSSetViewports(1, &viewPort);
 
 		// 그려질 화면의 영역 결정
-		shadowViewPort.Width = static_cast<FLOAT>(width * 2);
-		shadowViewPort.Height = static_cast<FLOAT>(width * 2);
+		shadowViewPort.Width = static_cast<FLOAT>(width * 5);
+		shadowViewPort.Height = static_cast<FLOAT>(width * 5);
 		shadowViewPort.MinDepth = 0.0f;
 		shadowViewPort.MaxDepth = 1.0f;
 		shadowViewPort.TopLeftX = 0;
@@ -348,7 +348,7 @@ namespace DX11
 		albedoBuffer->OnResize(width, height);
 		normalBuffer->OnResize(width, height);
 		worldPosBuffer->OnResize(width, height);
-		shadowDepthBuffer->OnResize(width * 2, width * 2);
+		shadowDepthBuffer->OnResize(width * 5, width * 5);
 
 		return true;
 	}

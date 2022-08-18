@@ -78,7 +78,7 @@ namespace DX11
 		combine->Clear();
 	}
 
-	void Blur::operator()(RenderTexture* blurTarget, float theta, ID3D11DepthStencilState* depthState)
+	void Blur::operator()(RenderTexture* blurTarget, float theta, ID3D11DepthStencilView* depthView, ID3D11DepthStencilState* depthState)
 	{
 		long width = blurTarget->GetWidth() / 2;
 		long height = blurTarget->GetHeight() / 2;
@@ -86,31 +86,31 @@ namespace DX11
 		verticalBlur->OnResize(width, height);
 		horizontalBlur->OnResize(width, height);
 		downSampler->OnResize(width, height);
-		auto downSRV = (*downSampler)(blurTarget->GetShaderResourceView());
+		auto downSRV = (*downSampler)(blurTarget->GetShaderResourceView(), depthView, depthState);
 
 		SetParameters(1.0f / static_cast<float>(width), 0.0f, theta);
-		horizontalBlur->OMSetRenderTarget(deviceContext);
+		horizontalBlur->OMSetRenderTarget(deviceContext, depthView);
 		spriteBatch->Begin(DirectX::SpriteSortMode_Immediate, nullptr, nullptr, depthState, nullptr,
 			[=]()
 			{
 				shader->SetUpShader();
-				paramBuffer->SetUpBuffer(0, &param, ShaderType::PIXEL);
+				paramBuffer->SetUpBuffer(8, &param, ShaderType::PIXEL);
 			});
 		spriteBatch->Draw(downSRV, RECT{ 0, 0, width, height });
 		spriteBatch->End();
 
 		SetParameters(0.0f, 1.0f / static_cast<float>(height), theta);
-		verticalBlur->OMSetRenderTarget(deviceContext);
+		verticalBlur->OMSetRenderTarget(deviceContext, depthView);
 		spriteBatch->Begin(DirectX::SpriteSortMode_Immediate, nullptr, nullptr, depthState, nullptr,
 			[=]()
 			{
 				shader->SetUpShader();
-				paramBuffer->SetUpBuffer(0, &param, ShaderType::PIXEL);
+				paramBuffer->SetUpBuffer(8, &param, ShaderType::PIXEL);
 			});
 		spriteBatch->Draw(horizontalBlur->GetShaderResourceView(), RECT{ 0, 0, width, height });
 		spriteBatch->End();
 
-		(*combine)(blurTarget, verticalBlur->GetShaderResourceView());
+		(*combine)(blurTarget, verticalBlur->GetShaderResourceView(), depthView, depthState);
 	}
 
 	void Blur::SetParameters(float x, float y, float theta)
