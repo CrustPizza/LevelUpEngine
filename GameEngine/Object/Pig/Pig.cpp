@@ -34,7 +34,7 @@ namespace GameEngineSpace
 		pbrModel->SetRoughness(0.0f);
 
 		prefab = pbrModel->GetPrefab();
-		prefab->SetAnimationKey("Attack2");
+		prefab->SetAnimationKey("Skill");
 		this->model = model;
 
 		transform.position.x += 5.0f;

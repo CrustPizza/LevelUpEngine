@@ -212,7 +212,9 @@ namespace GameEngineSpace
 		ModelBase* pigModel = graphicsFactory->CreateModelFromASEFile("ASEPig", "Resources/Model/Heracles_idle.ase");
 		pigModel = graphicsFactory->CreateAnimationFromASEFile("ASEPig", "Resources/Model/Heracles_idle.ase", "Idle");
 		pigModel = graphicsFactory->CreateAnimationFromASEFile("ASEPig", "Resources/Model/Heracles_run.ase", "Run");
+		pigModel = graphicsFactory->CreateAnimationFromASEFile("ASEPig", "Resources/Model/Heracles_attack1.ase", "Attack1");
 		pigModel = graphicsFactory->CreateAnimationFromASEFile("ASEPig", "Resources/Model/Heracles_attack2.ase", "Attack2");
+		pigModel = graphicsFactory->CreateAnimationFromASEFile("ASEPig", "Resources/Model/Heracles_skill.ase", "Skill");
 		//ModelBase* pigIdleAnimation = graphicsFactory->CreateAnimationFromASEFile("ASEPig", "Resources/Model/babypig_walk_6x.ASE", "Walk");
 
 		pig = new Pig;
@@ -769,6 +771,9 @@ namespace GameEngineSpace
 
 		}
 
+		/* Canvas */
+		canvas->Render(graphicsEngine);
+
 		singlePosition.x = x;
 
 		Matrix rtm = MatrixLookAtLH(singlePosition, camera.GetWorldPosition(), Vector::UnitY);
@@ -794,9 +799,6 @@ namespace GameEngineSpace
 		/* Post Process */
 		if (Input::GetInstance()->GetInputState(VK_TAB, KeyState::TOGGLE) == true)
 			graphicsEngine->PostProcess();
-
-		/* Canvas */
-		canvas->Render(graphicsEngine);
 
 		/* Texture test */
 		graphicsEngine->GraphicsDebugBeginEvent("Bricks");

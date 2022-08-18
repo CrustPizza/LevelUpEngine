@@ -16,7 +16,7 @@ Texture2D<float4> Texture : register( t0 );
 sampler Sampler : register( s0 );
 
 /* Parameter */
-cbuffer SampleOption : register ( b8 )
+cbuffer SampleOption : register ( b0 )
 {
 	float4 SampleOffsets[BlurDepth];
 	float4 SampleWeights[BlurDepth];
