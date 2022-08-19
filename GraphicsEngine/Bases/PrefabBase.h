@@ -77,12 +77,14 @@ namespace GraphicsEngineSpace
 		void SetRotation(const Vector& rotation) { model->SetRotation(rotation); }
 		void SetSkinning(bool isSkinning) { this->isSkinning = isSkinning; }
 
-		void SetAnimationKey(const std::string& animationKey)
+		bool SetAnimationKey(const std::string& animationKey)
 		{
 			if (model == nullptr)
-				return;
+				return false;
 
 			this->animationKey = animationKey;
+
+			return true;
 		}
 
 		template <typename T>
@@ -209,8 +211,12 @@ namespace GraphicsEngineSpace
 			Vector position;
 			Vector weights1;
 			Vector weights2;
+			Vector weights3;
+			Vector weights4;
 			unsigned int weightIndex1;
 			unsigned int weightIndex2;
+			unsigned int weightIndex3;
+			unsigned int weightIndex4;
 		};
 
 		for (int i = 0; i < meshes.size(); i++)
@@ -232,8 +238,12 @@ namespace GraphicsEngineSpace
 					temp.position = vertexData[j].position;
 					temp.weights1 = vertexData[j].weights1;
 					temp.weights2 = vertexData[j].weights2;
+					temp.weights3 = vertexData[j].weights3;
+					temp.weights4 = vertexData[j].weights4;
 					temp.weightIndex1 = vertexData[j].weightIndex1;
 					temp.weightIndex2 = vertexData[j].weightIndex2;
+					temp.weightIndex3 = vertexData[j].weightIndex3;
+					temp.weightIndex4 = vertexData[j].weightIndex4;
 
 					shadowSkinningVertices.push_back(temp);
 				}

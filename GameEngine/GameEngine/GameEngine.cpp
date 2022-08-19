@@ -209,12 +209,13 @@ namespace GameEngineSpace
 		vertexShader = resourceManager->GetShader("SkinningModelVS");
 		BufferBase* boneBuffer = resourceManager->GetBuffer("BoneMatrixCB");
 
-		ModelBase* pigModel = graphicsFactory->CreateModelFromASEFile("ASEPig", "Resources/Model/Heracles_idle.ase");
-		pigModel = graphicsFactory->CreateAnimationFromASEFile("ASEPig", "Resources/Model/Heracles_idle.ase", "Idle");
-		pigModel = graphicsFactory->CreateAnimationFromASEFile("ASEPig", "Resources/Model/Heracles_run.ase", "Run");
-		pigModel = graphicsFactory->CreateAnimationFromASEFile("ASEPig", "Resources/Model/Heracles_attack1.ase", "Attack1");
-		pigModel = graphicsFactory->CreateAnimationFromASEFile("ASEPig", "Resources/Model/Heracles_attack2.ase", "Attack2");
-		pigModel = graphicsFactory->CreateAnimationFromASEFile("ASEPig", "Resources/Model/Heracles_skill.ase", "Skill");
+		ModelBase* pigModel = graphicsFactory->CreateModelFromASEFile("Boss", "Resources/Model/Boss_Idle.ase");
+		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_idle.ase", "Idle");
+		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_run.ase", "Run");
+		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_stun.ase", "Stun");
+		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_tanmak.ase", "Tanmak");
+		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_attack_11.ase", "Attack11");
+		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_doljin.ase", "Doljin");
 		//ModelBase* pigIdleAnimation = graphicsFactory->CreateAnimationFromASEFile("ASEPig", "Resources/Model/babypig_walk_6x.ASE", "Walk");
 
 		pig = new Pig;
@@ -227,8 +228,14 @@ namespace GameEngineSpace
 		{
 			pigs[i] = new Pig;
 			pigs[i]->Init(graphicsFactory, pigModel);
-			pigs[i]->AddForce(Vector::UnitX * VectorReplicate(i * 5));
+			pigs[i]->AddForce(Vector::UnitX * VectorReplicate(i * 40));
 		}
+
+		pigs[0]->SetAnimKey("Run");
+		pigs[1]->SetAnimKey("Stun");
+		pigs[2]->SetAnimKey("Tanmak");
+		pigs[3]->SetAnimKey("Attack11");
+		pigs[3]->SetAnimKey("Doljin");
 
 		skyBox = graphicsFactory->CreateSkyBox("SkyBox");
 		//skyBox->SetTexture(graphicsFactory->CreateTexture("LobbyCubeMap", "Resources/Texture/lobbycube.dds"));
@@ -423,9 +430,6 @@ namespace GameEngineSpace
 		pbrGenji->Update(Time::instance.deltaTime);
 		pillar->Update(Time::instance.deltaTime);
 		ely->Update(Time::instance.deltaTime);
-
-		for (int i = 0; i < 10; i += 2)
-			pigs[i]->SetAnimKey("Idle");
 
 		static float metallic = 0.5f;
 
@@ -734,7 +738,7 @@ namespace GameEngineSpace
 		
 		for (int i = 0; i < 10; i++)
 		{
-			pigs[i]->Render(graphicsEngine, tick * i);
+			pigs[i]->Render(graphicsEngine, tick);
 		}
 		
 		graphicsEngine->GraphicsDebugEndEvent();

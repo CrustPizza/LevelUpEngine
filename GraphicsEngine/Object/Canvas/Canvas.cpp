@@ -182,35 +182,7 @@ namespace GraphicsEngineSpace
 
     ButtonUI* Canvas::CollidedButtonWithMouse(float mouseX, float mouseY, bool isClicked)
     {
-        ButtonUI* collidedButton = nullptr;
-        float minZ = 1.0f;
-
-        for (auto iter : buttonUIList)
-        {
-            if (iter.second == nullptr || iter.second->isEnable != true)
-                continue;
-
-            auto buttonScreenPosition = iter.second->GetScreenPosition();
-
-            if (mouseX < buttonScreenPosition.x || mouseY < buttonScreenPosition.y)
-            {
-                iter.second->buttonState = ButtonState::DEFAULT;
-                continue;
-            }
-
-            if (mouseX > buttonScreenPosition.x + iter.second->GetWidth() ||
-                mouseY > buttonScreenPosition.y + iter.second->GetHeight())
-            {
-                iter.second->buttonState = ButtonState::DEFAULT;
-                continue;
-            }
-
-            if (buttonScreenPosition.z <= minZ)
-            {
-                collidedButton = iter.second;
-                minZ = buttonScreenPosition.z;
-            }
-        }
+        ButtonUI* collidedButton = FindCollidedButton(mouseX, mouseY, isClicked);
 
         if (collidedButton == nullptr)
             return nullptr;
@@ -289,5 +261,61 @@ namespace GraphicsEngineSpace
         progressBarList.clear();
 
         child.clear();
+    }
+
+    ButtonUI* Canvas::FindCollidedButton(float mouseX, float mouseY, bool isClicked)
+    {
+        ButtonUI* collidedButton = nullptr;
+        float minZ = 1.0f;
+
+        for (auto& iter : canvasList)
+        {
+            if (iter.second == nullptr)
+                continue;
+
+            collidedButton = iter.second->CollidedButtonWithMouse(mouseX, mouseY, isClicked);
+
+            if (collidedButton != nullptr)
+                minZ = collidedButton->GetScreenPosition().z;
+        }
+
+        for (auto& iter : buttonUIList)
+        {
+            if (iter.second == nullptr)
+                continue;
+
+            if (iter.second->isEnable != true)
+            {
+                iter.second->buttonState = ButtonState::DEFAULT;
+                continue;
+            }
+
+            auto buttonScreenPosition = iter.second->GetScreenPosition();
+            auto buttonScreenScale = iter.second->GetScreenScale();
+
+            if (mouseX < buttonScreenPosition.x || mouseY < buttonScreenPosition.y)
+            {
+                iter.second->buttonState = ButtonState::DEFAULT;
+                continue;
+            }
+
+            if (mouseX > buttonScreenPosition.x + iter.second->GetWidth() * buttonScreenScale.x ||
+                mouseY > buttonScreenPosition.y + iter.second->GetHeight() * buttonScreenScale.y)
+            {
+                iter.second->buttonState = ButtonState::DEFAULT;
+                continue;
+            }
+
+            if (buttonScreenPosition.z <= minZ)
+            {
+                collidedButton = iter.second;
+                minZ = buttonScreenPosition.z;
+            }
+        }
+
+        if (collidedButton == nullptr)
+            return nullptr;
+
+        return collidedButton;
     }
 }

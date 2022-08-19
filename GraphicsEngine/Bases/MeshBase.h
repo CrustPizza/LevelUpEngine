@@ -31,8 +31,12 @@ namespace GraphicsEngineSpace
 		int		materialIndex;
 		Vector	weights1;
 		Vector	weights2;
+		Vector	weights3;
+		Vector	weights4;
 		unsigned int	weightIndex1;
 		unsigned int	weightIndex2;
+		unsigned int	weightIndex3;
+		unsigned int	weightIndex4;
 		Vector	tangent;
 		Vector	binormal;
 	};

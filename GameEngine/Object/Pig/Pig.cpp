@@ -34,7 +34,7 @@ namespace GameEngineSpace
 		pbrModel->SetRoughness(0.0f);
 
 		prefab = pbrModel->GetPrefab();
-		prefab->SetAnimationKey("Skill");
+		prefab->SetAnimationKey("Idle");
 		this->model = model;
 
 		transform.position.x += 5.0f;
@@ -128,17 +128,17 @@ namespace GameEngineSpace
 		{
 			if (velocity[i] != 0.0f)
 			{
-				if (velocity[i] > 0.01f)
+				if (velocity[i] > 0.1f)
 				{
-					transform.position[i] += 0.01f;
-					velocity[i] -= 0.01f;
+					transform.position[i] += 0.1f;
+					velocity[i] -= 0.1f;
 
 					ret = true;
 				}
-				else if (velocity[i] < -0.01f)
+				else if (velocity[i] < -0.1f)
 				{
-					transform.position[i] -= 0.01f;
-					velocity[i] += 0.01f;
+					transform.position[i] -= 0.1f;
+					velocity[i] += 0.1f;
 
 					ret = true;
 				}

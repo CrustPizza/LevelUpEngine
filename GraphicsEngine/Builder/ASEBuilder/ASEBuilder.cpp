@@ -602,7 +602,7 @@ namespace GraphicsEngineSpace
 			// Texture
 			vertices[i].texCoord = { 0.0f, 0.0f, 0.0f, 0.0f };
 
-			if (texture.tVertex.empty() != true)
+			if (vertex.vertices[i].textureIndex < texture.tVertex.size())
 			{
 				vertices[i].texCoord[0] = texture.tVertex[vertex.vertices[i].textureIndex].x;
 				vertices[i].texCoord[1] = 1.0f - texture.tVertex[vertex.vertices[i].textureIndex].y;
@@ -610,6 +610,8 @@ namespace GraphicsEngineSpace
 
 			vertices[i].weightIndex1 = 0;
 			vertices[i].weightIndex2 = 0;
+			vertices[i].weightIndex3 = 0;
+			vertices[i].weightIndex4 = 0;
 
 			float sum = 0.0f;
 
@@ -621,8 +623,16 @@ namespace GraphicsEngineSpace
 				vertices[i].weightIndex2 |= (vertex.vertices[i].weightIndex[j + 4] & 0xff) << (8 * j);
 				vertices[i].weights2[j] = vertex.vertices[i].weights[j + 4];
 
+				vertices[i].weightIndex3 |= (vertex.vertices[i].weightIndex[j + 8] & 0xff) << (8 * j);
+				vertices[i].weights3[j] = vertex.vertices[i].weights[j + 8];
+
+				vertices[i].weightIndex4 |= (vertex.vertices[i].weightIndex[j + 12] & 0xff) << (8 * j);
+				vertices[i].weights4[j] = vertex.vertices[i].weights[j + 12];
+
 				sum += vertex.vertices[i].weights[j];
 				sum += vertex.vertices[i].weights[j + 4];
+				sum += vertex.vertices[i].weights[j + 8];
+				sum += vertex.vertices[i].weights[j + 12];
 			}
 
 			if (sum > 1.0f)
@@ -631,6 +641,8 @@ namespace GraphicsEngineSpace
 				{
 					vertices[i].weights1[j] /= sum;
 					vertices[i].weights2[j] /= sum;
+					vertices[i].weights3[j] /= sum;
+					vertices[i].weights4[j] /= sum;
 				}
 			}
 

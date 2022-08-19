@@ -73,13 +73,14 @@ namespace GraphicsEngineSpace
 			return;
 
 		auto screenPosition = GetScreenPosition();
+		auto screenScale = GetScreenScale();
 
 		Rect dest =
 		{
 			screenPosition.x,
 			screenPosition.y,
-			screenPosition.x + width * GetScale().x,
-			screenPosition.y + height * GetScale().y
+			screenPosition.x + width * screenScale.x,
+			screenPosition.y + height * screenScale.y
 		};
 
 		engine->DrawSprite(backBarTexture->GetTexture(), dest, back, screenPosition.z);
@@ -91,7 +92,7 @@ namespace GraphicsEngineSpace
 
 		case Direction::LEFT:
 		{
-			dest.right = dest.left + width * GetScale().x * percent;
+			dest.right = dest.left + width * screenScale.x * percent;
 			frontSrc.right = frontSrc.left + front.GetWidth() * percent;
 
 			break;
@@ -99,7 +100,7 @@ namespace GraphicsEngineSpace
 
 		case Direction::RIGHT:
 		{
-			dest.left = dest.right - width * GetScale().x * percent;
+			dest.left = dest.right - width * screenScale.x * percent;
 			frontSrc.left = frontSrc.right - front.GetWidth() * percent;
 
 			break;
@@ -107,7 +108,7 @@ namespace GraphicsEngineSpace
 
 		case Direction::UP:
 		{
-			dest.bottom = dest.top + height * GetScale().y * percent;
+			dest.bottom = dest.top + height * screenScale.y * percent;
 			frontSrc.bottom = frontSrc.top + front.GetHeight() * percent;
 
 			break;
@@ -115,7 +116,7 @@ namespace GraphicsEngineSpace
 
 		case Direction::DOWN:
 		{
-			dest.top = dest.bottom - height * GetScale().y * percent;
+			dest.top = dest.bottom - height * screenScale.y * percent;
 			frontSrc.top = frontSrc.bottom - front.GetHeight() * percent;
 
 			break;

@@ -345,6 +345,10 @@ namespace GraphicsEngineSpace
 		DrawTextColor(fpsStr, Vector{ 1.0f, 1.0f, 0.0f, }, Vector{ 10.0f, 10.0f }, 0.0f, Vector{ 1.5f, 1.5f });
 		DrawTextColor(dtStr, Vector{ 1.0f, 1.0f, 0.0f, }, Vector{ 10.0f, 40.0f }, 0.0f, Vector{ 1.5f, 1.5f });
 
+		std::wstring text = L"가나다라 ABCD 1234";
+
+		DrawTextColor("ColonnaMT", text, Vector{ 1.0f, 1.0f, 0.0f, }, Vector{ 10.0f, 70.0f }, 0.0f, Vector{ 1.5f, 1.5f });
+
 		if (showMRT == true)
 			graphicsEngine->DebugRender();
 	}

@@ -853,8 +853,12 @@ namespace GraphicsEngineSpace
 		skinningLayout->AddElements("TANGENT", 0, GraphicsFormat::Float_R32G32B32A32, 0, 48);
 		skinningLayout->AddElements("BLENDWEIGHT", 0, GraphicsFormat::Float_R32G32B32A32, 0, 64);
 		skinningLayout->AddElements("BLENDWEIGHT", 1, GraphicsFormat::Float_R32G32B32A32, 0, 80);
-		skinningLayout->AddElements("BLENDINDICES", 0, GraphicsFormat::UINT_R8G8B8A8, 0, 96);
-		skinningLayout->AddElements("BLENDINDICES", 1, GraphicsFormat::UINT_R8G8B8A8, 0, 100);
+		skinningLayout->AddElements("BLENDWEIGHT", 2, GraphicsFormat::Float_R32G32B32A32, 0, 96);
+		skinningLayout->AddElements("BLENDWEIGHT", 3, GraphicsFormat::Float_R32G32B32A32, 0, 112);
+		skinningLayout->AddElements("BLENDINDICES", 0, GraphicsFormat::UINT_R8G8B8A8, 0, 128);
+		skinningLayout->AddElements("BLENDINDICES", 1, GraphicsFormat::UINT_R8G8B8A8, 0, 132);
+		skinningLayout->AddElements("BLENDINDICES", 2, GraphicsFormat::UINT_R8G8B8A8, 0, 136);
+		skinningLayout->AddElements("BLENDINDICES", 3, GraphicsFormat::UINT_R8G8B8A8, 0, 140);
 
 		CreateVertexShader("SkinningModelVS", "Shader/SkinningModel/SkinningModelVS.hlsl", "main", "vs_5_0", skinningLayout);
 
@@ -893,8 +897,12 @@ namespace GraphicsEngineSpace
 		pbrSkinnedLayout->AddElements("TEXCOORD", 0, GraphicsFormat::Float_R32G32B32A32, 0, 32);
 		pbrSkinnedLayout->AddElements("BLENDWEIGHT", 0, GraphicsFormat::Float_R32G32B32A32, 0, 48);
 		pbrSkinnedLayout->AddElements("BLENDWEIGHT", 1, GraphicsFormat::Float_R32G32B32A32, 0, 64);
-		pbrSkinnedLayout->AddElements("BLENDINDICES", 0, GraphicsFormat::UINT_R8G8B8A8, 0, 80);
-		pbrSkinnedLayout->AddElements("BLENDINDICES", 1, GraphicsFormat::UINT_R8G8B8A8, 0, 84);
+		pbrSkinnedLayout->AddElements("BLENDWEIGHT", 2, GraphicsFormat::Float_R32G32B32A32, 0, 80);
+		pbrSkinnedLayout->AddElements("BLENDWEIGHT", 3, GraphicsFormat::Float_R32G32B32A32, 0, 96);
+		pbrSkinnedLayout->AddElements("BLENDINDICES", 0, GraphicsFormat::UINT_R8G8B8A8, 0, 112);
+		pbrSkinnedLayout->AddElements("BLENDINDICES", 1, GraphicsFormat::UINT_R8G8B8A8, 0, 116);
+		pbrSkinnedLayout->AddElements("BLENDINDICES", 2, GraphicsFormat::UINT_R8G8B8A8, 0, 120);
+		pbrSkinnedLayout->AddElements("BLENDINDICES", 3, GraphicsFormat::UINT_R8G8B8A8, 0, 124);
 
 		CreateVertexShader("PBRSkinnedVS", "Shader/PBRModel/PBRModelVS.hlsl", "SkinnedMain", "vs_5_0", pbrSkinnedLayout);
 
@@ -913,8 +921,12 @@ namespace GraphicsEngineSpace
 		pbrSkinnedNormalLayout->AddElements("TANGENT", 0, GraphicsFormat::Float_R32G32B32A32, 0, 48);
 		pbrSkinnedNormalLayout->AddElements("BLENDWEIGHT", 0, GraphicsFormat::Float_R32G32B32A32, 0, 64);
 		pbrSkinnedNormalLayout->AddElements("BLENDWEIGHT", 1, GraphicsFormat::Float_R32G32B32A32, 0, 80);
-		pbrSkinnedNormalLayout->AddElements("BLENDINDICES", 0, GraphicsFormat::UINT_R8G8B8A8, 0, 96);
-		pbrSkinnedNormalLayout->AddElements("BLENDINDICES", 1, GraphicsFormat::UINT_R8G8B8A8, 0, 100);
+		pbrSkinnedNormalLayout->AddElements("BLENDWEIGHT", 2, GraphicsFormat::Float_R32G32B32A32, 0, 96);
+		pbrSkinnedNormalLayout->AddElements("BLENDWEIGHT", 3, GraphicsFormat::Float_R32G32B32A32, 0, 112);
+		pbrSkinnedNormalLayout->AddElements("BLENDINDICES", 0, GraphicsFormat::UINT_R8G8B8A8, 0, 128);
+		pbrSkinnedNormalLayout->AddElements("BLENDINDICES", 1, GraphicsFormat::UINT_R8G8B8A8, 0, 132);
+		pbrSkinnedNormalLayout->AddElements("BLENDINDICES", 2, GraphicsFormat::UINT_R8G8B8A8, 0, 136);
+		pbrSkinnedNormalLayout->AddElements("BLENDINDICES", 3, GraphicsFormat::UINT_R8G8B8A8, 0, 140);
 
 		CreateVertexShader("PBRSkinnedNormalVS", "Shader/PBRModel/PBRModelVS.hlsl", "SkinnedNormalMain", "vs_5_0", pbrSkinnedNormalLayout);
 
@@ -935,8 +947,12 @@ namespace GraphicsEngineSpace
 		shadowSkinningLayout->AddElements("POSITION", 0, GraphicsFormat::Float_R32G32B32A32, 0, 0);
 		shadowSkinningLayout->AddElements("BLENDWEIGHT", 0, GraphicsFormat::Float_R32G32B32A32, 0, 16);
 		shadowSkinningLayout->AddElements("BLENDWEIGHT", 1, GraphicsFormat::Float_R32G32B32A32, 0, 32);
-		shadowSkinningLayout->AddElements("BLENDINDICES", 0, GraphicsFormat::UINT_R8G8B8A8, 0, 48);
-		shadowSkinningLayout->AddElements("BLENDINDICES", 1, GraphicsFormat::UINT_R8G8B8A8, 0, 52);
+		shadowSkinningLayout->AddElements("BLENDWEIGHT", 2, GraphicsFormat::Float_R32G32B32A32, 0, 48);
+		shadowSkinningLayout->AddElements("BLENDWEIGHT", 3, GraphicsFormat::Float_R32G32B32A32, 0, 64);
+		shadowSkinningLayout->AddElements("BLENDINDICES", 0, GraphicsFormat::UINT_R8G8B8A8, 0, 80);
+		shadowSkinningLayout->AddElements("BLENDINDICES", 1, GraphicsFormat::UINT_R8G8B8A8, 0, 84);
+		shadowSkinningLayout->AddElements("BLENDINDICES", 2, GraphicsFormat::UINT_R8G8B8A8, 0, 88);
+		shadowSkinningLayout->AddElements("BLENDINDICES", 3, GraphicsFormat::UINT_R8G8B8A8, 0, 92);
 
 		CreateVertexShader("ShadowSkinningMapVS", "Shader/Shadow/ShadowVS.hlsl", "SkinningMain", "vs_5_0", shadowSkinningLayout);
 	}

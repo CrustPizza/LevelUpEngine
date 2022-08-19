@@ -91,8 +91,9 @@ namespace GraphicsEngineSpace
 		}
 
 		auto screenPosition = GetScreenPosition();
+		auto screenScale = GetScreenScale();
 
-		engine->DrawSprite(texture, screenPosition.x, screenPosition.y, width, height, screenPosition.z);
+		engine->DrawSprite(texture, screenPosition.x, screenPosition.y, width * screenScale.x, height * screenScale.y, screenPosition.z);
 
 		for (auto* iter : child)
 		{

@@ -31,8 +31,8 @@ struct Vertex
 	int				next;
 	float			normal[4];
 	int				textureIndex;
-	unsigned int	weightIndex[8];
-	float			weights[8];
+	unsigned int	weightIndex[16];
+	float			weights[16];
 	unsigned int	materialID;
 };
 

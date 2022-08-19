@@ -426,8 +426,12 @@ namespace GraphicsEngineSpace
 			pbrLayout->AddElements("TEXCOORD", 0, GraphicsFormat::Float_R32G32B32A32, 0, 32);
 			pbrLayout->AddElements("BLENDWEIGHT", 0, GraphicsFormat::Float_R32G32B32A32, 0, 48);
 			pbrLayout->AddElements("BLENDWEIGHT", 1, GraphicsFormat::Float_R32G32B32A32, 0, 64);
-			pbrLayout->AddElements("BLENDINDICES", 0, GraphicsFormat::UINT_R8G8B8A8, 0, 80);
-			pbrLayout->AddElements("BLENDINDICES", 1, GraphicsFormat::UINT_R8G8B8A8, 0, 84);
+			pbrLayout->AddElements("BLENDWEIGHT", 2, GraphicsFormat::Float_R32G32B32A32, 0, 80);
+			pbrLayout->AddElements("BLENDWEIGHT", 3, GraphicsFormat::Float_R32G32B32A32, 0, 96);
+			pbrLayout->AddElements("BLENDINDICES", 0, GraphicsFormat::UINT_R8G8B8A8, 0, 112);
+			pbrLayout->AddElements("BLENDINDICES", 1, GraphicsFormat::UINT_R8G8B8A8, 0, 116);
+			pbrLayout->AddElements("BLENDINDICES", 2, GraphicsFormat::UINT_R8G8B8A8, 0, 120);
+			pbrLayout->AddElements("BLENDINDICES", 3, GraphicsFormat::UINT_R8G8B8A8, 0, 124);
 
 			vertexShader = factory->CreateVertexShader("PBRSkinnedVS", "Shader/PBRModel/PBRModelVS.hlsl", "SkinnedMain", "vs_5_0", pbrLayout);
 
@@ -454,8 +458,12 @@ namespace GraphicsEngineSpace
 			pbrLayout->AddElements("TANGENT", 0, GraphicsFormat::Float_R32G32B32A32, 0, 48);
 			pbrLayout->AddElements("BLENDWEIGHT", 0, GraphicsFormat::Float_R32G32B32A32, 0, 64);
 			pbrLayout->AddElements("BLENDWEIGHT", 1, GraphicsFormat::Float_R32G32B32A32, 0, 80);
-			pbrLayout->AddElements("BLENDINDICES", 0, GraphicsFormat::UINT_R8G8B8A8, 0, 96);
-			pbrLayout->AddElements("BLENDINDICES", 1, GraphicsFormat::UINT_R8G8B8A8, 0, 100);
+			pbrLayout->AddElements("BLENDWEIGHT", 2, GraphicsFormat::Float_R32G32B32A32, 0, 96);
+			pbrLayout->AddElements("BLENDWEIGHT", 3, GraphicsFormat::Float_R32G32B32A32, 0, 112);
+			pbrLayout->AddElements("BLENDINDICES", 0, GraphicsFormat::UINT_R8G8B8A8, 0, 128);
+			pbrLayout->AddElements("BLENDINDICES", 1, GraphicsFormat::UINT_R8G8B8A8, 0, 132);
+			pbrLayout->AddElements("BLENDINDICES", 2, GraphicsFormat::UINT_R8G8B8A8, 0, 136);
+			pbrLayout->AddElements("BLENDINDICES", 3, GraphicsFormat::UINT_R8G8B8A8, 0, 140);
 
 			vertexShader = factory->CreateVertexShader("PBRSkinnedNormalVS", "Shader/PBRModel/PBRModelVS.hlsl", "SkinnedNormalMain", "vs_5_0", pbrLayout);
 
@@ -590,8 +598,12 @@ namespace GraphicsEngineSpace
 			Vector texCoord;
 			Vector weights1;
 			Vector weights2;
+			Vector weights3;
+			Vector weights4;
 			unsigned int weightIndex1;
 			unsigned int weightIndex2;
+			unsigned int weightIndex3;
+			unsigned int weightIndex4;
 		};
 
 		prefab->CreateVertexBuffer<SkinnedPBRVertex>(factory, [&](const VertexData& data) -> SkinnedPBRVertex
@@ -602,8 +614,12 @@ namespace GraphicsEngineSpace
 				temp.texCoord = data.texCoord;
 				temp.weights1 = data.weights1;
 				temp.weights2 = data.weights2;
+				temp.weights3 = data.weights3;
+				temp.weights4 = data.weights4;
 				temp.weightIndex1 = data.weightIndex1;
 				temp.weightIndex2 = data.weightIndex2;
+				temp.weightIndex3 = data.weightIndex3;
+				temp.weightIndex4 = data.weightIndex4;
 
 				return temp;
 			});

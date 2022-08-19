@@ -147,6 +147,21 @@ namespace GraphicsEngineSpace
 			};
 		}
 
+		Vector GetScreenScale()
+		{
+			Vector ret = scale;
+
+			if (parent != nullptr)
+			{
+				const Vector& parentScreenScale = parent->GetScreenScale();
+
+				ret.x *= parentScreenScale.x;
+				ret.y *= parentScreenScale.y;
+			}
+
+			return ret;
+		}
+
 		Vector GetScreenPosition()
 		{
 			auto screenPosition = Vector::Zero;

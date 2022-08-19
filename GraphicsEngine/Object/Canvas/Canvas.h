@@ -44,5 +44,8 @@ namespace GraphicsEngineSpace
 
 		void Render(GraphicsEngineBase* engine) override;
 		virtual void Release();
+
+	private:
+		ButtonUI* FindCollidedButton(float mouseX, float mouseY, bool isClicked);
 	};
 }

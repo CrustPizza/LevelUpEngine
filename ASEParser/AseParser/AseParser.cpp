@@ -164,8 +164,12 @@ void ASEParser::SplitVertex()
 							vertex.vertices[index].normal[l] = normal.normals[i].vertexNormal[j][l];
 							vertex.vertices[index].weightIndex[l] = 0;
 							vertex.vertices[index].weightIndex[l + 4] = 0;
+							vertex.vertices[index].weightIndex[l + 8] = 0;
+							vertex.vertices[index].weightIndex[l + 12] = 0;
 							vertex.vertices[index].weights[l] = 0.0f;
 							vertex.vertices[index].weights[l + 4] = 0.0f;
+							vertex.vertices[index].weights[l + 8] = 0.0f;
+							vertex.vertices[index].weights[l + 12] = 0.0f;
 						}
 					}
 					else
@@ -175,8 +179,12 @@ void ASEParser::SplitVertex()
 							vertex.vertices[index].normal[l] = 0.0f;
 							vertex.vertices[index].weightIndex[l] = 0;
 							vertex.vertices[index].weightIndex[l + 4] = 0;
+							vertex.vertices[index].weightIndex[l + 8] = 0;
+							vertex.vertices[index].weightIndex[l + 12] = 0;
 							vertex.vertices[index].weights[l] = 0.0f;
 							vertex.vertices[index].weights[l + 4] = 0.0f;
+							vertex.vertices[index].weights[l + 8] = 0.0f;
+							vertex.vertices[index].weights[l + 12] = 0.0f;
 						}
 					}
 

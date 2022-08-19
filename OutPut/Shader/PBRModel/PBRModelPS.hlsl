@@ -63,7 +63,10 @@ PS_Output ConstVarMain(VS_Default_Output input)
 
 	float3 color = LightSurface(ViewVector, Normal, 3, LightColor, LightDirection, Albedo, Roughness, Metallic, AO );
 
-	float2 shadowTexCoord = input.ShadowDepth.xy / input.ShadowDepth.w;
+	float NdotL = dot(Normal, -DLightDirection);
+	float4 shadowDepth = input.ShadowDepth;
+
+	float2 shadowTexCoord = shadowDepth.xy / shadowDepth.w;
 	shadowTexCoord.y *= -1;
 	shadowTexCoord = shadowTexCoord * 0.5f + 0.5f;
 	float depthFormShadowMap = ShadowMap.Sample( Sampler, shadowTexCoord ).r;
@@ -95,7 +98,10 @@ PS_Output AlbedoMain(VS_Default_Output input)
 
 	float3 color = LightSurface( ViewVector, Normal, 3, LightColor, LightDirection, AlbedoColor, Roughness, Metallic, AO );
 
-	float2 shadowTexCoord = input.ShadowDepth.xy / input.ShadowDepth.w;
+	float NdotL = dot(Normal, -DLightDirection);
+	float4 shadowDepth = input.ShadowDepth;
+
+	float2 shadowTexCoord = shadowDepth.xy / shadowDepth.w;
 	shadowTexCoord.y *= -1;
 	shadowTexCoord = shadowTexCoord * 0.5f + 0.5f;
 	float depthFormShadowMap = ShadowMap.Sample(Sampler, shadowTexCoord).r;
@@ -136,7 +142,10 @@ PS_Output AlbedoNormalMain(VS_Normal_Output input)
 
 	float3 color = LightSurface( ViewVector, Normal, 3, LightColor, LightDirection, AlbedoColor, Roughness, Metallic, AO );
 
-	float2 shadowTexCoord = input.ShadowDepth.xy / input.ShadowDepth.w;
+	float NdotL = dot(Normal, -DLightDirection);
+	float4 shadowDepth = input.ShadowDepth;
+
+	float2 shadowTexCoord = shadowDepth.xy / shadowDepth.w;
 	shadowTexCoord.y *= -1;
 	shadowTexCoord = shadowTexCoord * 0.5f + 0.5f;
 	float depthFormShadowMap = ShadowMap.Sample(Sampler, shadowTexCoord).r;
@@ -149,7 +158,7 @@ PS_Output AlbedoNormalMain(VS_Normal_Output input)
 	output.screen = float4(color, Alpha);
 	output.depth = input.Position.z;
 	output.albedo = float4(AlbedoColor, 1.0f);
-	output.normal = float4(input.Normal, 1.0f);
+	output.normal = float4(N, 1.0f);
 	output.worldPos = float4(input.WorldPos, 1.0f);
 	output.tangent = float4(Normal, 1.0f);
 

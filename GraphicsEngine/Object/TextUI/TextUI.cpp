@@ -38,7 +38,7 @@ namespace GraphicsEngineSpace
 		if (isEnable != true || engine == nullptr)
 			return;
 
-		engine->DrawTextColor(text, color, GetScreenPosition(), 0.0f, Vector{ fontSize / 14.0f, fontSize / 14.0f } * scale);
+		engine->DrawTextColor(text, color, GetScreenPosition(), 0.0f, Vector{ fontSize / 14.0f, fontSize / 14.0f } * GetScreenScale());
 
 		for (auto* iter : child)
 		{
