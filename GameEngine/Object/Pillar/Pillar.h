@@ -35,6 +35,5 @@ namespace GameEngineSpace
 
 		void SetMetallic(float metallic);
 		void SetRoughness(float roughness);
-		void SetLight(const Vector& dir, const Vector& color, int index);
 	};
 }

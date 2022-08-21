@@ -69,13 +69,4 @@ namespace GameEngineSpace
 		prefab->PrepareRender(transform.GetWorldTransform(), tick);
 		prefab->Render(engine);
 	}
-
-	void Cube::SetLight(const Vector& dir, const Vector& color, int index)
-	{
-		if (pbrModel == nullptr)
-			return;
-
-		pbrModel->SetLightDirection(dir, index);
-		pbrModel->SetLightColor(color, index);
-	}
 }

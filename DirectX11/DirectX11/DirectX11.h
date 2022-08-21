@@ -86,6 +86,7 @@ namespace DX11
 		RenderTexture* albedoBuffer;
 		RenderTexture* normalBuffer;
 		RenderTexture* worldPosBuffer;
+		RenderTexture* tangentNormalBuffer;
 
 		// Shadow
 		RenderTexture* shadowDepthBuffer;

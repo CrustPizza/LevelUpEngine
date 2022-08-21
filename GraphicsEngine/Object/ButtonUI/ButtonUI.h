@@ -3,7 +3,7 @@
 *	Button UI.h					*
 *								*
 *	Created : 2022/08/10		*
-*	Updated : 2022/08/10		*
+*	Updated : 2022/08/20		*
 *********************************/
 
 #pragma once
@@ -23,7 +23,7 @@ namespace GraphicsEngineSpace
 		DOWN,
 		UP,
 		PRESS,
-		HOVER
+		HOVER,
 	};
 
 	class ButtonUI : public UIBase
@@ -34,6 +34,8 @@ namespace GraphicsEngineSpace
 		ButtonState buttonState;
 
 		std::function<void(void)> clickEvent;
+		std::function<void(void)> hoverEvent;
+		std::function<void(void)> hoverOutEvent;
 
 	protected:
 		ButtonUI();
@@ -45,6 +47,8 @@ namespace GraphicsEngineSpace
 		virtual void SetPressTexture(TextureBase* texture);
 		virtual void SetButtonState(ButtonState state);
 		virtual void SetClickEvent(std::function<void(void)> clickEvent);
+		virtual void SetHoverEvent(std::function<void(void)> hoverEvent);
+		virtual void SetHoverOutEvent(std::function<void(void)> hoverOutEvent);
 
 		virtual ButtonState GetButtonState();
 

@@ -3,7 +3,7 @@
 *	Text UI.h					*
 *								*
 *	Created : 2022/08/08		*
-*	Updated : 2022/08/09		*
+*	Updated : 2022/08/20		*
 *********************************/
 
 #pragma once
@@ -18,7 +18,8 @@ namespace GraphicsEngineSpace
 
 	class TextUI : public UIBase
 	{
-		std::string text;
+		std::wstring text;
+		std::string font;
 		Vector color;
 		float fontSize;
 
@@ -28,7 +29,12 @@ namespace GraphicsEngineSpace
 
 	public:
 		virtual void SetText(const std::string& text);
+		virtual void SetText(const std::wstring& text);
 		virtual void SetColor(const Vector& color);
+		virtual void SetFont(const std::string& fontName);
+		virtual void SetFontSize(float fontSize);
+
+		virtual std::string GetText();
 
 	protected:
 		void Render(GraphicsEngineBase* engine);

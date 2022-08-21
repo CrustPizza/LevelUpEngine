@@ -26,15 +26,28 @@ cbuffer cbDirectionalLight : register( b1 )
 	float3 DLightDirection;
 	float4 DLightDiffuse;
 	float4 DLightAmbient;
+	float4 DLightColor;
 	float  DLightSpecularPower;
 }
 
-/* Const PBR Parameter */
-cbuffer cbPBRParmeter : register( b2 )
+/* Point Light */
+struct PointLight
 {
-	float3 LightDirection[3];
-	float3 LightColor[3];
+	float4 PLightPosition;
+	float4 PLightDiffuse;
+	float4 PLightColor;
+	float  PLightSpecularPower;
+	float  PLightIntensity;
+};
 
+cbuffer cbPointLight : register( b2 )
+{
+	PointLight PointLights[20];
+}
+
+/* Const PBR Parameter */
+cbuffer cbPBRParmeter : register( b3 )
+{
 	float3 Albedo;
 	float  Alpha;
 	float  Metallic;
@@ -61,7 +74,7 @@ PS_Output ConstVarMain(VS_Default_Output input)
 	const float3 Normal = normalize( input.Normal );
 	const float AO = 1.0f;
 
-	float3 color = LightSurface(ViewVector, Normal, 3, LightColor, LightDirection, Albedo, Roughness, Metallic, AO );
+	float3 color = LightSurface(ViewVector, Normal, 21, LightColor, LightDirection, Albedo, Roughness, Metallic, AO );
 
 	float NdotL = dot(Normal, -DLightDirection);
 	float4 shadowDepth = input.ShadowDepth;

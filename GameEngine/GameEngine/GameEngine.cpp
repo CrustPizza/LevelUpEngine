@@ -209,13 +209,24 @@ namespace GameEngineSpace
 		vertexShader = resourceManager->GetShader("SkinningModelVS");
 		BufferBase* boneBuffer = resourceManager->GetBuffer("BoneMatrixCB");
 
-		ModelBase* pigModel = graphicsFactory->CreateModelFromASEFile("Boss", "Resources/Model/Boss_Idle.ase");
+		ModelBase* pigModel = graphicsFactory->CreateModelFromASEFile("Boss", "Resources/Model/Boss.ase");
 		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_idle.ase", "Idle");
+		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_attack1.ase", "Attack1");
+		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_attack2.ase", "Attack2");
+		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_attack3.ase", "Attack3");
+		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_badak.ase", "Badak");
+		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_count.ase", "Count");
+		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_death.ase", "Death");
+		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_doljin_start.ase", "DoljinStart");
+		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_doljin_run.ase", "DoljinRun");
+		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_jump1.ase", "Jump1");
+		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_jump2.ase", "Jump2");
+		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_pohyo.ase", "Pohyo");
 		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_run.ase", "Run");
 		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_stun.ase", "Stun");
 		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_tanmak.ase", "Tanmak");
-		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_attack_11.ase", "Attack11");
-		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_doljin.ase", "Doljin");
+		//pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_attack_11.ase", "Attack11");
+		//pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_doljin.ase", "Doljin");
 		//ModelBase* pigIdleAnimation = graphicsFactory->CreateAnimationFromASEFile("ASEPig", "Resources/Model/babypig_walk_6x.ASE", "Walk");
 
 		pig = new Pig;
@@ -231,11 +242,16 @@ namespace GameEngineSpace
 			pigs[i]->AddForce(Vector::UnitX * VectorReplicate(i * 40));
 		}
 
-		pigs[0]->SetAnimKey("Run");
-		pigs[1]->SetAnimKey("Stun");
-		pigs[2]->SetAnimKey("Tanmak");
-		pigs[3]->SetAnimKey("Attack11");
-		pigs[3]->SetAnimKey("Doljin");
+		pigs[0]->SetAnimKey("Pohyo");
+		pigs[1]->SetAnimKey("Run");
+		pigs[2]->SetAnimKey("Stun");
+		pigs[3]->SetAnimKey("Tanmak");
+		pigs[4]->SetAnimKey("Count");
+		pigs[5]->SetAnimKey("Death");
+		pigs[6]->SetAnimKey("DoljinStart");
+		pigs[7]->SetAnimKey("DoljinRun");
+		pigs[8]->SetAnimKey("Jump1");
+		pigs[9]->SetAnimKey("Jump2");
 
 		skyBox = graphicsFactory->CreateSkyBox("SkyBox");
 		//skyBox->SetTexture(graphicsFactory->CreateTexture("LobbyCubeMap", "Resources/Texture/lobbycube.dds"));
@@ -503,9 +519,6 @@ namespace GameEngineSpace
 		else
 			pLightColor = pLight->color * VectorReplicate(1.0f - distance / pLight->intensity);
 
-		pig->SetLight(Vector::UnitZ * MatrixRotationFromVector(dLight->rotation), dLight->color, 0);
-		pig->SetLight(pLightVector, pLightColor, 1);
-
 		pLightVector = pbrGenji->GetTransform().GetWorldTransform()[3] - pLight->position;
 		distance = Vector3Length(pLightVector);
 
@@ -520,9 +533,6 @@ namespace GameEngineSpace
 			pLightColor = Vector::Zero;
 		else
 			pLightColor = pLight->color * VectorReplicate(1.0f - distance / pLight->intensity);
-
-		pbrGenji->SetLight(Vector::UnitZ * MatrixRotationFromVector(dLight->rotation), dLight->color, 0);
-		pbrGenji->SetLight(pLightVector, pLightColor, 1);
 
 		for (int i = 0; i < 10; i++)
 		{
@@ -542,8 +552,6 @@ namespace GameEngineSpace
 				pLightColor = pLight->color * VectorReplicate(1.0f - distance / pLight->intensity);
 
 			pigs[i]->Update(Time::instance.deltaTime);
-			pigs[i]->SetLight(Vector::UnitZ * MatrixRotationFromVector(dLight->rotation), dLight->color, 0);
-			pigs[i]->SetLight(pLightVector, pLightColor, 1);
 		}
 
 		pLightVector = pbrCube->GetTransform().GetWorldTransform()[3] - pLight->position;
@@ -560,9 +568,6 @@ namespace GameEngineSpace
 			pLightColor = Vector::Zero;
 		else
 			pLightColor = pLight->color * VectorReplicate(1.0f - distance / pLight->intensity);
-
-		pbrCube->SetLight(Vector::UnitZ * MatrixRotationFromVector(dLight->rotation), dLight->color, 0);
-		pbrCube->SetLight(pLightVector, pLightColor, 1);
 
 		using GraphicsEngineSpace::HorizontalLocation;
 		using GraphicsEngineSpace::VerticalLocation;

@@ -56,6 +56,9 @@ namespace GraphicsEngineSpace
 			return nullptr;
 		}
 
+		if (animationKey.length() > 0)
+			newModel->AddAnimation(animationKey);
+
 		return resourceManager->GetModel(name);
 	}
 
@@ -90,13 +93,15 @@ namespace GraphicsEngineSpace
 
 		if (newAnimation == nullptr)
 		{
-			animationModel->Release();
+			newAnimation->Release();
 
 			return nullptr;
 		}
 
 		aseBuilder.MergeAnimation(animationModel, newAnimation);
 		delete newAnimation;
+
+		animationModel->AddAnimation(animationKey);
 
 		return animationModel;
 	}
@@ -728,6 +733,8 @@ namespace GraphicsEngineSpace
 			return nullptr;
 		}
 
+		newCanvas->SetName(name);
+
 		return resourceManager->GetCanvas(name);
 	}
 
@@ -793,8 +800,8 @@ namespace GraphicsEngineSpace
 		CreateConstantBuffer("LegacyMaterialCB", USAGE::DEFAULT, 0, sizeof(Vector) * 3);
 
 		/* Light Buffer */
-		CreateConstantBuffer("DirectionalLightCB", USAGE::DEFAULT, 0, sizeof(Vector) * 4);
-		CreateConstantBuffer("PointLightCB", USAGE::DEFAULT, 0, sizeof(Vector) * 3);
+		CreateConstantBuffer("DirectionalLightCB", USAGE::DEFAULT, 0, sizeof(Vector) * 5);
+		CreateConstantBuffer("PointLightCB", USAGE::DEFAULT, 0, sizeof(Matrix) * 20);
 
 		/* Bone Matrix Buffer */
 		CreateConstantBuffer("BoneMatrixCB", USAGE::DEFAULT, 0, sizeof(Matrix) * 64);

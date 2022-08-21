@@ -20,33 +20,11 @@ namespace GraphicsEngineSpace
 		PBR_PSParameter.albedo[2] = 1.0f;
 		PBR_PSParameter.metallic = 0.5f;
 		PBR_PSParameter.roughness = 0.2f;
-
-		for (int i = 0; i < 3; i++)
-		{
-			PBR_PSParameter.lightDirection[i] = -Vector::UnitY;
-			PBR_PSParameter.lightColor[i] = Vector::Zero;
-		}
 	}
 
 	PBRModel::~PBRModel()
 	{
 
-	}
-
-	void PBRModel::SetLightDirection(const Vector& lightDirection, int index)
-	{
-		if (index < 0 || 2 < index)
-			return;
-
-		PBR_PSParameter.lightDirection[index] = lightDirection;
-	}
-
-	void PBRModel::SetLightColor(const Vector& lightColor, int index)
-	{
-		if (index < 0 || 2 < index)
-			return;
-
-		PBR_PSParameter.lightColor[index] = lightColor;
 	}
 
 	void PBRModel::SetPrefab(PrefabBase* prefab)

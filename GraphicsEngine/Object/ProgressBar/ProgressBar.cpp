@@ -72,6 +72,8 @@ namespace GraphicsEngineSpace
 		if (isEnable != true || engine == nullptr)
 			return;
 
+		engine->GraphicsDebugBeginEvent(name);
+
 		auto screenPosition = GetScreenPosition();
 		auto screenScale = GetScreenScale();
 
@@ -131,5 +133,7 @@ namespace GraphicsEngineSpace
 			if (iter != nullptr)
 				iter->Render(engine);
 		}
+
+		engine->GraphicsDebugEndEvent();
 	}
 }
