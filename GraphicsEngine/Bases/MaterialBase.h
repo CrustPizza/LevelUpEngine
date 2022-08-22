@@ -21,7 +21,10 @@ namespace GraphicsEngineSpace
 		DIFFUSE,
 		SPECULAR,
 		NORMAL,
-		SHINE
+		SHINE,
+		METALLIC,
+		ROUGHNESS,
+		AMBIENTOCCLUSION
 	};
 
 	struct MapData
@@ -55,7 +58,7 @@ namespace GraphicsEngineSpace
 			, material{} {}
 		virtual ~MaterialBase() = default;
 
-		const MaterialData& GetMaterialData() { return material; }
+		MaterialData& GetMaterialData() { return material; }
 
 		void SetMaterial(MaterialData material) { this->material = material; }
 	};

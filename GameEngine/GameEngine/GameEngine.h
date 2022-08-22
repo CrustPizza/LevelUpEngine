@@ -17,6 +17,7 @@
 #include "Object/Pillar/Pillar.h"
 #include "Object/Mannequin/Mannequin.h"
 #include "Object/Ely/Ely.h"
+#include "Object/Heracles/Heracles.h"
 
 namespace GameEngineSpace
 {
@@ -61,6 +62,8 @@ namespace GameEngineSpace
 		Genji* pbrGenji;
 		Pig* pig;
 		Pig* pigs[10];
+
+		Heracles* heracles;
 
 		GraphicsEngineSpace::DirectionalLight* dLight;
 

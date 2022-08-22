@@ -576,6 +576,7 @@ namespace GraphicsEngineSpace
 
 		return resourceManager->GetPBRModel(name);
 	}
+
 	PBRModel* Factory::CreateSkinningAlbedoNormalModel(const std::string& name, ModelBase* model)
 	{
 		if (graphicsFactory == nullptr || resourceManager == nullptr || model == nullptr)
@@ -584,6 +585,72 @@ namespace GraphicsEngineSpace
 		PBRBuilder builder;
 
 		PBRModel* newPBRModel = builder.CreateSkinningAlbedoNormalModel(name, this, model);
+
+		if (newPBRModel == nullptr)
+			return nullptr;
+
+		if (resourceManager->AddPBRModel(name, newPBRModel) != true)
+		{
+			newPBRModel->Release();
+
+			return nullptr;
+		}
+
+		return resourceManager->GetPBRModel(name);
+	}
+
+	PBRModel* Factory::CreateWithoutAOStaticModel(const std::string& name, ModelBase* model)
+	{
+		if (graphicsFactory == nullptr || resourceManager == nullptr || model == nullptr)
+			return nullptr;
+
+		PBRBuilder builder;
+
+		PBRModel* newPBRModel = builder.CreateWithoutAOStaticModel(name, this, model);
+
+		if (newPBRModel == nullptr)
+			return nullptr;
+
+		if (resourceManager->AddPBRModel(name, newPBRModel) != true)
+		{
+			newPBRModel->Release();
+
+			return nullptr;
+		}
+
+		return resourceManager->GetPBRModel(name);
+	}
+
+	PBRModel* Factory::CreateWithoutAOModel(const std::string& name, ModelBase* model)
+	{
+		if (graphicsFactory == nullptr || resourceManager == nullptr || model == nullptr)
+			return nullptr;
+
+		PBRBuilder builder;
+
+		PBRModel* newPBRModel = builder.CreateWithoutAOModel(name, this, model);
+
+		if (newPBRModel == nullptr)
+			return nullptr;
+
+		if (resourceManager->AddPBRModel(name, newPBRModel) != true)
+		{
+			newPBRModel->Release();
+
+			return nullptr;
+		}
+
+		return resourceManager->GetPBRModel(name);
+	}
+
+	PBRModel* Factory::CreateAllTextureModel(const std::string& name, ModelBase* model)
+	{
+		if (graphicsFactory == nullptr || resourceManager == nullptr || model == nullptr)
+			return nullptr;
+
+		PBRBuilder builder;
+
+		PBRModel* newPBRModel = builder.CreateAllTextureModel(name, this, model);
 
 		if (newPBRModel == nullptr)
 			return nullptr;
@@ -936,8 +1003,14 @@ namespace GraphicsEngineSpace
 		pbrSkinnedNormalLayout->AddElements("BLENDINDICES", 3, GraphicsFormat::UINT_R8G8B8A8, 0, 140);
 
 		CreateVertexShader("PBRSkinnedNormalVS", "Shader/PBRModel/PBRModelVS.hlsl", "SkinnedNormalMain", "vs_5_0", pbrSkinnedNormalLayout);
-
+		
 		resourceManager->SubLayout("PBRSkinnedNormalLayout");
+		
+		// Without AO
+		CreatePixelShader("PBRWithoutAOPS", "Shader/PBRModel/PBRModelPS.hlsl", "WithoutAOMain", "ps_5_0");
+
+		// All Texture Model
+		CreatePixelShader("PBRAllTexturePS", "Shader/PBRModel/PBRModelPS.hlsl", "AllTextureMain", "ps_5_0");
 
 		/* Shadow Map Shader */
 		LayoutBase* shadowLayout = CreateLayout("ShadowMapLayout");

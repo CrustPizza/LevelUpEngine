@@ -167,6 +167,7 @@
     <ClCompile Include="Application\Application.cpp" />
     <ClCompile Include="Application\Windows\WindowConstructor.cpp" />
     <ClCompile Include="Camera\Camera.cpp" />
+    <ClCompile Include="Object\Heracles\Heracles.cpp" />
     <ClCompile Include="Object\Ely\Ely.cpp" />
     <ClCompile Include="Object\Mannequin\Mannequin.cpp" />
     <ClCompile Include="Object\Cube\Cube.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="Application\Application.h" />
     <ClInclude Include="Application\Windows\WindowConstructor.h" />
     <ClInclude Include="Camera\Camera.h" />
+    <ClInclude Include="Object\Heracles\Heracles.h" />
     <ClInclude Include="Object\Ely\Ely.h" />
     <ClInclude Include="Object\Mannequin\Mannequin.h" />
     <ClInclude Include="Object\Cube\Cube.h" />

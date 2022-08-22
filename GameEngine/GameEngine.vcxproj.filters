@@ -43,6 +43,7 @@
     <ClCompile Include="Object\Pillar\Pillar.cpp" />
     <ClCompile Include="Object\Mannequin\Mannequin.cpp" />
     <ClCompile Include="Object\Ely\Ely.cpp" />
+    <ClCompile Include="Object\Heracles\Heracles.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameEngineFramework.h" />
@@ -87,6 +88,7 @@
     <ClInclude Include="Object\Pillar\Pillar.h" />
     <ClInclude Include="Object\Mannequin\Mannequin.h" />
     <ClInclude Include="Object\Ely\Ely.h" />
+    <ClInclude Include="Object\Heracles\Heracles.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Application">

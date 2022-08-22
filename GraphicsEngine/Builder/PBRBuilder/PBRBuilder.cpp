@@ -332,6 +332,168 @@ namespace GraphicsEngineSpace
 		return newPBRModel;
 	}
 
+	PBRModel* PBRBuilder::CreateWithoutAOStaticModel(const std::string& name, Factory* factory, ModelBase* model)
+	{
+		PBRModel* newPBRModel = SetStandard(name, factory, model);
+
+		if (newPBRModel == nullptr)
+			return nullptr;
+
+		/* Vertex Shader */
+		ShaderBase* vertexShader = GetNormalVS(factory);
+
+		/* Pixel Shader */
+		ShaderBase* pixelShader = GetWithoutAOPS(factory);
+
+		/* Parameter Buffer */
+
+		// VS Parameter
+		BufferBase* paramBuffer = GetVSParameterCB(factory);
+
+		ConstantBufferSetting vsParamBufferOption;
+
+		vsParamBufferOption.buffer = paramBuffer;
+		vsParamBufferOption.slot = 2;
+		vsParamBufferOption.type = ShaderType::VERTEX;
+		vsParamBufferOption.data = &newPBRModel->PBR_VSParameter;
+
+		// PS Parameter
+		paramBuffer = GetPSParameterCB(factory);
+
+		ConstantBufferSetting psParamBufferOption;
+
+		psParamBufferOption.buffer = paramBuffer;
+		psParamBufferOption.slot = 3;
+		psParamBufferOption.type = ShaderType::PIXEL;
+		psParamBufferOption.data = &newPBRModel->PBR_PSParameter;
+
+		newPBRModel->GetPrefab()->SetVertexShader(vertexShader);
+		newPBRModel->GetPrefab()->SetPixelShader(pixelShader);
+		newPBRModel->GetPrefab()->AddOnceBuffer(vsParamBufferOption);
+		newPBRModel->GetPrefab()->AddOnceBuffer(psParamBufferOption);
+
+		/* Vertex Buffer */
+		CreateSkinnedNormalVB(factory, newPBRModel->GetPrefab());
+
+		return newPBRModel;
+	}
+
+	PBRModel* PBRBuilder::CreateWithoutAOModel(const std::string& name, Factory* factory, ModelBase* model)
+	{
+		PBRModel* newPBRModel = SetStandard(name, factory, model);
+
+		if (newPBRModel == nullptr)
+			return nullptr;
+
+		/* Vertex Shader */
+		ShaderBase* vertexShader = GetSkinnedNormalVS(factory);
+
+		/* Pixel Shader */
+		ShaderBase* pixelShader = GetWithoutAOPS(factory);
+
+		/* Parameter Buffer */
+
+		// VS Parameter
+		BufferBase* paramBuffer = GetVSParameterCB(factory);
+
+		ConstantBufferSetting vsParamBufferOption;
+
+		vsParamBufferOption.buffer = paramBuffer;
+		vsParamBufferOption.slot = 2;
+		vsParamBufferOption.type = ShaderType::VERTEX;
+		vsParamBufferOption.data = &newPBRModel->PBR_VSParameter;
+
+		// PS Parameter
+		paramBuffer = GetPSParameterCB(factory);
+
+		ConstantBufferSetting psParamBufferOption;
+
+		psParamBufferOption.buffer = paramBuffer;
+		psParamBufferOption.slot = 3;
+		psParamBufferOption.type = ShaderType::PIXEL;
+		psParamBufferOption.data = &newPBRModel->PBR_PSParameter;
+
+		// Bone Matrix Buffer
+		BufferBase* boneBuffer = GetBoneMatrixCB(factory);
+
+		ConstantBufferSetting boneMatrixElements;
+
+		boneMatrixElements.buffer = boneBuffer;
+		boneMatrixElements.slot = 3;
+		boneMatrixElements.type = ShaderType::VERTEX;
+		boneMatrixElements.data = model->GetBoneMatrix();
+
+		newPBRModel->GetPrefab()->SetVertexShader(vertexShader);
+		newPBRModel->GetPrefab()->SetPixelShader(pixelShader);
+		newPBRModel->GetPrefab()->AddOnceBuffer(vsParamBufferOption);
+		newPBRModel->GetPrefab()->AddOnceBuffer(psParamBufferOption);
+		newPBRModel->GetPrefab()->AddOnceBuffer(boneMatrixElements);
+
+		/* Vertex Buffer */
+		newPBRModel->GetPrefab()->SetSkinning(true);
+		CreateSkinnedNormalVB(factory, newPBRModel->GetPrefab());
+
+		return newPBRModel;
+	}
+
+	PBRModel* PBRBuilder::CreateAllTextureModel(const std::string& name, Factory* factory, ModelBase* model)
+	{
+		PBRModel* newPBRModel = SetStandard(name, factory, model);
+
+		if (newPBRModel == nullptr)
+			return nullptr;
+
+		/* Vertex Shader */
+		ShaderBase* vertexShader = GetSkinnedNormalVS(factory);
+
+		/* Pixel Shader */
+		ShaderBase* pixelShader = GetAllTexturePS(factory);
+
+		/* Parameter Buffer */
+
+		// VS Parameter
+		BufferBase* paramBuffer = GetVSParameterCB(factory);
+
+		ConstantBufferSetting vsParamBufferOption;
+
+		vsParamBufferOption.buffer = paramBuffer;
+		vsParamBufferOption.slot = 2;
+		vsParamBufferOption.type = ShaderType::VERTEX;
+		vsParamBufferOption.data = &newPBRModel->PBR_VSParameter;
+
+		// PS Parameter
+		paramBuffer = GetPSParameterCB(factory);
+
+		ConstantBufferSetting psParamBufferOption;
+
+		psParamBufferOption.buffer = paramBuffer;
+		psParamBufferOption.slot = 3;
+		psParamBufferOption.type = ShaderType::PIXEL;
+		psParamBufferOption.data = &newPBRModel->PBR_PSParameter;
+
+		// Bone Matrix Buffer
+		BufferBase* boneBuffer = GetBoneMatrixCB(factory);
+
+		ConstantBufferSetting boneMatrixElements;
+
+		boneMatrixElements.buffer = boneBuffer;
+		boneMatrixElements.slot = 3;
+		boneMatrixElements.type = ShaderType::VERTEX;
+		boneMatrixElements.data = model->GetBoneMatrix();
+
+		newPBRModel->GetPrefab()->SetVertexShader(vertexShader);
+		newPBRModel->GetPrefab()->SetPixelShader(pixelShader);
+		newPBRModel->GetPrefab()->AddOnceBuffer(vsParamBufferOption);
+		newPBRModel->GetPrefab()->AddOnceBuffer(psParamBufferOption);
+		newPBRModel->GetPrefab()->AddOnceBuffer(boneMatrixElements);
+
+		/* Vertex Buffer */
+		newPBRModel->GetPrefab()->SetSkinning(true);
+		CreateSkinnedNormalVB(factory, newPBRModel->GetPrefab());
+
+		return newPBRModel;
+	}
+
 	PBRModel* PBRBuilder::SetStandard(const std::string& name, Factory* factory, ModelBase* model)
 	{
 		if (factory == nullptr)
@@ -513,6 +675,36 @@ namespace GraphicsEngineSpace
 		if (pixelShader == nullptr)
 		{
 			pixelShader = factory->CreatePixelShader("PBRAlbedoNormalPS", "Shader/PBRModel/PBRModelPS.hlsl", "AlbedoNormalMain", "ps_5_0");
+
+			if (pixelShader == nullptr)
+				return nullptr;
+		}
+
+		return pixelShader;
+	}
+
+	ShaderBase* PBRBuilder::GetWithoutAOPS(Factory* factory)
+	{
+		ShaderBase* pixelShader = factory->resourceManager->GetShader("PBRWithoutAOPS");
+
+		if (pixelShader == nullptr)
+		{
+			pixelShader = factory->CreatePixelShader("PBRWithoutAOPS", "Shader/PBRModel/PBRModelPS.hlsl", "WithoutAOMain", "ps_5_0");
+
+			if (pixelShader == nullptr)
+				return nullptr;
+		}
+
+		return pixelShader;
+	}
+
+	ShaderBase* PBRBuilder::GetAllTexturePS(Factory* factory)
+	{
+		ShaderBase* pixelShader = factory->resourceManager->GetShader("PBRAllTexturePS");
+
+		if (pixelShader == nullptr)
+		{
+			pixelShader = factory->CreatePixelShader("PBRAllTexturePS", "Shader/PBRModel/PBRModelPS.hlsl", "AllTextureMain", "ps_5_0");
 
 			if (pixelShader == nullptr)
 				return nullptr;

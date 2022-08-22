@@ -27,14 +27,15 @@ namespace GameEngineSpace
 	{
 		static int ID = 0;
 
-		pbrModel = factory->CreateAlbedoModel("PillarPBR_" + std::to_string(ID++), model);
+		pbrModel = factory->CreateWithoutAOStaticModel("PillarPBR_" + std::to_string(ID++), model);
 		pbrModel->SetAlpha(1.0f);
-		pbrModel->SetMetallic(0.5f);
-		pbrModel->SetRoughness(0.2f);
 
 		prefab = pbrModel->GetPrefab();
 		this->model = model;
 		this->model->SetAnimationKey("Idle");
+
+		transform.position.x += 10.0f;
+		transform.position.z -= 20.0f;
 	}
 
 	void Pillar::Update(float tick)

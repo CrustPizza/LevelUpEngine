@@ -7,8 +7,8 @@
 *********************************/
 
 /* IBL Texture */
-TextureCube<float3> Radiance   : register( t4 );
-TextureCube<float3> Irradiance : register( t5 );
+TextureCube<float3> Radiance   : register( t5 );
+TextureCube<float3> Irradiance : register( t6 );
 
 /* Sampler */
 sampler   Sampler    : register( s0 );

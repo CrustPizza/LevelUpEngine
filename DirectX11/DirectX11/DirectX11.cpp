@@ -616,6 +616,10 @@ namespace DX11
 	{
 		annotation->BeginEvent(_T("Shadow Map"));
 
+		ID3D11ShaderResourceView* null = nullptr;
+
+		deviceContext->PSSetShaderResources(7, 1, &null);
+
 		deviceContext->ClearDepthStencilView(shadowDepthView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 		shadowDepthBuffer->ClearRenderTargetView(deviceContext, shadowDepthView, DirectX::Colors::Black);
 		shadowDepthBuffer->OMSetRenderTarget(deviceContext, shadowDepthView);
@@ -624,8 +628,6 @@ namespace DX11
 
 	void DirectX11::EndShadowRender()
 	{
-		annotation->EndEvent();
-
 		ID3D11RenderTargetView* mrt[] =
 		{
 			backScreen->GetRenderTargetView(),
@@ -638,11 +640,14 @@ namespace DX11
 
 		deviceContext->OMSetRenderTargets(ARRAYSIZE(mrt), mrt, depthView);
 
-		auto shadowMapSRV = shadowDepthBuffer->GetShaderResourceView();
-		deviceContext->PSSetShaderResources(2, 1, &shadowMapSRV);
 		deviceContext->OMSetDepthStencilState(depthState, 0);
 		deviceContext->RSSetViewports(1, &viewPort);
 		deviceContext->OMSetBlendState(blendState, nullptr, 0xff);
+
+		auto shadowMapSRV = shadowDepthBuffer->GetShaderResourceView();
+		deviceContext->PSSetShaderResources(7, 1, &shadowMapSRV);
+
+		annotation->EndEvent();
 	}
 
 	bool DirectX11::CreateBackScreen()

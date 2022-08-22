@@ -97,6 +97,84 @@ element->SetupAttachment(parent);
 			return boundingBoxMax - boundingBoxMin;
 		}
 
+		void SetMetallicMap(TextureBase* metalicMap)
+		{
+			for (auto& material : materials)
+			{
+				auto& maps = material.second->GetMaterialData().maps;
+
+				for (auto& map : maps)
+				{
+					if (map.type == MapType::METALLIC)
+					{
+						maps[maps.size()].map = metalicMap;
+						return;
+					}
+				}
+
+				MapData temp;
+
+				temp.map = metalicMap;
+				temp.type = MapType::METALLIC;
+
+				maps.push_back(temp);
+
+				break;
+			}
+		}
+
+		void SetRoughnessMap(TextureBase* roughnessMap)
+		{
+			for (auto& material : materials)
+			{
+				auto& maps = material.second->GetMaterialData().maps;
+
+				for (auto& map : maps)
+				{
+					if (map.type == MapType::ROUGHNESS)
+					{
+						maps[maps.size()].map = roughnessMap;
+						return;
+					}
+				}
+
+				MapData temp;
+
+				temp.map = roughnessMap;
+				temp.type = MapType::ROUGHNESS;
+
+				maps.push_back(temp);
+
+				break;
+			}
+		}
+
+		void SetAmbientOcclusionMap(TextureBase* ambientOcclusionMap)
+		{
+			for (auto& material : materials)
+			{
+				auto& maps = material.second->GetMaterialData().maps;
+
+				for (auto& map : maps)
+				{
+					if (map.type == MapType::AMBIENTOCCLUSION)
+					{
+						maps[maps.size()].map = ambientOcclusionMap;
+						return;
+					}
+				}
+
+				MapData temp;
+
+				temp.map = ambientOcclusionMap;
+				temp.type = MapType::AMBIENTOCCLUSION;
+
+				maps.push_back(temp);
+
+				break;
+			}
+		}
+
 		void AddAnimation(const std::string& animationKey)
 		{
 			if (IsAlreadyHaveAnimation(animationKey) == true)

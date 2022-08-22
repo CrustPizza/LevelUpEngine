@@ -160,16 +160,19 @@ namespace GraphicsEngineSpace
 
 				for (int i = 0; i < maps.size(); i++)
 				{
-					if (maps[i].type == MapType::DIFFUSE)
+					int slot = -1;
+
+					switch (maps[i].type)
 					{
-						if (maps[i].map != nullptr)
-							maps[i].map->SetUpTexture(0, ShaderType::PIXEL);
+					case MapType::DIFFUSE: slot = 0; break;
+					case MapType::NORMAL: slot = 1; break;
+					case MapType::METALLIC: slot = 2; break;
+					case MapType::ROUGHNESS: slot = 3; break;
+					case MapType::AMBIENTOCCLUSION: slot = 4; break;
 					}
-					else if (maps[i].type == MapType::NORMAL)
-					{
-						if (maps[i].map != nullptr)
-							maps[i].map->SetUpTexture(1, ShaderType::PIXEL);
-					}
+
+					if (slot >= 0)
+						maps[i].map->SetUpTexture(slot, ShaderType::PIXEL);
 				}
 
 				break;

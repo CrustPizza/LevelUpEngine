@@ -15,7 +15,7 @@ namespace DX11
 		, downSampler(nullptr)
 		, blur(nullptr)
 		, combine(nullptr)
-		, threshold(0.70f)
+		, threshold(0.90f)
 	{
 
 	}
