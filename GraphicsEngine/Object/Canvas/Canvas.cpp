@@ -287,13 +287,19 @@ namespace GraphicsEngineSpace
 
         for (auto& iter : canvasList)
         {
-            if (iter.second == nullptr)
+            if (iter.second == nullptr || iter.second->isEnable != true)
                 continue;
 
-            collidedButton = iter.second->CollidedButtonWithMouse(mouseX, mouseY, isClicked);
+            ButtonUI* tempButton = iter.second->CollidedButtonWithMouse(mouseX, mouseY, isClicked);
 
-            if (collidedButton != nullptr)
-                minZ = collidedButton->GetScreenPosition().z;
+            if (tempButton == nullptr)
+                continue;
+
+            if (tempButton->GetScreenPosition().z <= minZ)
+            {
+                minZ = tempButton->GetScreenPosition().z;
+                collidedButton = tempButton;
+            }
         }
 
         for (auto& iter : buttonUIList)
