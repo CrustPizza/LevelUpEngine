@@ -48,6 +48,8 @@ namespace GraphicsEngineSpace
 
 		/* Vertex Buffer */
 		void CreateBasicVB(Factory* factory, PrefabBase* prefab);
+		void CreateNormalVB(Factory* factory, PrefabBase* prefab);
 		void CreateSkinnedVB(Factory* factory, PrefabBase* prefab);
+		void CreateSkinnedNormalVB(Factory* factory, PrefabBase* prefab);
 	};
 }

@@ -67,6 +67,7 @@ namespace DX11
 		, albedoBuffer(nullptr)
 		, normalBuffer(nullptr)
 		, worldPosBuffer(nullptr)
+		, tangentNormalBuffer(nullptr)
 
 		, shadowDepthBuffer(nullptr)
 
@@ -167,6 +168,9 @@ namespace DX11
 
 		worldPosBuffer = new RenderTexture(backBufferFormat);
 		worldPosBuffer->SetDevice(d3dDevice);
+
+		tangentNormalBuffer = new RenderTexture(backBufferFormat);
+		tangentNormalBuffer->SetDevice(d3dDevice);
 
 		shadowDepthBuffer = new RenderTexture(backBufferFormat);
 		shadowDepthBuffer->SetDevice(d3dDevice);
@@ -348,6 +352,7 @@ namespace DX11
 		albedoBuffer->OnResize(width, height);
 		normalBuffer->OnResize(width, height);
 		worldPosBuffer->OnResize(width, height);
+		tangentNormalBuffer->OnResize(width, height);
 		shadowDepthBuffer->OnResize(width * 5, width * 5);
 
 		return true;
@@ -491,6 +496,10 @@ namespace DX11
 		deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		deviceContext->DrawIndexed(indicesSize, 0, 0);
 
+		ID3D11ShaderResourceView* null[] = { nullptr, nullptr };
+
+		deviceContext->PSSetShaderResources(0, ARRAYSIZE(null), null);
+
 		return true;
 	}
 
@@ -592,12 +601,12 @@ namespace DX11
 			depthBuffer->GetRenderTargetView(),
 			albedoBuffer->GetRenderTargetView(),
 			normalBuffer->GetRenderTargetView(),
-			worldPosBuffer->GetRenderTargetView()
+			worldPosBuffer->GetRenderTargetView(),
+			tangentNormalBuffer->GetRenderTargetView()
 		};
 
 		deviceContext->OMSetRenderTargets(ARRAYSIZE(mrt), mrt, depthView);
 
-		deviceContext->ClearDepthStencilView(depthView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 		auto shadowMapSRV = shadowDepthBuffer->GetShaderResourceView();
 		deviceContext->PSSetShaderResources(2, 1, &shadowMapSRV);
 		deviceContext->OMSetDepthStencilState(depthState, 0);
@@ -630,6 +639,7 @@ namespace DX11
 		albedoBuffer->ClearRenderTargetView(deviceContext, depthView, DirectX::Colors::Black);
 		normalBuffer->ClearRenderTargetView(deviceContext, depthView, DirectX::Colors::Black);
 		worldPosBuffer->ClearRenderTargetView(deviceContext, depthView, DirectX::Colors::Black);
+		tangentNormalBuffer->ClearRenderTargetView(deviceContext, depthView, DirectX::Colors::Black);
 		deviceContext->OMSetRenderTargets(1, &renderTargetView, depthView);
 		deviceContext->ClearRenderTargetView(renderTargetView, DirectX::Colors::Black);
 		deviceContext->OMSetDepthStencilState(depthState, 0);
@@ -640,7 +650,8 @@ namespace DX11
 			depthBuffer->GetRenderTargetView(),
 			albedoBuffer->GetRenderTargetView(),
 			normalBuffer->GetRenderTargetView(),
-			worldPosBuffer->GetRenderTargetView()
+			worldPosBuffer->GetRenderTargetView(),
+			tangentNormalBuffer->GetRenderTargetView()
 		};
 
 		deviceContext->OMSetRenderTargets(ARRAYSIZE(mrt), mrt, depthView);
@@ -724,6 +735,7 @@ namespace DX11
 		DELETE_RELEASE_PTR(albedoBuffer);
 		DELETE_RELEASE_PTR(normalBuffer);
 		DELETE_RELEASE_PTR(worldPosBuffer);
+		DELETE_RELEASE_PTR(tangentNormalBuffer);
 		DELETE_RELEASE_PTR(shadowDepthBuffer);
 
 		delete factory;
@@ -737,9 +749,13 @@ namespace DX11
 
 	void DirectX11::DebugRender()
 	{
+		annotation->BeginEvent(L"Debug Render");
+
 		backScreen->OMSetRenderTarget(deviceContext, depthView);
 
 		ID3D11ShaderResourceView* null[] = { nullptr };
+
+		annotation->BeginEvent(L"Depth Buffer");
 
 		auto depthSRV = depthBuffer->GetShaderResourceView();
 
@@ -747,11 +763,19 @@ namespace DX11
 		spriteBatch->Draw(depthSRV, RECT{ static_cast<long>(viewPort.Width * 0.8f), 0, static_cast<long>(viewPort.Width), static_cast<long>(viewPort.Height * 0.20f) });
 		spriteBatch->End();
 
+		annotation->EndEvent();
+
+		annotation->BeginEvent(L"Albedo Buffer");
+
 		auto albedoSRV = albedoBuffer->GetShaderResourceView();
 
 		spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, nullptr, nullptr, depthState);
 		spriteBatch->Draw(albedoSRV, RECT{ static_cast<long>(viewPort.Width * 0.8f), static_cast<long>(viewPort.Height * 0.20f), static_cast<long>(viewPort.Width), static_cast<long>(viewPort.Height * 0.4f) });
 		spriteBatch->End();
+
+		annotation->EndEvent();
+
+		annotation->BeginEvent(L"Normal Buffer");
 
 		auto normalSRV = normalBuffer->GetShaderResourceView();
 
@@ -759,19 +783,31 @@ namespace DX11
 		spriteBatch->Draw(normalSRV, RECT{ static_cast<long>(viewPort.Width * 0.8f), static_cast<long>(viewPort.Height * 0.4f), static_cast<long>(viewPort.Width), static_cast<long>(viewPort.Height * 0.6f) });
 		spriteBatch->End();
 
+		annotation->EndEvent();
+
+		annotation->BeginEvent(L"World Position Buffer");
+
 		auto worldPosSRV = worldPosBuffer->GetShaderResourceView();
 
 		spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, nullptr, nullptr, depthState);
 		spriteBatch->Draw(worldPosSRV, RECT{ static_cast<long>(viewPort.Width * 0.8f), static_cast<long>(viewPort.Height * 0.6f), static_cast<long>(viewPort.Width), static_cast<long>(viewPort.Height * 0.8f) });
 		spriteBatch->End();
 
-		auto shadowDepthSRV = shadowDepthBuffer->GetShaderResourceView();
+		annotation->EndEvent();
+
+		annotation->BeginEvent(L"Tangent Normal Buffer");
+
+		auto tangentNormalSRV = tangentNormalBuffer->GetShaderResourceView();
 
 		spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, nullptr, nullptr, depthState);
-		spriteBatch->Draw(shadowDepthSRV, RECT{ static_cast<long>(viewPort.Width * 0.8f), static_cast<long>(viewPort.Height * 0.8f), static_cast<long>(viewPort.Width), static_cast<long>(viewPort.Height) });
+		spriteBatch->Draw(tangentNormalSRV, RECT{ static_cast<long>(viewPort.Width * 0.8f), static_cast<long>(viewPort.Height * 0.8f), static_cast<long>(viewPort.Width), static_cast<long>(viewPort.Height) });
 		spriteBatch->End();
 
+		annotation->EndEvent();
+
 		deviceContext->PSSetShaderResources(0, 1, null);
+
+		annotation->EndEvent();
 	}
 
 	void DirectX11::AddRenderQueue(const RenderData& renderData)

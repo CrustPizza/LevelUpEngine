@@ -178,15 +178,6 @@ namespace GameEngineSpace
 		pbrModel->SetRoughness(roughness);
 	}
 
-	void Pig::SetLight(const Vector& dir, const Vector& color, int index)
-	{
-		if (pbrModel == nullptr)
-			return;
-
-		pbrModel->SetLightDirection(dir, index);
-		pbrModel->SetLightColor(color, index);
-	}
-
 	void Pig::SetAnimKey(const std::string& animationName)
 	{
 		if (pbrModel == nullptr)

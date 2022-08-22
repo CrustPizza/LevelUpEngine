@@ -253,9 +253,9 @@ namespace GraphicsEngineSpace
 			resourceManager->GetShader("ShadowMapPS")->SetUpShader();
 
 			Vector position = Vector::Backward * MatrixRotationFromVector(dLight->rotation);
-			position *= 10.0f;
+			position *= 50.0f;
 
-			Matrix lightProjection = OrthographicOffCenterMatrix(position.x - 200, position.x + 200, position.y - 200, position.y + 200, position.z - 200, position.z + 200);
+			Matrix lightProjection = OrthographicOffCenterMatrix(position.x - 400, position.x + 400, position.y - 400, position.y + 400, position.z - 400, position.z + 400);
 			//Matrix lightProjection = OrthographicMatrix(300, 300, -300, 300.0f);
 
 			Matrix lightViewProjection = ViewMatrix(position, dLight->rotation) * lightProjection;

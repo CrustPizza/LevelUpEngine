@@ -30,8 +30,9 @@ namespace GraphicsEngineSpace
 	{
 		cbDirectionalLight cb;
 		cb.direction = Vector::UnitZ * HeraclesMath::MatrixRotationFromVector(rotation);
-		cb.diffuse = diffuse * color;
-		cb.ambient = ambient * color;
+		cb.diffuse = diffuse;
+		cb.ambient = ambient;
+		cb.color = color;
 		cb.specularPower = specularPower;
 
 		lightParamBuffer->SetUpBuffer(slot, &cb, type);

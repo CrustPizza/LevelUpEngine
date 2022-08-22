@@ -51,7 +51,7 @@ namespace GraphicsEngineSpace
 		ConstantBufferSetting psParamBufferOption;
 
 		psParamBufferOption.buffer = paramBuffer;
-		psParamBufferOption.slot = 2;
+		psParamBufferOption.slot = 3;
 		psParamBufferOption.type = ShaderType::PIXEL;
 		psParamBufferOption.data = &newPBRModel->PBR_PSParameter;
 
@@ -97,7 +97,7 @@ namespace GraphicsEngineSpace
 		ConstantBufferSetting psParamBufferOption;
 
 		psParamBufferOption.buffer = paramBuffer;
-		psParamBufferOption.slot = 2;
+		psParamBufferOption.slot = 3;
 		psParamBufferOption.type = ShaderType::PIXEL;
 		psParamBufferOption.data = &newPBRModel->PBR_PSParameter;
 
@@ -143,7 +143,7 @@ namespace GraphicsEngineSpace
 		ConstantBufferSetting psParamBufferOption;
 
 		psParamBufferOption.buffer = paramBuffer;
-		psParamBufferOption.slot = 2;
+		psParamBufferOption.slot = 3;
 		psParamBufferOption.type = ShaderType::PIXEL;
 		psParamBufferOption.data = &newPBRModel->PBR_PSParameter;
 
@@ -153,7 +153,7 @@ namespace GraphicsEngineSpace
 		newPBRModel->GetPrefab()->AddOnceBuffer(psParamBufferOption);
 
 		/* Vertex Buffer */
-		CreateBasicVB(factory, newPBRModel->GetPrefab());
+		CreateNormalVB(factory, newPBRModel->GetPrefab());
 
 		return newPBRModel;
 	}
@@ -189,7 +189,7 @@ namespace GraphicsEngineSpace
 		ConstantBufferSetting psParamBufferOption;
 
 		psParamBufferOption.buffer = paramBuffer;
-		psParamBufferOption.slot = 2;
+		psParamBufferOption.slot = 3;
 		psParamBufferOption.type = ShaderType::PIXEL;
 		psParamBufferOption.data = &newPBRModel->PBR_PSParameter;
 
@@ -247,7 +247,7 @@ namespace GraphicsEngineSpace
 		ConstantBufferSetting psParamBufferOption;
 
 		psParamBufferOption.buffer = paramBuffer;
-		psParamBufferOption.slot = 2;
+		psParamBufferOption.slot = 3;
 		psParamBufferOption.type = ShaderType::PIXEL;
 		psParamBufferOption.data = &newPBRModel->PBR_PSParameter;
 
@@ -305,7 +305,7 @@ namespace GraphicsEngineSpace
 		ConstantBufferSetting psParamBufferOption;
 
 		psParamBufferOption.buffer = paramBuffer;
-		psParamBufferOption.slot = 2;
+		psParamBufferOption.slot = 3;
 		psParamBufferOption.type = ShaderType::PIXEL;
 		psParamBufferOption.data = &newPBRModel->PBR_PSParameter;
 
@@ -327,7 +327,7 @@ namespace GraphicsEngineSpace
 
 		/* Vertex Buffer */
 		newPBRModel->GetPrefab()->SetSkinning(true);
-		CreateSkinnedVB(factory, newPBRModel->GetPrefab());
+		CreateSkinnedNormalVB(factory, newPBRModel->GetPrefab());
 
 		return newPBRModel;
 	}
@@ -544,7 +544,7 @@ namespace GraphicsEngineSpace
 
 		if (paramBuffer == nullptr)
 		{
-			paramBuffer = factory->CreateConstantBuffer("PBR_PSParameterCB", USAGE::DEFAULT, 0, sizeof(Vector) * 8);
+			paramBuffer = factory->CreateConstantBuffer("PBR_PSParameterCB", USAGE::DEFAULT, 0, sizeof(Vector) * 2);
 
 			if (paramBuffer == nullptr)
 				return nullptr;
@@ -589,6 +589,28 @@ namespace GraphicsEngineSpace
 			});
 	}
 
+	void PBRBuilder::CreateNormalVB(Factory* factory, PrefabBase* prefab)
+	{
+		struct NoneTexturePBRVertex
+		{
+			Vector position;
+			Vector normal;
+			Vector texCoord;
+			Vector tangent;
+		};
+
+		prefab->CreateVertexBuffer<NoneTexturePBRVertex>(factory, [&](const VertexData& data) -> NoneTexturePBRVertex
+			{
+				NoneTexturePBRVertex temp;
+				temp.position = data.position;
+				temp.normal = data.normal;
+				temp.texCoord = data.texCoord;
+				temp.tangent = data.tangent;
+
+				return temp;
+			});
+	}
+
 	void PBRBuilder::CreateSkinnedVB(Factory* factory, PrefabBase* prefab)
 	{
 		struct SkinnedPBRVertex
@@ -612,6 +634,44 @@ namespace GraphicsEngineSpace
 				temp.position = data.position;
 				temp.normal = data.normal;
 				temp.texCoord = data.texCoord;
+				temp.weights1 = data.weights1;
+				temp.weights2 = data.weights2;
+				temp.weights3 = data.weights3;
+				temp.weights4 = data.weights4;
+				temp.weightIndex1 = data.weightIndex1;
+				temp.weightIndex2 = data.weightIndex2;
+				temp.weightIndex3 = data.weightIndex3;
+				temp.weightIndex4 = data.weightIndex4;
+
+				return temp;
+			});
+	}
+
+	void PBRBuilder::CreateSkinnedNormalVB(Factory* factory, PrefabBase* prefab)
+	{
+		struct SkinnedPBRVertex
+		{
+			Vector position;
+			Vector normal;
+			Vector texCoord;
+			Vector tangent;
+			Vector weights1;
+			Vector weights2;
+			Vector weights3;
+			Vector weights4;
+			unsigned int weightIndex1;
+			unsigned int weightIndex2;
+			unsigned int weightIndex3;
+			unsigned int weightIndex4;
+		};
+
+		prefab->CreateVertexBuffer<SkinnedPBRVertex>(factory, [&](const VertexData& data) -> SkinnedPBRVertex
+			{
+				SkinnedPBRVertex temp;
+				temp.position = data.position;
+				temp.normal = data.normal;
+				temp.texCoord = data.texCoord;
+				temp.tangent = data.tangent;
 				temp.weights1 = data.weights1;
 				temp.weights2 = data.weights2;
 				temp.weights3 = data.weights3;

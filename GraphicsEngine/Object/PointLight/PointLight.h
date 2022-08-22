@@ -20,6 +20,7 @@ namespace GraphicsEngineSpace
 		{
 			Vector position;
 			Vector diffuse;
+			Vector color;
 			float specularPower;
 			float intensity;
 		};
@@ -33,5 +34,7 @@ namespace GraphicsEngineSpace
 
 		void SetBuffer(BufferBase* buffer) override;
 		void SetUpBuffer(unsigned int slot, ShaderType type) override;
+		virtual cbPointLight GetPointLightParameter();
+		virtual BufferBase* GetBuffer();
 	};
 }

@@ -26,20 +26,32 @@ namespace GraphicsEngineSpace
 		this->texture = texture;
 	}
 
+	TextureBase* TextureUI::GetTexture()
+	{
+		return texture;
+	}
+
 	void TextureUI::Render(GraphicsEngineBase* engine)
 	{
 		if (isEnable != true || engine == nullptr)
 			return;
 
-		auto screenPosition = GetScreenPosition();
-		auto screenScale = GetScreenScale();
+		engine->GraphicsDebugBeginEvent(name);
 
-		engine->DrawSprite(texture->GetTexture(), screenPosition.x, screenPosition.y, width * screenScale.x, height * screenScale.y, screenPosition.z);
+		if (texture != nullptr)
+		{
+			auto screenPosition = GetScreenPosition();
+			auto screenScale = GetScreenScale();
+
+			engine->DrawSprite(texture->GetTexture(), screenPosition.x, screenPosition.y, width * screenScale.x, height * screenScale.y, screenPosition.z);
+		}
 
 		for (auto* iter : child)
 		{
 			if (iter != nullptr)
 				iter->Render(engine);
 		}
+
+		engine->GraphicsDebugEndEvent();
 	}
 }

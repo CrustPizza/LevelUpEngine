@@ -97,6 +97,14 @@ element->SetupAttachment(parent);
 			return boundingBoxMax - boundingBoxMin;
 		}
 
+		void AddAnimation(const std::string& animationKey)
+		{
+			if (IsAlreadyHaveAnimation(animationKey) == true)
+				return;
+
+			animationKeys.push_back(animationKey);
+		}
+
 		bool SetAnimationKey(const std::string& animationKey)
 		{
 			if (this->animationKey.compare(animationKey) == 0)

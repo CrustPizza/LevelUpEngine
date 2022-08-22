@@ -30,10 +30,28 @@ namespace GraphicsEngineSpace
 	{
 		cbPointLight cb;
 		cb.position = position;
-		cb.diffuse = diffuse * color;
+		cb.diffuse = diffuse;
+		cb.color = color;
 		cb.specularPower = specularPower;
 		cb.intensity = intensity;
 
 		lightParamBuffer->SetUpBuffer(slot, &cb, type);
+	}
+
+	PointLight::cbPointLight PointLight::GetPointLightParameter()
+	{
+		cbPointLight cb;
+		cb.position = position;
+		cb.diffuse = diffuse;
+		cb.color = color;
+		cb.specularPower = specularPower;
+		cb.intensity = intensity;
+
+		return cb;
+	}
+
+	BufferBase* PointLight::GetBuffer()
+	{
+		return lightParamBuffer;
 	}
 }

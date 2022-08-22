@@ -41,6 +41,7 @@ namespace GraphicsEngineSpace
 		virtual ProgressBar* GetProgressBar(const std::string& name);
 
 		virtual ButtonUI* CollidedButtonWithMouse(float mouseX, float mouseY, bool isClicked);
+		virtual void SetScaleAllCanvas(Vector scale);
 
 		void Render(GraphicsEngineBase* engine) override;
 		virtual void Release();

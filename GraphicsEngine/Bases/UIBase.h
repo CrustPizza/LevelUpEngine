@@ -53,13 +53,15 @@ namespace GraphicsEngineSpace
 		Vector rotation;
 		Vector scale;
 
+		std::string name;
+
 	private:
 		Vector screenPosition;
 
 	protected:
 		UIBase()
-			: anchor{ HorizontalLocation::LEFT, VerticalLocation::TOP }
-			, pivot{ HorizontalLocation::LEFT, VerticalLocation::TOP }
+			: anchor{ HorizontalLocation::CENTER, VerticalLocation::MIDDLE }
+			, pivot{ HorizontalLocation::CENTER, VerticalLocation::MIDDLE }
 			, width(0.0f)
 			, height(0.0f)
 			, parent(nullptr)
@@ -110,6 +112,7 @@ namespace GraphicsEngineSpace
 			this->pivot = pivot;
 		}
 
+		void SetName(const std::string& name) { this->name = name; }
 		void SetPosition(const Vector& position) { this->position = position; }
 		void SetRotation(const Vector& rotation) { this->rotation = rotation; }
 		void SetScale(const Vector& scale) { this->scale = scale; }
@@ -128,6 +131,7 @@ namespace GraphicsEngineSpace
 			parent->SetChild(this);
 		}
 
+		const std::string& GetName() { return name; }
 		const Vector& GetPosition() { return position; }
 		const Vector& GetRotation() { return rotation; }
 		const Vector& GetScale() { return scale; }
@@ -165,24 +169,26 @@ namespace GraphicsEngineSpace
 		Vector GetScreenPosition()
 		{
 			auto screenPosition = Vector::Zero;
+			auto screenScale = GetScreenScale();
 
 			if (parent != nullptr)
 			{
 				screenPosition = parent->GetScreenPosition();
+				auto parentScreenScale = parent->GetScreenScale();
 
 				switch (anchor.hLocation)
 				{
 
 				case HorizontalLocation::CENTER:
 				{
-					screenPosition.x += parent->width / 2;
+					screenPosition.x += parent->width / 2 * parentScreenScale.x;
 
 					break;
 				}
 
 				case HorizontalLocation::RIGHT:
 				{
-					screenPosition.x += parent->width;
+					screenPosition.x += parent->width * parentScreenScale.x;
 
 					break;
 				}
@@ -194,14 +200,14 @@ namespace GraphicsEngineSpace
 
 				case VerticalLocation::MIDDLE:
 				{
-					screenPosition.y += parent->height / 2;
+					screenPosition.y += parent->height / 2 * parentScreenScale.y;
 
 					break;
 				}
 
 				case VerticalLocation::BOTTOM:
 				{
-					screenPosition.y += parent->height;
+					screenPosition.y += parent->height * parentScreenScale.y;
 
 					break;
 				}
@@ -214,14 +220,14 @@ namespace GraphicsEngineSpace
 
 			case HorizontalLocation::CENTER:
 			{
-				screenPosition.x -= width / 2 * scale.x;
+				screenPosition.x -= width / 2 * screenScale.x;
 
 				break;
 			}
 
 			case HorizontalLocation::RIGHT:
 			{
-				screenPosition.x -= width * scale.x;
+				screenPosition.x -= width * screenScale.x;
 
 				break;
 			}
@@ -233,21 +239,21 @@ namespace GraphicsEngineSpace
 
 			case VerticalLocation::MIDDLE:
 			{
-				screenPosition.y -= height / 2 * scale.y;
+				screenPosition.y -= height / 2 * screenScale.y;
 
 				break;
 			}
 
 			case VerticalLocation::BOTTOM:
 			{
-				screenPosition.y -= height * scale.y;
+				screenPosition.y -= height * screenScale.y;
 
 				break;
 			}
 
 			}
 
-			return position + screenPosition;
+			return position * screenScale + screenPosition;
 		}
 
 	private:

@@ -3,7 +3,7 @@
 *	Texture UI.h				*
 *								*
 *	Created : 2022/08/08		*
-*	Updated : 2022/08/09		*
+*	Updated : 2022/08/20		*
 *********************************/
 
 #pragma once
@@ -26,6 +26,7 @@ namespace GraphicsEngineSpace
 
 	public:
 		virtual void SetTexture(TextureBase* texture);
+		virtual TextureBase* GetTexture();
 
 	protected:
 		void Render(GraphicsEngineBase* engine);

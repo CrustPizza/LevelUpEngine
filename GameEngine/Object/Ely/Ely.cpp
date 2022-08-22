@@ -143,13 +143,4 @@ namespace GameEngineSpace
 
 		pbrModel->SetRoughness(roughness);
 	}
-
-	void Ely::SetLight(const Vector& dir, const Vector& color, int index)
-	{
-		if (pbrModel == nullptr)
-			return;
-
-		pbrModel->SetLightDirection(dir, index);
-		pbrModel->SetLightColor(color, index);
-	}
 }

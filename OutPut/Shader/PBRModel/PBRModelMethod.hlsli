@@ -91,8 +91,8 @@ float3 LightSurface(
 	float3 View,
 	float3 Normal,
 	int lightsAmount,
-	float3 lightColor[3],
-	float3 lightDirection[3],
+	float3 lightColor[21],
+	float3 lightDirection[21],
 	float3 albedo, float roughness, float metallic,	float ao)
 {
 	static const float specularCoefficient = 0.04f;

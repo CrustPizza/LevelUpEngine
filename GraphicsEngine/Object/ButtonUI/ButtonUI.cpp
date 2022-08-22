@@ -3,7 +3,7 @@
 *	Button UI.cpp				*
 *								*
 *	Created : 2022/08/10		*
-*	Updated : 2022/08/10		*
+*	Updated : 2022/08/20		*
 *********************************/
 
 #include "ButtonUI.h"
@@ -16,6 +16,8 @@ namespace GraphicsEngineSpace
 		, pressTexture(nullptr)
 		, buttonState(ButtonState::DEFAULT)
 		, clickEvent(nullptr)
+		, hoverEvent(nullptr)
+		, hoverOutEvent(nullptr)
 	{
 
 	}
@@ -42,17 +44,34 @@ namespace GraphicsEngineSpace
 
 	void ButtonUI::SetButtonState(ButtonState state)
 	{
-		buttonState = state;
+		if (buttonState == ButtonState::HOVER && state != ButtonState::HOVER)
+		{
+			if (hoverOutEvent != nullptr)
+				hoverOutEvent();
+		}
 
 		switch (state)
 		{
 		case ButtonState::UP: if (clickEvent != nullptr) clickEvent(); break;
+		case ButtonState::HOVER: if (hoverEvent != nullptr) hoverEvent(); break;
 		}
+
+		buttonState = state;
 	}
 
 	void ButtonUI::SetClickEvent(std::function<void(void)> clickEvent)
 	{
 		this->clickEvent = clickEvent;
+	}
+
+	void ButtonUI::SetHoverEvent(std::function<void(void)> hoverEvent)
+	{
+		this->hoverEvent = hoverEvent;
+	}
+
+	void ButtonUI::SetHoverOutEvent(std::function<void(void)> hoverOutEvent)
+	{
+		this->hoverOutEvent = hoverOutEvent;
 	}
 
 	ButtonState ButtonUI::GetButtonState()
@@ -65,7 +84,12 @@ namespace GraphicsEngineSpace
 		if (isEnable != true || engine == nullptr)
 			return;
 
-		Texture* texture = defaultTexture->GetTexture();
+		engine->GraphicsDebugBeginEvent(name);
+
+		Texture* texture = nullptr;
+
+		if (defaultTexture != nullptr)
+			texture = defaultTexture->GetTexture();
 
 		switch (buttonState)
 		{
@@ -78,7 +102,7 @@ namespace GraphicsEngineSpace
 
 			break;
 		}
-		
+
 		case ButtonState::UP:
 		case ButtonState::HOVER:
 		{
@@ -90,15 +114,20 @@ namespace GraphicsEngineSpace
 
 		}
 
-		auto screenPosition = GetScreenPosition();
-		auto screenScale = GetScreenScale();
+		if (texture != nullptr)
+		{
+			auto screenPosition = GetScreenPosition();
+			auto screenScale = GetScreenScale();
 
-		engine->DrawSprite(texture, screenPosition.x, screenPosition.y, width * screenScale.x, height * screenScale.y, screenPosition.z);
+			engine->DrawSprite(texture, screenPosition.x, screenPosition.y, width * screenScale.x, height * screenScale.y, screenPosition.z);
+		}
 
 		for (auto* iter : child)
 		{
 			if (iter != nullptr)
 				iter->Render(engine);
 		}
+
+		engine->GraphicsDebugEndEvent();
 	}
 }

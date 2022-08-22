@@ -25,9 +25,6 @@ namespace GraphicsEngineSpace
 
 		struct PBR_PSParameterCB
 		{
-			Vector lightDirection[3];
-			Vector lightColor[3];
-
 			float albedo[3];
 			float alpha;
 			float metallic;
@@ -42,8 +39,6 @@ namespace GraphicsEngineSpace
 
 		PrefabBase* const GetPrefab() { return prefab; }
 
-		virtual void SetLightDirection(const Vector& lightDirection, int index);
-		virtual void SetLightColor(const Vector& lightColor, int index);
 		virtual void SetPrefab(PrefabBase* prefab);
 		virtual void SetAlbedo(const Vector& albedo);
 		virtual void SetAlpha(float alpha);

@@ -20,6 +20,7 @@ namespace GraphicsEngineSpace
 			Vector	direction;
 			Vector	diffuse;
 			Vector	ambient;
+			Vector	color;
 			float	specularPower;
 		};
 

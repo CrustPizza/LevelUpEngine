@@ -39,9 +39,8 @@ namespace GraphicsEngineSpace
 
         TextUI* newTextUI = new TextUI;
 
+        newTextUI->SetName(newUIName);
         newTextUI->SetParent(this);
-        newTextUI->SetWidth(this->width / 4);
-        newTextUI->SetHeight(this->height / 4);
 
         textUIList[newUIName] = newTextUI;
 
@@ -60,6 +59,7 @@ namespace GraphicsEngineSpace
 
         Canvas* newCanvas = new Canvas(width, height);
 
+        newCanvas->SetName(newUIName);
         newCanvas->SetParent(this);
 
         canvasList[newUIName] = newCanvas;
@@ -79,6 +79,7 @@ namespace GraphicsEngineSpace
 
         ButtonUI* newButtonUI = new ButtonUI;
 
+        newButtonUI->SetName(newUIName);
         newButtonUI->SetParent(this);
         newButtonUI->SetWidth(this->width / 4);
         newButtonUI->SetHeight(this->height / 4);
@@ -100,6 +101,7 @@ namespace GraphicsEngineSpace
 
         TextureUI* newTextureUI = new TextureUI;
 
+        newTextureUI->SetName(newUIName);
         newTextureUI->SetParent(this);
         newTextureUI->SetWidth(this->width / 4);
         newTextureUI->SetHeight(this->height / 4);
@@ -121,6 +123,7 @@ namespace GraphicsEngineSpace
 
         ProgressBar* newProgressBar = new ProgressBar;
 
+        newProgressBar->SetName(newUIName);
         newProgressBar->SetParent(this);
         newProgressBar->SetWidth(this->width / 4);
         newProgressBar->SetHeight(this->height / 4);
@@ -189,21 +192,31 @@ namespace GraphicsEngineSpace
 
         if (isClicked == true)
         {
-            if (collidedButton->buttonState == ButtonState::DOWN)
-                collidedButton->buttonState = ButtonState::PRESS;
-            else if (collidedButton->buttonState != ButtonState::PRESS)
-                collidedButton->buttonState = ButtonState::DOWN;
+            if (collidedButton->buttonState == ButtonState::DOWN ||
+                collidedButton->buttonState == ButtonState::PRESS)
+                collidedButton->SetButtonState(ButtonState::PRESS);
+            else
+                collidedButton->SetButtonState(ButtonState::DOWN);
         }
         else
         {
             if (collidedButton->buttonState == ButtonState::DOWN ||
                 collidedButton->buttonState == ButtonState::PRESS)
-                collidedButton->buttonState = ButtonState::UP;
+                collidedButton->SetButtonState(ButtonState::UP);
             else
-                collidedButton->buttonState = ButtonState::HOVER;
+                collidedButton->SetButtonState(ButtonState::HOVER);
         }
 
         return collidedButton;
+    }
+
+    void Canvas::SetScaleAllCanvas(Vector scale)
+    {
+        for (auto& iter : canvasList)
+        {
+            if (iter.second != nullptr)
+                iter.second->SetScale(scale);
+        }
     }
 
     void Canvas::Render(GraphicsEngineBase* engine)
@@ -211,11 +224,15 @@ namespace GraphicsEngineSpace
         if (isEnable != true || engine == nullptr)
             return;
 
+        engine->GraphicsDebugBeginEvent(name);
+
         for (auto* iter : child)
         {
             if (iter != nullptr)
                 iter->Render(engine);
         }
+
+        engine->GraphicsDebugEndEvent();
     }
 
     void Canvas::Release()
@@ -286,7 +303,7 @@ namespace GraphicsEngineSpace
 
             if (iter.second->isEnable != true)
             {
-                iter.second->buttonState = ButtonState::DEFAULT;
+                iter.second->SetButtonState(ButtonState::DEFAULT);
                 continue;
             }
 
@@ -295,14 +312,14 @@ namespace GraphicsEngineSpace
 
             if (mouseX < buttonScreenPosition.x || mouseY < buttonScreenPosition.y)
             {
-                iter.second->buttonState = ButtonState::DEFAULT;
+                iter.second->SetButtonState(ButtonState::DEFAULT);
                 continue;
             }
 
             if (mouseX > buttonScreenPosition.x + iter.second->GetWidth() * buttonScreenScale.x ||
                 mouseY > buttonScreenPosition.y + iter.second->GetHeight() * buttonScreenScale.y)
             {
-                iter.second->buttonState = ButtonState::DEFAULT;
+                iter.second->SetButtonState(ButtonState::DEFAULT);
                 continue;
             }
 
