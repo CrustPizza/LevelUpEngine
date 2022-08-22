@@ -10,10 +10,14 @@
 
 namespace GraphicsEngineSpace
 {
+	PointLight* PointLight::instance = nullptr;
+	PointLight::cbPointLight PointLight::parameters[20] = {};
+	int paramIndex = 0;
+
 	PointLight::PointLight()
 		: intensity(10.0f)
 	{
-
+		
 	}
 
 	PointLight::~PointLight()
@@ -38,20 +42,30 @@ namespace GraphicsEngineSpace
 		lightParamBuffer->SetUpBuffer(slot, &cb, type);
 	}
 
-	PointLight::cbPointLight PointLight::GetPointLightParameter()
+	void PointLight::SetUpPointLightsBuffer(unsigned int slot, ShaderType type)
 	{
-		cbPointLight cb;
-		cb.position = position;
-		cb.diffuse = diffuse;
-		cb.color = color;
-		cb.specularPower = specularPower;
-		cb.intensity = intensity;
+		if (lightParamBuffer == nullptr)
+			return;
 
-		return cb;
+		lightParamBuffer->SetUpBuffer(slot, parameters, type);
+
+		paramIndex = 0;
+
+		for (int i = 0; i < 20; i++)
+			parameters[i] = {};
 	}
 
-	BufferBase* PointLight::GetBuffer()
+	void PointLight::SetUpPointLight()
 	{
-		return lightParamBuffer;
+		if (paramIndex >= 20)
+			return;
+
+		parameters[paramIndex].position = position;
+		parameters[paramIndex].diffuse = diffuse;
+		parameters[paramIndex].color = color;
+		parameters[paramIndex].specularPower = specularPower;
+		parameters[paramIndex].intensity = intensity;
+
+		paramIndex++;
 	}
 }

@@ -29,8 +29,18 @@ namespace GraphicsEngineSpace
 			PrefabBase* prefab;
 		};
 
+		struct Sprite3DData
+		{
+			Texture* texture;
+			Vector worldPosition[3];
+			Vector texCoord[3];
+			Matrix worldViewProjection;
+			float  depth;
+		};
+
 	protected:
 		std::vector<RenderData> renderQueue;
+		std::vector<Sprite3DData> sprite3DQueue;
 
 	public:
 		GraphicsEngineBase() = default;
@@ -43,6 +53,7 @@ namespace GraphicsEngineSpace
 		virtual bool DrawSprite(Texture* texture, long posX, long posY, long width, long height, float z) abstract;
 		virtual bool DrawSprite(Texture* texture, const Rect& dest, const Rect& src, float z) abstract;
 		virtual bool DrawSpriteOn3D(Texture* texture, Vector worldPosition[3], const Matrix& viewProjection) abstract;
+		virtual bool DrawSpriteOn3D(Texture* texture, Vector worldPosition[3], const Matrix& viewProjection, const Vector texCoord[3]) abstract;
 		virtual bool DrawSpriteOn3D(Texture* texture, long width, long height, const Matrix& worldViewProjection) abstract;
 		virtual bool DrawSpriteOn3D(Texture* texture, long width, long height, const Matrix& worldViewProjection, const Vector texCoord[3]) abstract;
 

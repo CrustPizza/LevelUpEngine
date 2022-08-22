@@ -76,7 +76,7 @@ namespace GraphicsEngineSpace
 
 		engine->GraphicsDebugBeginEvent(name);
 
-		engine->DrawTextColor(font, text, color, GetScreenPosition(), 0.0f, Vector{ fontSize / 16.0f, fontSize / 16.0f } * GetScreenScale());
+		engine->DrawTextColor(font, text, color, GetScreenPosition(), 0.0f, Vector{ fontSize / 32.0f, fontSize / 32.0f } * GetScreenScale());
 
 		for (auto* iter : child)
 		{

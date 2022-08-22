@@ -39,7 +39,9 @@ namespace GameEngineSpace
 
 	void Cube::Init(GraphicsEngineSpace::Factory* factory, ModelBase* model, ShaderBase* vertexShader, ShaderBase* pixelShader, BufferBase* matrixBuffer)
 	{
-		prefab = factory->CreatePrefab("CubePrefab", model, matrixBuffer, 0);
+		static int j = 0;
+
+		prefab = factory->CreatePrefab("CubePrefab" + std::to_string(j), model, matrixBuffer, 0);
 		prefab->SetVertexShader(vertexShader);
 		prefab->SetPixelShader(pixelShader);
 
@@ -49,14 +51,18 @@ namespace GameEngineSpace
 			HeraclesMath::Vector color;
 		};
 
+		transform.position.x = 5.0f - j;
+
 		prefab->CreateVertexBuffer<CubeVertex>(factory, [](const GraphicsEngineSpace::VertexData& data)-> CubeVertex
 			{
 				CubeVertex temp;
 				temp.position = data.position;
-				temp.color = { 1.0f, 1.0f, 1.0f, 1.0f };
+				temp.color = { 0.1, 1.0f, 1.0f, 1.0f };
 
 				return temp;
 			});
+
+		j++;
 	}
 
 	void Cube::Update(float tick)

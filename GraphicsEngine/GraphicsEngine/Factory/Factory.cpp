@@ -694,7 +694,7 @@ namespace GraphicsEngineSpace
 
 		if (constantBuffer == nullptr)
 		{
-			constantBuffer = CreateConstantBuffer("PointLightCB", USAGE::DEFAULT, 0, sizeof(Vector) * 3);
+			constantBuffer = CreateConstantBuffer("PointLightCB", USAGE::DEFAULT, 0, sizeof(Matrix) * 20);
 
 			if (constantBuffer == nullptr)
 			{

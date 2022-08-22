@@ -101,6 +101,7 @@ PS_Output main(VS_Output input)
 	// Diffuse & Specular
 	float3 pLightDirection = PLightPosition.xyz - input.WorldPos;
 	float distance = length(pLightDirection);
+	pLightDirection = normalize( pLightDirection );
 
 	if (distance < PLightIntensity)
 	{

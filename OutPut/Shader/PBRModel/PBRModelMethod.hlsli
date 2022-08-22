@@ -108,7 +108,7 @@ float3 LightSurface(
 
 	for (int i = 0; i < lightsAmount; i++)
 	{
-		const float3 L = normalize(-lightDirection[i]);
+		const float3 L = normalize(lightDirection[i]);
 
 		const float3 H = normalize(L + View);
 

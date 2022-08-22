@@ -167,8 +167,11 @@ namespace GameEngineSpace
 
 		ModelBase* cubeModel = graphicsFactory->CreateModelFromASEFile("ASECube", "Resources/Model/Cube.ase");
 
-		cube = new Cube;
-		cube->Init(graphicsFactory, cubeModel, vertexShader, pixelShader, matrixBuffer);
+		for (int i = 0; i < 10; i++)
+		{
+			cubes[i] = new Cube;
+			cubes[i]->Init(graphicsFactory, cubeModel, vertexShader, pixelShader, matrixBuffer);
+		}
 
 		pbrCube = new Cube;
 		pbrCube->Init(graphicsFactory, cubeModel);
@@ -259,9 +262,13 @@ namespace GameEngineSpace
 		dLight = graphicsFactory->CreateDirectionalLight("DLight");
 		dLight->rotation.x += 45.0f;
 
-		pLight = graphicsFactory->CreatePointLight("PLight");
-		pLight->color = { 1.0f, 0.0f, 0.0f, 1.0f };
-		pLight->intensity = 20.0f;
+		for (int i = 0; i < 10; i++)
+		{
+			pLight[i] = graphicsFactory->CreatePointLight("PLight" + std::to_string(i));
+			pLight[i]->color = { 1.0f * (i / 5), 1.0f - 1.0f * (i / 5), 0.0f, 1.0f };
+			pLight[i]->intensity = 100.0f;
+			pLight[i]->position.x = -5.0f + 1.0f * i;
+		}
 
 		graphicsFactory->CreateTexture("Bricks", "Resources/Texture/bricks.dds");
 
@@ -440,12 +447,16 @@ namespace GameEngineSpace
 
 		sceneManager->Update();
 
-		cube->Update(Time::instance.deltaTime);
 		pbrCube->Update(Time::instance.deltaTime);
 		genji->Update(Time::instance.deltaTime);
 		pbrGenji->Update(Time::instance.deltaTime);
 		pillar->Update(Time::instance.deltaTime);
 		ely->Update(Time::instance.deltaTime);
+
+		for (int i = 0; i < 10; i++)
+		{
+			cubes[i]->Update(Time::instance.deltaTime);
+		}
 
 		static float metallic = 0.5f;
 
@@ -503,71 +514,6 @@ namespace GameEngineSpace
 		dLight->rotation.y += 15.0f * Time::instance.deltaTime;
 
 		//pig->LookAt(-camera.GetWorldPosition());
-
-		Vector pLightVector = pig->GetTransform().GetWorldTransform()[3] - pLight->position;
-		float distance = Vector3Length(pLightVector);
-
-		if (distance > 0.0f)
-			pLightVector = Vector3Normalize(pLightVector);
-		else
-			pLightVector = Vector::Zero;
-
-		Vector pLightColor;
-
-		if (distance > pLight->intensity)
-			pLightColor = Vector::Zero;
-		else
-			pLightColor = pLight->color * VectorReplicate(1.0f - distance / pLight->intensity);
-
-		pLightVector = pbrGenji->GetTransform().GetWorldTransform()[3] - pLight->position;
-		distance = Vector3Length(pLightVector);
-
-		if (distance > 0.0f)
-			pLightVector = Vector3Normalize(pLightVector);
-		else
-			pLightVector = Vector::Zero;
-
-		pLightColor;
-
-		if (distance > pLight->intensity)
-			pLightColor = Vector::Zero;
-		else
-			pLightColor = pLight->color * VectorReplicate(1.0f - distance / pLight->intensity);
-
-		for (int i = 0; i < 10; i++)
-		{
-			pLightVector = pigs[i]->GetTransform().GetWorldTransform()[3] - pLight->position;
-			distance = Vector3Length(pLightVector);
-
-			if (distance > 0.0f)
-				pLightVector = Vector3Normalize(pLightVector);
-			else
-				pLightVector = Vector::Zero;
-
-			pLightColor;
-
-			if (distance > pLight->intensity)
-				pLightColor = Vector::Zero;
-			else
-				pLightColor = pLight->color * VectorReplicate(1.0f - distance / pLight->intensity);
-
-			pigs[i]->Update(Time::instance.deltaTime);
-		}
-
-		pLightVector = pbrCube->GetTransform().GetWorldTransform()[3] - pLight->position;
-		distance = Vector3Length(pLightVector);
-
-		if (distance > 0.0f)
-			pLightVector = Vector3Normalize(pLightVector);
-		else
-			pLightVector = Vector::Zero;
-
-		pLightColor;
-
-		if (distance > pLight->intensity)
-			pLightColor = Vector::Zero;
-		else
-			pLightColor = pLight->color * VectorReplicate(1.0f - distance / pLight->intensity);
 
 		using GraphicsEngineSpace::HorizontalLocation;
 		using GraphicsEngineSpace::VerticalLocation;
@@ -678,7 +624,10 @@ namespace GameEngineSpace
 
 		/* Cube */
 		graphicsEngine->GraphicsDebugBeginEvent("Cube");
-		cube->Render(graphicsEngine);
+		for (int i = 0; i < 10; i++)
+		{
+			cubes[i]->Render(graphicsEngine);
+		}
 		graphicsEngine->GraphicsDebugEndEvent();
 
 		/* View world*/
@@ -700,7 +649,10 @@ namespace GameEngineSpace
 
 		/* Point Light */
 		graphicsEngine->GraphicsDebugBeginEvent("Point Light");
-		pLight->SetUpBuffer(2, ShaderType::PIXEL);
+		for (int i = 0; i < 10; i++)
+		{
+			pLight[i]->SetUpPointLight();
+		}
 		graphicsEngine->GraphicsDebugEndEvent();
 
 		/* Sampler */
@@ -750,18 +702,23 @@ namespace GameEngineSpace
 
 		graphicsEngine->Render();
 
+		graphicsEngine->GraphicsDebugBeginEvent("Sprite Animation");
+		spriteAnim->Render(graphicsEngine, camera.GetView()* camera.GetProjection(), camera.GetWorldPosition(), tick);
+		spriteAnim1->Render(graphicsEngine, camera.GetView()* camera.GetProjection(), camera.GetWorldPosition(), tick);
+		spriteAnim2->Render(graphicsEngine, camera.GetView()* camera.GetProjection(), camera.GetWorldPosition(), tick);
+		spriteAnim3->Render(graphicsEngine, camera.GetView()* camera.GetProjection(), camera.GetWorldPosition(), tick);
+		spriteAnim4->Render(graphicsEngine, camera.GetView()* camera.GetProjection(), camera.GetWorldPosition(), tick);
+		spriteAnim5->Render(graphicsEngine, camera.GetView()* camera.GetProjection(), camera.GetWorldPosition(), tick);
+		spriteAnim6->Render(graphicsEngine, camera.GetView()* camera.GetProjection(), camera.GetWorldPosition(), tick);
+		spriteAnim7->Render(graphicsEngine, camera.GetView()* camera.GetProjection(), camera.GetWorldPosition(), tick);
+		spriteAnim8->Render(graphicsEngine, camera.GetView()* camera.GetProjection(), camera.GetWorldPosition(), tick);
+		graphicsEngine->GraphicsDebugEndEvent();
+
 		/* Line */
 		graphicsEngine->GraphicsDebugBeginEvent("Line Draw");
 		graphicsEngine->DrawLine(resourceManager->GetBuffer("LineVB"), resourceManager->GetBuffer("LineIB"), Vector{ 1.0f, 1.0f, 0.0f }, MatrixTranspose(MatrixTranslationFromVector({ -15.0f, 0.0f, 0.0f, 1.0f })));
 		graphicsEngine->DrawLine(resourceManager->GetBuffer("LineVB"), resourceManager->GetBuffer("LineIB"), Vector{ 1.0f, 0.0f, 0.0f }, MatrixTranspose(MatrixTranslationFromVector({ -20.0f, 0.0f, 0.0f, 1.0f })));
 		graphicsEngine->GraphicsDebugEndEvent();
-
-		static float depth = 0.0f;
-
-		if (Input::GetInstance()->GetInputState(VK_UP, KeyState::STAY) == true)
-			depth += 0.01f;
-		else if (Input::GetInstance()->GetInputState(VK_DOWN, KeyState::STAY) == true)
-			depth -= 0.01f;
 
 		graphicsEngine->GraphicsDebugBeginEvent("Bricks 1");
 		Vector position[3] =
@@ -777,7 +734,6 @@ namespace GameEngineSpace
 		if (Input::GetInstance()->GetInputState('V', KeyState::STAY) == true)
 		{
 			x += 0.01f;
-
 		}
 
 		/* Canvas */
@@ -791,18 +747,6 @@ namespace GameEngineSpace
 		rtm = MatrixTranspose(rtm * camera.GetView() * camera.GetProjection());
 
 		graphicsEngine->DrawSpriteOn3D(resourceManager->GetTexture("Explosion")->GetTexture(), 10.0f, 10.0f, rtm);
-		graphicsEngine->GraphicsDebugEndEvent();
-
-		graphicsEngine->GraphicsDebugBeginEvent("Sprite Animation");
-		spriteAnim->Render(graphicsEngine, camera.GetView() * camera.GetProjection(), camera.GetWorldPosition(), tick);
-		spriteAnim1->Render(graphicsEngine, camera.GetView() * camera.GetProjection(), camera.GetWorldPosition(), tick);
-		spriteAnim2->Render(graphicsEngine, camera.GetView() * camera.GetProjection(), camera.GetWorldPosition(), tick);
-		spriteAnim3->Render(graphicsEngine, camera.GetView() * camera.GetProjection(), camera.GetWorldPosition(), tick);
-		spriteAnim4->Render(graphicsEngine, camera.GetView() * camera.GetProjection(), camera.GetWorldPosition(), tick);
-		spriteAnim5->Render(graphicsEngine, camera.GetView() * camera.GetProjection(), camera.GetWorldPosition(), tick);
-		spriteAnim6->Render(graphicsEngine, camera.GetView() * camera.GetProjection(), camera.GetWorldPosition(), tick);
-		spriteAnim7->Render(graphicsEngine, camera.GetView() * camera.GetProjection(), camera.GetWorldPosition(), tick);
-		spriteAnim8->Render(graphicsEngine, camera.GetView() * camera.GetProjection(), camera.GetWorldPosition(), tick);
 		graphicsEngine->GraphicsDebugEndEvent();
 
 		/* Post Process */
@@ -823,7 +767,6 @@ namespace GameEngineSpace
 	{
 		graphicsEngine->Release();
 
-		delete cube;
 		delete pbrCube;
 		delete genji;
 		delete pbrGenji;
@@ -833,7 +776,10 @@ namespace GameEngineSpace
 		delete ely;
 
 		for (int i = 0; i < 10; i++)
+		{
 			delete pigs[i];
+			delete cubes[i];
+		}
 	}
 
 	GameEngineDeclSpec GameEngine* CreateGameEngine()

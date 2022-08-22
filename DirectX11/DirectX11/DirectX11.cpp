@@ -416,6 +416,37 @@ namespace DX11
 		return true;
 	}
 
+	bool DirectX11::DrawSpriteOn3D(Texture* texture, HeraclesMath::Vector worldPosition[3], const HeraclesMath::Matrix& viewProjection, const HeraclesMath::Vector texCoord[3])
+	{
+		if (effect2D == nullptr)
+			return false;
+
+		DirectX::XMVECTOR worldPos[3] =
+		{
+			{ worldPosition[0][0], worldPosition[0][1], worldPosition[0][2], worldPosition[0][3] },
+			{ worldPosition[1][0], worldPosition[1][1], worldPosition[1][2], worldPosition[1][3] },
+			{ worldPosition[2][0], worldPosition[2][1], worldPosition[2][2], worldPosition[2][3] }
+		};
+
+		DirectX::XMVECTOR xmTexCoord[3] = { { texCoord[0].x, texCoord[0].y }, { texCoord[1].x, texCoord[1].y }, { texCoord[2].x, texCoord[2].y } };
+
+		DirectX::XMMATRIX viewProj;
+
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				viewProj.r[i].m128_f32[j] = viewProjection[i][j];
+			}
+		}
+
+		deviceContext->OMSetBlendState(blendState, nullptr, 0xff);
+
+		effect2D->Draw(reinterpret_cast<ID3D11ShaderResourceView*>(texture), worldPos, xmTexCoord, &viewProj);
+
+		return true;
+	}
+
 	bool DirectX11::DrawSpriteOn3D(Texture* texture, long width, long height, const HeraclesMath::Matrix& worldViewProjection)
 	{
 		if (effect2D == nullptr)

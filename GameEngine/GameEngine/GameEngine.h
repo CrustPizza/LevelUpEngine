@@ -56,7 +56,6 @@ namespace GameEngineSpace
 		Camera camera;
 
 		// Test
-		Cube* cube;
 		Cube* pbrCube;
 		Genji* genji;
 		Genji* pbrGenji;
@@ -64,7 +63,9 @@ namespace GameEngineSpace
 		Pig* pigs[10];
 
 		GraphicsEngineSpace::DirectionalLight* dLight;
-		GraphicsEngineSpace::PointLight* pLight;
+
+		Cube* cubes[10];
+		GraphicsEngineSpace::PointLight* pLight[10];
 		
 		GraphicsEngineSpace::SkyBoxBase* skyBox;
 		GraphicsEngineSpace::IBLTexture* ibl;

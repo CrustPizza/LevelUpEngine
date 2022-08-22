@@ -8,6 +8,7 @@
 
 #include "GraphicsEngine.h"
 #include "../DirectX11/DirectX11Framework.h"
+#include <algorithm>
 
 namespace GraphicsEngineSpace
 {
@@ -91,6 +92,8 @@ namespace GraphicsEngineSpace
 		resourceManager = new ResourceManager;
 		factory->InitFactory(graphicsFactory, resourceManager);
 
+		PointLight::instance = factory->CreatePointLight("PointLightManager");
+
 		return factory;
 	}
 
@@ -119,17 +122,89 @@ namespace GraphicsEngineSpace
 
 	bool GraphicsEngine::DrawSpriteOn3D(Texture* texture, HeraclesMath::Vector worldPosition[3], const HeraclesMath::Matrix& viewProjection)
 	{
-		return graphicsEngine->DrawSpriteOn3D(texture, worldPosition, viewProjection);
+		Sprite3DData spriteData;
+
+		spriteData.texture = texture;
+
+		for (int i = 0; i < 3; i++)
+			spriteData.worldPosition[i] = worldPosition[i];
+
+		spriteData.texCoord[0] = { 0.0f, 0.0f };
+		spriteData.texCoord[1] = { 1.0f, 0.0f };
+		spriteData.texCoord[2] = { 0.0f, 1.0f };
+
+		spriteData.worldViewProjection = viewProjection;
+
+		sprite3DQueue.push_back(spriteData);
+
+		return true;
+	}
+
+	bool GraphicsEngine::DrawSpriteOn3D(Texture* texture, Vector worldPosition[3], const Matrix& viewProjection, const Vector texCoord[3])
+	{
+		Sprite3DData spriteData;
+
+		spriteData.texture = texture;
+
+		for (int i = 0; i < 3; i++)
+		{
+			spriteData.worldPosition[i] = worldPosition[i];
+			spriteData.texCoord[i] = texCoord[i];
+		}
+
+		spriteData.worldViewProjection = viewProjection;
+
+		sprite3DQueue.push_back(spriteData);
+
+		return true;
 	}
 
 	bool GraphicsEngine::DrawSpriteOn3D(Texture* texture, long width, long height, const HeraclesMath::Matrix& worldViewProjection)
 	{
+		Sprite3DData spriteData;
+
+		spriteData.texture = texture;
+
+		for (int i = 0; i < 3; i++)
+			spriteData.worldPosition[i] = { width / 2.0f, height / 2.0f, 0.0f, 1.0f };
+
+		spriteData.worldPosition[1].x -= width;
+		spriteData.worldPosition[2].y -= height;
+
+		spriteData.texCoord[0] = { 0.0f, 0.0f };
+		spriteData.texCoord[1] = { 1.0f, 0.0f };
+		spriteData.texCoord[2] = { 0.0f, 1.0f };
+
+		spriteData.worldViewProjection = worldViewProjection;
+		spriteData.depth = worldViewProjection[2][3] / worldViewProjection[3][3];
+
+		sprite3DQueue.push_back(spriteData);
+
+		return true;
 		return graphicsEngine->DrawSpriteOn3D(texture, width, height, worldViewProjection);
 	}
 
 	bool GraphicsEngine::DrawSpriteOn3D(Texture* texture, long width, long height, const Matrix& worldViewProjection, const Vector texCoord[3])
 	{
-		return graphicsEngine->DrawSpriteOn3D(texture, width, height, worldViewProjection, texCoord);
+		Sprite3DData spriteData;
+
+		spriteData.texture = texture;
+
+		for (int i = 0; i < 3; i++)
+		{
+			spriteData.worldPosition[i] = { width / 2.0f, height / 2.0f, 0.0f, 1.0f };
+			spriteData.texCoord[i] = texCoord[i];
+		}
+
+		spriteData.worldPosition[1].x -= width;
+		spriteData.worldPosition[2].y -= height;
+
+		spriteData.worldViewProjection = worldViewProjection;
+		spriteData.depth = worldViewProjection[2][3] / worldViewProjection[3][3];
+
+		sprite3DQueue.push_back(spriteData);
+
+		return true;
 	}
 
 	bool GraphicsEngine::DrawMesh(BufferBase* vertices, BufferBase* indices)
@@ -246,6 +321,8 @@ namespace GraphicsEngineSpace
 	{
 		DirectionalLight* dLight = resourceManager->GetDirectionalLight();
 
+		PointLight::instance->SetUpPointLightsBuffer(2, ShaderType::PIXEL);
+
 		if (dLight != nullptr)
 		{
 			graphicsEngine->BeginShadowRender();
@@ -304,6 +381,25 @@ namespace GraphicsEngineSpace
 		renderQueue.clear();
 
 		graphicsEngine->GraphicsDebugEndEvent();
+
+		graphicsEngine->GraphicsDebugBeginEvent("3D Sprite Render");
+
+		std::sort(sprite3DQueue.begin(), sprite3DQueue.end(), [](const Sprite3DData& dest, const Sprite3DData& src) -> bool
+			{
+				return dest.depth > src.depth;
+			});
+
+		for (auto& iter : sprite3DQueue)
+		{
+			if (iter.texture == nullptr)
+				continue;
+
+			graphicsEngine->DrawSpriteOn3D(iter.texture, iter.worldPosition, iter.worldViewProjection, iter.texCoord);
+		}
+
+		sprite3DQueue.clear();
+
+		graphicsEngine->GraphicsDebugEndEvent();
 	}
 
 	void GraphicsEngine::PostProcess()
@@ -342,12 +438,12 @@ namespace GraphicsEngineSpace
 		std::string dtStr = "DeltaTime : ";
 		dtStr += std::to_string(deltaTime);
 
-		DrawTextColor(fpsStr, Vector{ 1.0f, 1.0f, 0.0f, }, Vector{ 10.0f, 10.0f }, 0.0f, Vector{ 1.5f, 1.5f });
-		DrawTextColor(dtStr, Vector{ 1.0f, 1.0f, 0.0f, }, Vector{ 10.0f, 40.0f }, 0.0f, Vector{ 1.5f, 1.5f });
+		DrawTextColor(fpsStr, Vector{ 1.0f, 1.0f, 0.0f, }, Vector{ 10.0f, 10.0f }, 0.0f, Vector{ 0.5f, 0.5f });
+		DrawTextColor(dtStr, Vector{ 1.0f, 1.0f, 0.0f, }, Vector{ 10.0f, 40.0f }, 0.0f, Vector{ 0.5f, 0.5f });
 
 		std::wstring text = L"가나다라 ABCD 1234";
 
-		DrawTextColor("ColonnaMT", text, Vector{ 1.0f, 1.0f, 0.0f, }, Vector{ 10.0f, 70.0f }, 0.0f, Vector{ 1.5f, 1.5f });
+		DrawTextColor("ColonnaMT", text, Vector{ 1.0f, 1.0f, 0.0f, }, Vector{ 10.0f, 70.0f }, 0.0f, Vector{ 0.5f, 0.5f });
 
 		if (showMRT == true)
 			graphicsEngine->DebugRender();
