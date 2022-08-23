@@ -49,9 +49,10 @@ namespace GraphicsEngineSpace
 		virtual PBRModel* CreateSkinningModel(const std::string& name, ModelBase* model);
 		virtual PBRModel* CreateSkinningAlbedoModel(const std::string& name, ModelBase* model);
 		virtual PBRModel* CreateSkinningAlbedoNormalModel(const std::string& name, ModelBase* model);
-		virtual PBRModel* CreateWithoutAOStaticModel(const std::string& name, ModelBase* model);
 		virtual PBRModel* CreateWithoutAOModel(const std::string& name, ModelBase* model);
+		virtual PBRModel* CreateWithoutAOStaticModel(const std::string& name, ModelBase* model);
 		virtual PBRModel* CreateAllTextureModel(const std::string& name, ModelBase* model);
+		virtual PBRModel* CreateAllTextureStaticModel(const std::string& name, ModelBase* model);
 
 		virtual IBLTexture* CreateIBLTexture(const std::string& name, const std::string& radiancePath, const std::string& irradiancePath);
 

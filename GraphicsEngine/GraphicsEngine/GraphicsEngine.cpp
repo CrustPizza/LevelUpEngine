@@ -323,47 +323,47 @@ namespace GraphicsEngineSpace
 
 		PointLight::instance->SetUpPointLightsBuffer(2, ShaderType::PIXEL);
 
-		//if (dLight != nullptr)
-		//{
-		//	graphicsEngine->BeginShadowRender();
+		if (dLight != nullptr)
+		{
+			graphicsEngine->BeginShadowRender();
 
-		//	resourceManager->GetShader("ShadowMapPS")->SetUpShader();
+			resourceManager->GetShader("ShadowMapPS")->SetUpShader();
 
-		//	Vector position = Vector::Backward * MatrixRotationFromVector(dLight->rotation);
-		//	position *= 50.0f;
+			Vector position = Vector::Backward * MatrixRotationFromVector(dLight->rotation);
+			position *= 50.0f;
 
-		//	Matrix lightProjection = OrthographicOffCenterMatrix(position.x - 400, position.x + 400, position.y - 400, position.y + 400, position.z - 400, position.z + 400);
-		//	//Matrix lightProjection = OrthographicMatrix(300, 300, -300, 300.0f);
+			Matrix lightProjection = OrthographicOffCenterMatrix(position.x - 400, position.x + 400, position.y - 400, position.y + 400, position.z - 400, position.z + 400);
+			//Matrix lightProjection = OrthographicMatrix(300, 300, -300, 300.0f);
 
-		//	Matrix lightViewProjection = ViewMatrix(position, dLight->rotation) * lightProjection;
-		//	lightViewProjection = MatrixTranspose(lightViewProjection);
+			Matrix lightViewProjection = ViewMatrix(position, dLight->rotation) * lightProjection;
+			lightViewProjection = MatrixTranspose(lightViewProjection);
 
-		//	resourceManager->GetBuffer("LightViewProjectionCB")->SetUpBuffer(7, &lightViewProjection, ShaderType::VERTEX);
+			resourceManager->GetBuffer("LightViewProjectionCB")->SetUpBuffer(7, &lightViewProjection, ShaderType::VERTEX);
 
-		//	for (auto& iter : renderQueue)
-		//	{
-		//		if (iter.prefab != nullptr)
-		//		{
-		//			graphicsEngine->GraphicsDebugBeginEvent(iter.prefab->model->GetName() + "_Shadow");
-		//			iter.prefab->PrepareRender(iter.worldTransform, iter.animationTime);
+			for (auto& iter : renderQueue)
+			{
+				if (iter.prefab != nullptr)
+				{
+					graphicsEngine->GraphicsDebugBeginEvent(iter.prefab->model->GetName() + "_Shadow");
+					iter.prefab->PrepareRender(iter.worldTransform, iter.animationTime);
 
-		//			if (iter.prefab->isSkinning == true)
-		//			{
-		//				resourceManager->GetShader("ShadowSkinningMapVS")->SetUpShader();
-		//				resourceManager->GetBuffer("BoneMatrixCB")->SetUpBuffer(3, iter.prefab->model->GetBoneMatrix(), ShaderType::VERTEX);
-		//			}
-		//			else
-		//			{
-		//				resourceManager->GetShader("ShadowMapVS")->SetUpShader();
-		//			}
+					if (iter.prefab->isSkinning == true)
+					{
+						resourceManager->GetShader("ShadowSkinningMapVS")->SetUpShader();
+						resourceManager->GetBuffer("BoneMatrixCB")->SetUpBuffer(3, iter.prefab->model->GetBoneMatrix(), ShaderType::VERTEX);
+					}
+					else
+					{
+						resourceManager->GetShader("ShadowMapVS")->SetUpShader();
+					}
 
-		//			iter.prefab->ShadowRender(graphicsEngine);
-		//			graphicsEngine->GraphicsDebugEndEvent();
-		//		}
-		//	}
+					iter.prefab->ShadowRender(graphicsEngine);
+					graphicsEngine->GraphicsDebugEndEvent();
+				}
+			}
 
-		//	graphicsEngine->EndShadowRender();
-		//}
+			graphicsEngine->EndShadowRender();
+		}
 
 		graphicsEngine->GraphicsDebugBeginEvent("Render");
 

@@ -192,18 +192,15 @@ namespace GraphicsEngineSpace
 		if (newBuffer == nullptr)
 			return nullptr;
 
-		if (resourceManager->AddBuffer(name, newBuffer) != true)
-		{
-			int count = 1;
+		std::string bufferName = name;
+		int ID = 1;
 
-			while (resourceManager->AddBuffer(name + std::to_string(count++), newBuffer) != true)
-			{
-				if (count >= 100)
-					return nullptr;
-			}
+		while (resourceManager->AddBuffer(bufferName, newBuffer) != true)
+		{
+			bufferName = name + std::to_string(ID++);
 		}
 
-		return resourceManager->GetBuffer(name);
+		return resourceManager->GetBuffer(bufferName);
 	}
 
 	BufferBase* Factory::CreateIndexBuffer(const std::string& name, USAGE usage, UINT CPUflag, UINT typeSize, void* dataPtr, UINT size)
@@ -224,7 +221,7 @@ namespace GraphicsEngineSpace
 			bufferName = name + std::to_string(ID++);
 		}
 
-		return resourceManager->GetBuffer(name);
+		return resourceManager->GetBuffer(bufferName);
 	}
 
 	BufferBase* Factory::CreateConstantBuffer(const std::string& name, USAGE usage, UINT CPUflag, UINT typeSize)
@@ -599,28 +596,6 @@ namespace GraphicsEngineSpace
 		return resourceManager->GetPBRModel(name);
 	}
 
-	PBRModel* Factory::CreateWithoutAOStaticModel(const std::string& name, ModelBase* model)
-	{
-		if (graphicsFactory == nullptr || resourceManager == nullptr || model == nullptr)
-			return nullptr;
-
-		PBRBuilder builder;
-
-		PBRModel* newPBRModel = builder.CreateWithoutAOStaticModel(name, this, model);
-
-		if (newPBRModel == nullptr)
-			return nullptr;
-
-		if (resourceManager->AddPBRModel(name, newPBRModel) != true)
-		{
-			newPBRModel->Release();
-
-			return nullptr;
-		}
-
-		return resourceManager->GetPBRModel(name);
-	}
-
 	PBRModel* Factory::CreateWithoutAOModel(const std::string& name, ModelBase* model)
 	{
 		if (graphicsFactory == nullptr || resourceManager == nullptr || model == nullptr)
@@ -643,6 +618,28 @@ namespace GraphicsEngineSpace
 		return resourceManager->GetPBRModel(name);
 	}
 
+	PBRModel* Factory::CreateWithoutAOStaticModel(const std::string& name, ModelBase* model)
+	{
+		if (graphicsFactory == nullptr || resourceManager == nullptr || model == nullptr)
+			return nullptr;
+
+		PBRBuilder builder;
+
+		PBRModel* newPBRModel = builder.CreateWithoutAOStaticModel(name, this, model);
+
+		if (newPBRModel == nullptr)
+			return nullptr;
+
+		if (resourceManager->AddPBRModel(name, newPBRModel) != true)
+		{
+			newPBRModel->Release();
+
+			return nullptr;
+		}
+
+		return resourceManager->GetPBRModel(name);
+	}
+
 	PBRModel* Factory::CreateAllTextureModel(const std::string& name, ModelBase* model)
 	{
 		if (graphicsFactory == nullptr || resourceManager == nullptr || model == nullptr)
@@ -651,6 +648,28 @@ namespace GraphicsEngineSpace
 		PBRBuilder builder;
 
 		PBRModel* newPBRModel = builder.CreateAllTextureModel(name, this, model);
+
+		if (newPBRModel == nullptr)
+			return nullptr;
+
+		if (resourceManager->AddPBRModel(name, newPBRModel) != true)
+		{
+			newPBRModel->Release();
+
+			return nullptr;
+		}
+
+		return resourceManager->GetPBRModel(name);
+	}
+
+	PBRModel* Factory::CreateAllTextureStaticModel(const std::string& name, ModelBase* model)
+	{
+		if (graphicsFactory == nullptr || resourceManager == nullptr || model == nullptr)
+			return nullptr;
+
+		PBRBuilder builder;
+
+		PBRModel* newPBRModel = builder.CreateAllTextureStaticModel(name, this, model);
 
 		if (newPBRModel == nullptr)
 			return nullptr;
@@ -850,6 +869,7 @@ namespace GraphicsEngineSpace
 		CreateFontObject("EBS-Light", "Font/ebsLight.spritefont");
 		CreateFontObject("EBS-Medium", "Font/ebsMedium.spritefont");
 		CreateFontObject("H2MJRE", "Font/h2mjre.spritefont");
+		CreateFontObject("HahmletBold", "Font/Hahmlet_Bold.spritefont");
 		CreateFontObject("NotoSansBold", "Font/NotoSansCJK_KR_Bold.spritefont");
 		CreateFontObject("NotoSansMedium", "Font/NotoSansCJK_KR_Medium.spritefont");
 		CreateFontObject("NotoSansRegular", "Font/NotoSansCJK_KR_Regular.spritefont");

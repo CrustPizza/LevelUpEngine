@@ -117,10 +117,12 @@ PS_Output ConstVarMain(VS_Default_Output input)
 	shadowTexCoord = shadowTexCoord * 0.5f + 0.5f;
 	float depthFormShadowMap = ShadowMap.Sample( Sampler, shadowTexCoord ).r;
 	
-	if (depthFormShadowMap - 0.0025f < input.ShadowDepth.z)
+	if (depthFormShadowMap + 0.0025f < input.ShadowDepth.z)
 	{
 		color *= 0.5f;
 	}
+
+	color = pow(color, 1.0f / 2.2f);
 
 	output.screen = float4(color, Alpha);
 	output.depth = input.Position.z;
@@ -181,10 +183,12 @@ PS_Output AlbedoMain(VS_Default_Output input)
 	shadowTexCoord = shadowTexCoord * 0.5f + 0.5f;
 	float depthFormShadowMap = ShadowMap.Sample(Sampler, shadowTexCoord).r;
 
-	if (depthFormShadowMap - 0.0025f < input.ShadowDepth.z)
+	if (depthFormShadowMap + 0.0025f < input.ShadowDepth.z)
 	{
 		color *= 0.5f;
 	}
+
+	color = pow(color, 1.0f / 2.2f);
 
 	output.screen = float4(color, Alpha);
 	output.depth = input.Position.z;
@@ -254,10 +258,12 @@ PS_Output AlbedoNormalMain(VS_Normal_Output input)
 	shadowTexCoord = shadowTexCoord * 0.5f + 0.5f;
 	float depthFormShadowMap = ShadowMap.Sample(Sampler, shadowTexCoord).r;
 
-	if (depthFormShadowMap - 0.0025f < input.ShadowDepth.z)
+	if (depthFormShadowMap + 0.0025f < input.ShadowDepth.z)
 	{
 		color *= 0.5f;
 	}
+
+	color = pow(color, 1.0f / 2.2f);
 
 	output.screen = float4(color, Alpha);
 	output.depth = input.Position.z;
@@ -329,10 +335,12 @@ PS_Output WithoutAOMain(VS_Normal_Output input)
 	shadowTexCoord = shadowTexCoord * 0.5f + 0.5f;
 	float depthFormShadowMap = ShadowMap.Sample(Sampler, shadowTexCoord).r;
 
-	if (depthFormShadowMap - 0.0025f < input.ShadowDepth.z)
+	if (depthFormShadowMap + 0.0025f < input.ShadowDepth.z)
 	{
 		color *= 0.5f;
 	}
+
+	color = pow(color, 1.0f / 2.2f);
 
 	output.screen = float4(color, Alpha);
 	output.depth = input.Position.z;
@@ -406,7 +414,7 @@ PS_Output AllTextureMain(VS_Normal_Output input)
 	shadowTexCoord = shadowTexCoord * 0.5f + 0.5f;
 	float depthFormShadowMap = ShadowMap.Sample(Sampler, shadowTexCoord).r;
 
-	if (depthFormShadowMap - 0.0025f < input.ShadowDepth.z)
+	if (depthFormShadowMap + 0.0025f < input.ShadowDepth.z)
 	{
 		color *= 0.5f;
 	}

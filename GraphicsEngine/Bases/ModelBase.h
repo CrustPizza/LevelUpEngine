@@ -97,7 +97,7 @@ element->SetupAttachment(parent);
 			return boundingBoxMax - boundingBoxMin;
 		}
 
-		void SetMetallicMap(TextureBase* metalicMap)
+		void SetMetallicMap(TextureBase* metallicMap)
 		{
 			for (auto& material : materials)
 			{
@@ -107,14 +107,14 @@ element->SetupAttachment(parent);
 				{
 					if (map.type == MapType::METALLIC)
 					{
-						maps[maps.size()].map = metalicMap;
+						map.map = metallicMap;
 						return;
 					}
 				}
 
 				MapData temp;
 
-				temp.map = metalicMap;
+				temp.map = metallicMap;
 				temp.type = MapType::METALLIC;
 
 				maps.push_back(temp);
@@ -133,7 +133,7 @@ element->SetupAttachment(parent);
 				{
 					if (map.type == MapType::ROUGHNESS)
 					{
-						maps[maps.size()].map = roughnessMap;
+						map.map = roughnessMap;
 						return;
 					}
 				}
@@ -159,7 +159,7 @@ element->SetupAttachment(parent);
 				{
 					if (map.type == MapType::AMBIENTOCCLUSION)
 					{
-						maps[maps.size()].map = ambientOcclusionMap;
+						map.map = ambientOcclusionMap;
 						return;
 					}
 				}
@@ -218,13 +218,13 @@ element->SetupAttachment(parent);
 			if (timeReset == true)
 			{
 				for (auto* iter : helpers)
-					iter->UpdateAnimation(animationKey, 0.0f);
+					iter->UpdateAnimation(animationKey, -1.0f);
 
 				for (auto* iter : meshes)
-					iter->UpdateAnimation(animationKey, 0.0f);
+					iter->UpdateAnimation(animationKey, -1.0f);
 
 				for (auto* iter : bones)
-					iter->UpdateAnimation(animationKey, 0.0f);
+					iter->UpdateAnimation(animationKey, -1.0f);
 			}
 
 			Transform* transform = &emptyObject.GetTransform();

@@ -38,6 +38,23 @@ namespace GraphicsEngineSpace
 		{
 			bool reset = true;
 
+			if (animTime < 0.0f)
+			{
+				if (rotations.empty() != true)
+				{
+					Vector quat = rotations.back().vec;
+					transform->SetRotation(ConvertQuaternionToEuler(quat));
+				}
+				
+				if (positions.empty() != true)
+				{
+					Vector pos = positions.back().vec;
+					transform->SetPosition(pos);
+				}
+
+				return true;
+			}
+
 			for (int i = 1; i < rotations.size(); i++)
 			{
 				float destTick = rotations[i - 1].tick;
