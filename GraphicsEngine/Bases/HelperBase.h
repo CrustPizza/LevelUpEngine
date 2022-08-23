@@ -36,12 +36,12 @@ namespace GraphicsEngineSpace
 
 		bool UpdateAnimation(const std::string& animationKey, float tick)
 		{
+			GetTransform().ResetLocation();
+
 			auto result = animations.find(animationKey);
 
 			if (result == animations.end())
 				return false;
-
-			GetTransform().ResetLocation();
 
 			bool temp = result->second->UpdateAnimation(&GetTransform(), tick);
 

@@ -99,6 +99,8 @@ float3 LightSurface(
 
 	const float NDotV = saturate( dot( Normal, View) );
 
+	roughness = clamp(roughness, 0.04f, 1.0f);
+
 	const float alpha = roughness * roughness;
 
 	const float3 diffuseColor = lerp( albedo, (float3)0, metallic ) * ao;
@@ -106,6 +108,7 @@ float3 LightSurface(
 
 	float3 ret = 0;
 
+	[unroll]
 	for (int i = 0; i < lightsAmount; i++)
 	{
 		const float3 L = normalize(lightDirection[i]);

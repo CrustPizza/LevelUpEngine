@@ -235,7 +235,7 @@ namespace HeraclesMath
 		static_assert(permuteZ < 8, "PermuteZ template parameter out of range");
 		static_assert(permuteW < 8, "PermuteW template parameter out of range");
 
-		const unsigned int shuffle = ((permuteW & 3) << 6) | ((permuteZ & 3) << 4) | ((permuteY & 3) << 2) | (permuteX & 3);
+		const unsigned int shuffle = (((permuteW & 3) << 6) | ((permuteZ & 3) << 4) | ((permuteY & 3) << 2) | (permuteX & 3));
 
 		const bool whichX = permuteX > 3;
 		const bool whichY = permuteY > 3;

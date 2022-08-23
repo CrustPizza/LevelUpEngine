@@ -501,10 +501,10 @@ namespace HeraclesMath
 	{
 		return Vector
 		{
-			v1.x < v2.x ? 0xffffffff : 0,
-			v1.y < v2.y ? 0xffffffff : 0,
-			v1.z < v2.z ? 0xffffffff : 0,
-			v1.w < v2.w ? 0xffffffff : 0
+			(v1.x < v2.x) ? 0xffffffff : 0,
+			(v1.y < v2.y) ? 0xffffffff : 0,
+			(v1.z < v2.z) ? 0xffffffff : 0,
+			(v1.w < v2.w) ? 0xffffffff : 0
 		};
 	}
 
@@ -1000,16 +1000,16 @@ namespace HeraclesMath
 	Vector ConvertRotationNormalToQuaternion(const Vector& normalAxis, float angle)
 	{
 		// 마소 XMQuaternionRotationNormal 코드
+		Vector N = VectorSelect(Vector::One, normalAxis, Vector::Select1110);
+
 		float fSin = 0.0f;
 		float fCos = 0.0f;
 
 		ConvertRadianToScalarSinCos(fSin, fCos, angle);
 
-		Vector normal = normalAxis;
-		normal[3] = 1.0f;
 		Vector scale = { fSin, fSin, fSin, fCos };
 
-		return normal * scale;
+		return N * scale;
 	}
 
 	Vector ConvertRotationAxisAngleToQuaternion(const Vector& axis, float angle)
@@ -1253,7 +1253,7 @@ namespace HeraclesMath
 		// 11-degree minimax approximation
 		fSin = (((((-2.3889859e-08f * y2 + 2.7525562e-06f) * y2 - 0.00019840874f) * y2 + 0.0083333310f) * y2 - 0.16666667f) * y2 + 1.0f) * y;
 
-		// 11-degree minimax approximation
+		// 10-degree minimax approximation
 		float p = ((((-2.6051615e-07f * y2 + 2.4760495e-05f) * y2 - 0.0013888378f) * y2 + 0.041666638f) * y2 - 0.5f) * y2 + 1.0f;
 		fCos = sign * p;
 	}

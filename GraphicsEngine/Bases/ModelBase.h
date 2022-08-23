@@ -197,19 +197,19 @@ element->SetupAttachment(parent);
 		{
 			bool timeReset = true;
 
-			for (auto iter : helpers)
+			for (auto* iter : helpers)
 			{
 				if (iter->UpdateAnimation(animationKey, animTime) == true)
 					timeReset = false;
 			}
 
-			for (auto iter : meshes)
+			for (auto* iter : meshes)
 			{
 				if (iter->UpdateAnimation(animationKey, animTime) == true)
 					timeReset = false;
 			}
 			
-			for (auto iter : bones)
+			for (auto* iter : bones)
 			{
 				if (iter->UpdateAnimation(animationKey, animTime) == true)
 					timeReset = false;
@@ -217,13 +217,13 @@ element->SetupAttachment(parent);
 
 			if (timeReset == true)
 			{
-				for (auto iter : helpers)
+				for (auto* iter : helpers)
 					iter->UpdateAnimation(animationKey, 0.0f);
 
-				for (auto iter : meshes)
+				for (auto* iter : meshes)
 					iter->UpdateAnimation(animationKey, 0.0f);
 
-				for (auto iter : bones)
+				for (auto* iter : bones)
 					iter->UpdateAnimation(animationKey, 0.0f);
 			}
 

@@ -35,8 +35,19 @@ namespace GameEngineSpace
 		prefab->SetAnimationKey("Idle");
 		this->model = model;
 
-		transform.position.z -= 15.0f;
+		transform.position.z -= 30.0f * ID;
 		transform.scale = { 0.1f, 0.1f, 0.1f };
+	}
+
+	void Heracles::SetWeapon(GraphicsEngineSpace::Factory* factory, ModelBase* model)
+	{
+		static int ID = 0;
+
+		weaponPbrModel = factory->CreateSkinningAlbedoModel("HeraclesWeaponPBR_" + std::to_string(ID++), model);
+		weaponPbrModel->SetAlpha(1.0f);
+
+		weaponPrefab = weaponPbrModel->GetPrefab();
+		weaponPrefab->SetAnimationKey("Idle");
 	}
 
 	void Heracles::Update(float tick)
@@ -50,10 +61,13 @@ namespace GameEngineSpace
 	{
 		animationTime += tick;
 
+		weaponPrefab->PrepareRender(transform.GetWorldTransform(), animationTime);
+
 		if (prefab->PrepareRender(transform.GetWorldTransform(), animationTime) == true)
 			animationTime = 0.0f;
 
 		prefab->Render(engine);
+		weaponPrefab->Render(engine);
 	}
 
 	void Heracles::SetAnimKey(const std::string& animationName)
@@ -62,5 +76,6 @@ namespace GameEngineSpace
 			return;
 
 		pbrModel->GetPrefab()->SetAnimationKey(animationName);
+		weaponPbrModel->GetPrefab()->SetAnimationKey(animationName);
 	}
 }

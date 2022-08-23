@@ -21,8 +21,10 @@ namespace GameEngineSpace
 	class Heracles : public ObjectBase
 	{
 		PBRModel* pbrModel;
+		PBRModel* weaponPbrModel;
 
 		PrefabBase* prefab;
+		PrefabBase* weaponPrefab;
 		ModelBase* model;
 
 		Vector velocity;
@@ -35,6 +37,7 @@ namespace GameEngineSpace
 		~Heracles();
 
 		void Init(GraphicsEngineSpace::Factory* factory, ModelBase* model);
+		void SetWeapon(GraphicsEngineSpace::Factory* factory, ModelBase* model);
 		void Update(float tick) override;
 		void Render(GraphicsEngineSpace::GraphicsEngineBase* engine, float tick = 0.0f) override;
 

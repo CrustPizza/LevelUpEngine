@@ -117,7 +117,7 @@ PS_Output ConstVarMain(VS_Default_Output input)
 	shadowTexCoord = shadowTexCoord * 0.5f + 0.5f;
 	float depthFormShadowMap = ShadowMap.Sample( Sampler, shadowTexCoord ).r;
 	
-	if (depthFormShadowMap + 0.005f < input.ShadowDepth.z)
+	if (depthFormShadowMap - 0.0025f < input.ShadowDepth.z)
 	{
 		color *= 0.5f;
 	}
@@ -181,7 +181,7 @@ PS_Output AlbedoMain(VS_Default_Output input)
 	shadowTexCoord = shadowTexCoord * 0.5f + 0.5f;
 	float depthFormShadowMap = ShadowMap.Sample(Sampler, shadowTexCoord).r;
 
-	if (depthFormShadowMap + 0.005f < input.ShadowDepth.z)
+	if (depthFormShadowMap - 0.0025f < input.ShadowDepth.z)
 	{
 		color *= 0.5f;
 	}
@@ -211,7 +211,7 @@ PS_Output AlbedoNormalMain(VS_Normal_Output input)
 	N = NormalMap.Sample(Sampler, input.TexCoord).xyz;
 
 	const float3 ViewVector = normalize(ViewPosition - input.WorldPos);
-	const float3 Normal = mul(N.xyz, TSpace);
+	const float3 Normal = normalize( mul( N.xyz, TSpace ) );
 	const float AO = 1.0f;
 	const float3 AlbedoColor = DiffuseMap.Sample(Sampler, input.TexCoord).xyz;
 
@@ -254,7 +254,7 @@ PS_Output AlbedoNormalMain(VS_Normal_Output input)
 	shadowTexCoord = shadowTexCoord * 0.5f + 0.5f;
 	float depthFormShadowMap = ShadowMap.Sample(Sampler, shadowTexCoord).r;
 
-	if (depthFormShadowMap + 0.005f < input.ShadowDepth.z)
+	if (depthFormShadowMap - 0.0025f < input.ShadowDepth.z)
 	{
 		color *= 0.5f;
 	}
@@ -262,7 +262,7 @@ PS_Output AlbedoNormalMain(VS_Normal_Output input)
 	output.screen = float4(color, Alpha);
 	output.depth = input.Position.z;
 	output.albedo = float4(AlbedoColor, 1.0f);
-	output.normal = float4(N, 1.0f);
+	output.normal = float4(normalize(input.Normal), 1.0f);
 	output.worldPos = float4(input.WorldPos, 1.0f);
 	output.tangent = float4(Normal, 1.0f);
 
@@ -284,7 +284,7 @@ PS_Output WithoutAOMain(VS_Normal_Output input)
 	N = NormalMap.Sample(Sampler, input.TexCoord).xyz;
 
 	const float3 ViewVector = normalize( ViewPosition - input.WorldPos );
-	const float3 Normal = mul( N.xyz, TSpace );
+	const float3 Normal = normalize( mul( N.xyz, TSpace ) );
 	const float metallic = MetallicMap.Sample(Sampler, input.TexCoord).r;
 	const float roughness = RoughnessMap.Sample(Sampler, input.TexCoord).r;
 	const float AO = 1.0f;
@@ -329,7 +329,7 @@ PS_Output WithoutAOMain(VS_Normal_Output input)
 	shadowTexCoord = shadowTexCoord * 0.5f + 0.5f;
 	float depthFormShadowMap = ShadowMap.Sample(Sampler, shadowTexCoord).r;
 
-	if (depthFormShadowMap + 0.005f < input.ShadowDepth.z)
+	if (depthFormShadowMap - 0.0025f < input.ShadowDepth.z)
 	{
 		color *= 0.5f;
 	}
@@ -337,7 +337,7 @@ PS_Output WithoutAOMain(VS_Normal_Output input)
 	output.screen = float4(color, Alpha);
 	output.depth = input.Position.z;
 	output.albedo = float4(AlbedoColor, 1.0f);
-	output.normal = float4(N, 1.0f);
+	output.normal = float4(normalize(input.Normal), 1.0f);
 	output.worldPos = float4(input.WorldPos, 1.0f);
 	output.tangent = float4(Normal, 1.0f);
 
@@ -359,44 +359,46 @@ PS_Output AllTextureMain(VS_Normal_Output input)
 	N = NormalMap.Sample(Sampler, input.TexCoord).xyz;
 
 	const float3 ViewVector = normalize( ViewPosition - input.WorldPos );
-	const float3 Normal = mul( N.xyz, TSpace );
+	const float3 Normal = normalize( mul( N.xyz, TSpace ) );
 	const float metallic = MetallicMap.Sample(Sampler, input.TexCoord).r;
 	const float roughness = RoughnessMap.Sample(Sampler, input.TexCoord).r;
 	const float AO = AOMap.Sample(Sampler, input.TexCoord).r;
-	const float3 AlbedoColor = DiffuseMap.Sample( Sampler, input.TexCoord ).xyz;
+	const float3 AlbedoColor = pow( DiffuseMap.Sample( Sampler, input.TexCoord ).xyz, 2.2f );
 
-	float3 LightColor[21];
-	float3 LightDirection[21];
+	float3 lightColor[21];
+	float3 lightDirection[21];
 
-	LightColor[0] = DLightColor.xyz;
-	LightDirection[0] = -DLightDirection;
+	lightColor[0].xyz = DLightColor.xyz;
+	lightDirection[0].xyz = -DLightDirection.xyz;
 
+	[unroll]
 	for (int i = 0; i < 20; i++)
 	{
+		int j = i + 1;
+
 		float3 pLightDirection = PointLights[i].PLightPosition.xyz - input.WorldPos;
 		float distance = length(pLightDirection);
 
-		LightColor[i + 1] = 0;
-		LightDirection[i + 1] = 0;
+		lightColor[j] = 0;
+		lightDirection[j] = 0;
 
 		if (distance < PointLights[i].PLightIntensity)
 		{
-			LightDirection[i + 1] = normalize(pLightDirection);
+			lightDirection[j] = normalize(pLightDirection);
 
-			float NDotL = dot(Normal, LightDirection[i]);
+			float NDotL = dot(Normal, lightDirection[i]);
 
 			if (NDotL > 0.0f)
 			{
 				float intensity = 1.0f - (distance / PointLights[i].PLightIntensity);
 
-				LightColor[i + 1] = PointLights[i].PLightColor.xyz * intensity;
+				lightColor[j] = PointLights[i].PLightColor.xyz * intensity;
 			}
 		}
 	}
 
-	float3 color = LightSurface( ViewVector, Normal, 21, LightColor, LightDirection, AlbedoColor, roughness, metallic, AO );
+	float3 color = LightSurface( ViewVector, Normal, 21, lightColor, lightDirection, AlbedoColor, roughness, metallic, AO );
 
-	float NdotL = dot(Normal, -DLightDirection);
 	float4 shadowDepth = input.ShadowDepth;
 
 	float2 shadowTexCoord = shadowDepth.xy / shadowDepth.w;
@@ -404,15 +406,17 @@ PS_Output AllTextureMain(VS_Normal_Output input)
 	shadowTexCoord = shadowTexCoord * 0.5f + 0.5f;
 	float depthFormShadowMap = ShadowMap.Sample(Sampler, shadowTexCoord).r;
 
-	if (depthFormShadowMap + 0.005f < input.ShadowDepth.z)
+	if (depthFormShadowMap - 0.0025f < input.ShadowDepth.z)
 	{
 		color *= 0.5f;
 	}
 
+	color = pow( color, 1.0f / 2.2f );
+
 	output.screen = float4(color, Alpha);
 	output.depth = input.Position.z;
 	output.albedo = float4(AlbedoColor, 1.0f);
-	output.normal = float4(N, 1.0f);
+	output.normal = float4(normalize(input.Normal), 1.0f);
 	output.worldPos = float4(input.WorldPos, 1.0f);
 	output.tangent = float4(Normal, 1.0f);
 

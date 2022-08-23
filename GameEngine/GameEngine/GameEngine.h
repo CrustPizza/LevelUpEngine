@@ -63,7 +63,7 @@ namespace GameEngineSpace
 		Pig* pig;
 		Pig* pigs[10];
 
-		Heracles* heracles;
+		Heracles* heracles[10];
 
 		GraphicsEngineSpace::DirectionalLight* dLight;
 
