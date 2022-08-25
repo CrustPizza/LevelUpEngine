@@ -10,21 +10,21 @@
 #include "PBRModelMethod.hlsli"
 
 /* Texture Map */
-Texture2D DiffuseMap	: register( t0 );
-Texture2D NormalMap		: register( t1 );
-Texture2D MetallicMap	: register( t2 );
-Texture2D RoughnessMap	: register( t3 );
-Texture2D AOMap			: register( t4 );
-Texture2D ShadowMap		: register( t7 );
+Texture2D DiffuseMap	: register(t0);
+Texture2D NormalMap		: register(t1);
+Texture2D MetallicMap	: register(t2);
+Texture2D RoughnessMap	: register(t3);
+Texture2D AOMap			: register(t4);
+Texture2D ShadowMap		: register(t7);
 
 /* View */
-cbuffer cbView : register( b0 )
+cbuffer cbView : register(b0)
 {
 	float3 ViewPosition;
 }
 
 /* Directional Light */
-cbuffer cbDirectionalLight : register( b1 )
+cbuffer cbDirectionalLight : register(b1)
 {
 	float3 DLightDirection;
 	float4 DLightDiffuse;
@@ -41,16 +41,17 @@ struct PointLight
 	float4 PLightColor;
 	float  PLightSpecularPower;
 	float  PLightIntensity;
-	float2 padding;
+	float  PLightRange;
+	float padding;
 };
 
-cbuffer cbPointLight : register( b2 )
+cbuffer cbPointLight : register(b2)
 {
 	PointLight PointLights[20];
 }
 
 /* Const PBR Parameter */
-cbuffer cbPBRParmeter : register( b3 )
+cbuffer cbPBRParmeter : register(b3)
 {
 	float3 Albedo;
 	float  Alpha;
@@ -74,55 +75,50 @@ PS_Output ConstVarMain(VS_Default_Output input)
 {
 	PS_Output output = (PS_Output)0;
 
-	const float3 ViewVector = normalize( ViewPosition - input.WorldPos );
-	const float3 Normal = normalize( input.Normal );
+	const float3 ViewVector = normalize(ViewPosition - input.WorldPos);
+	const float3 Normal = normalize(input.Normal);
 	const float AO = 1.0f;
 
-	float3 LightColor[21];
-	float3 LightDirection[21];
+	float3 lightColor[21];
+	float3 lightDirection[21];
 
-	LightColor[0] = DLightColor.xyz;
-	LightDirection[0] = -DLightDirection;
+	lightColor[0].xyz = DLightColor.xyz;
+	lightDirection[0].xyz = -DLightDirection.xyz;
 
+	[unroll]
 	for (int i = 0; i < 20; i++)
 	{
+		int j = i + 1;
+
 		float3 pLightDirection = PointLights[i].PLightPosition.xyz - input.WorldPos;
-		float distance = length( pLightDirection );
+		float distance = length(pLightDirection);
 
-		LightColor[i + 1] = 0;
-		LightDirection[i + 1] = 0;
+		lightColor[j] = 0;
+		lightDirection[j] = 0;
 
-		if (distance < PointLights[i].PLightIntensity)
+		if (distance < PointLights[i].PLightRange)
 		{
-			LightDirection[i + 1] = normalize( pLightDirection );
+			lightDirection[j] = normalize(pLightDirection);
 
-			float NDotL = dot( Normal, LightDirection[i] );
+			float intensity = (1.0f - (distance / PointLights[i].PLightRange)) * PointLights[i].PLightIntensity;
 
-			if (NDotL > 0.0f)
-			{
-				float intensity = 1.0f - ( distance / PointLights[i].PLightIntensity );
-
-				LightColor[i + 1] = PointLights[i].PLightColor.xyz * intensity;
-			}
+			lightColor[j] = PointLights[i].PLightColor.xyz * intensity;
 		}
 	}
 
-	float3 color = LightSurface(ViewVector, Normal, 21, LightColor, LightDirection, Albedo, Roughness, Metallic, AO );
+	float3 color = LightSurface(ViewVector, Normal, 21, lightColor, lightDirection, Albedo, Roughness, Metallic, AO);
 
-	float NdotL = dot(Normal, -DLightDirection);
 	float4 shadowDepth = input.ShadowDepth;
 
 	float2 shadowTexCoord = shadowDepth.xy / shadowDepth.w;
 	shadowTexCoord.y *= -1;
 	shadowTexCoord = shadowTexCoord * 0.5f + 0.5f;
-	float depthFormShadowMap = ShadowMap.Sample( Sampler, shadowTexCoord ).r;
-	
+	float depthFormShadowMap = ShadowMap.Sample(Sampler, shadowTexCoord).r;
+
 	if (depthFormShadowMap + 0.0025f < input.ShadowDepth.z)
 	{
 		color *= 0.5f;
 	}
-
-	color = pow(color, 1.0f / 2.2f);
 
 	output.screen = float4(color, Alpha);
 	output.depth = input.Position.z;
@@ -139,43 +135,42 @@ PS_Output AlbedoMain(VS_Default_Output input)
 {
 	PS_Output output = (PS_Output)0;
 
-	const float3 ViewVector = normalize( ViewPosition - input.WorldPos );
-	const float3 Normal = normalize( input.Normal );
+	const float3 ViewVector = normalize(ViewPosition - input.WorldPos);
+	const float3 Normal = normalize(input.Normal);
 	const float AO = 1.0f;
-	const float3 AlbedoColor = DiffuseMap.Sample( Sampler, input.TexCoord ).xyz;
+	const float3 AlbedoColor = pow(DiffuseMap.Sample(Sampler, input.TexCoord).xyz, 2.2f);
 
-	float3 LightColor[21];
-	float3 LightDirection[21];
+	float3 lightColor[21];
+	float3 lightDirection[21];
 
-	LightColor[0] = DLightColor.xyz;
-	LightDirection[0] = -DLightDirection;
+	lightColor[0].xyz = DLightColor.xyz;
+	lightDirection[0].xyz = -DLightDirection.xyz;
 
+	[unroll]
 	for (int i = 0; i < 20; i++)
 	{
+		int j = i + 1;
+
 		float3 pLightDirection = PointLights[i].PLightPosition.xyz - input.WorldPos;
 		float distance = length(pLightDirection);
 
-		LightColor[i + 1] = 0;
-		LightDirection[i + 1] = 0;
+		lightColor[j] = 0;
+		lightDirection[j] = 0;
 
-		if (distance < PointLights[i].PLightIntensity)
+		if (distance < PointLights[i].PLightRange)
 		{
-			LightDirection[i + 1] = normalize(pLightDirection);
+			lightDirection[j] = normalize(pLightDirection);
 
-			float NDotL = dot(Normal, LightDirection[i]);
+			float intensity = (1.0f - (distance / PointLights[i].PLightRange)) * PointLights[i].PLightIntensity;
 
-			if (NDotL > 0.0f)
-			{
-				float intensity = 1.0f - (distance / PointLights[i].PLightIntensity);
-
-				LightColor[i + 1] = PointLights[i].PLightColor.xyz * intensity;
-			}
+			lightColor[j] = PointLights[i].PLightColor.xyz * intensity;
 		}
 	}
 
-	float3 color = LightSurface( ViewVector, Normal, 21, LightColor, LightDirection, AlbedoColor, Roughness, Metallic, AO );
+	float3 color = LightSurface(ViewVector, Normal, 21, lightColor, lightDirection, AlbedoColor, Roughness, Metallic, AO);
 
-	float NdotL = dot(Normal, -DLightDirection);
+	color = pow(color, 1.0f / 2.2);
+
 	float4 shadowDepth = input.ShadowDepth;
 
 	float2 shadowTexCoord = shadowDepth.xy / shadowDepth.w;
@@ -187,8 +182,6 @@ PS_Output AlbedoMain(VS_Default_Output input)
 	{
 		color *= 0.5f;
 	}
-
-	color = pow(color, 1.0f / 2.2f);
 
 	output.screen = float4(color, Alpha);
 	output.depth = input.Position.z;
@@ -208,49 +201,48 @@ PS_Output AlbedoNormalMain(VS_Normal_Output input)
 	float3 N = normalize(input.Normal);
 	float3 T = input.Tangent;
 	T = normalize(T - dot(T, N) * N);
-	float3 B = cross(N, T);
+	float3 B = cross(T, N);
 
 	float3x3 TSpace = { T, B, N };
 
 	N = NormalMap.Sample(Sampler, input.TexCoord).xyz;
 
 	const float3 ViewVector = normalize(ViewPosition - input.WorldPos);
-	const float3 Normal = normalize( mul( N.xyz, TSpace ) );
+	const float3 Normal = normalize(mul(N.xyz, TSpace));
 	const float AO = 1.0f;
-	const float3 AlbedoColor = DiffuseMap.Sample(Sampler, input.TexCoord).xyz;
+	const float3 AlbedoColor = pow(DiffuseMap.Sample(Sampler, input.TexCoord).xyz, 2.2f);
 
-	float3 LightColor[21];
-	float3 LightDirection[21];
+	float3 lightColor[21];
+	float3 lightDirection[21];
 
-	LightColor[0] = DLightColor.xyz;
-	LightDirection[0] = -DLightDirection;
+	lightColor[0].xyz = DLightColor.xyz;
+	lightDirection[0].xyz = -DLightDirection.xyz;
 
+	[unroll]
 	for (int i = 0; i < 20; i++)
 	{
+		int j = i + 1;
+
 		float3 pLightDirection = PointLights[i].PLightPosition.xyz - input.WorldPos;
 		float distance = length(pLightDirection);
 
-		LightColor[i + 1] = 0;
-		LightDirection[i + 1] = 0;
+		lightColor[j] = 0;
+		lightDirection[j] = 0;
 
-		if (distance < PointLights[i].PLightIntensity)
+		if (distance < PointLights[i].PLightRange)
 		{
-			LightDirection[i + 1] = normalize(pLightDirection);
+			lightDirection[j] = normalize(pLightDirection);
 
-			float NDotL = dot(Normal, LightDirection[i]);
+			float intensity = (1.0f - (distance / PointLights[i].PLightRange)) * PointLights[i].PLightIntensity;
 
-			if (NDotL > 0.0f)
-			{
-				float intensity = 1.0f - (distance / PointLights[i].PLightIntensity);
-
-				LightColor[i + 1] = PointLights[i].PLightColor.xyz * intensity;
-			}
+			lightColor[j] = PointLights[i].PLightColor.xyz * intensity;
 		}
 	}
 
-	float3 color = LightSurface(ViewVector, Normal, 21, LightColor, LightDirection, AlbedoColor, Roughness, Metallic, AO);
+	float3 color = LightSurface(ViewVector, Normal, 21, lightColor, lightDirection, AlbedoColor, Roughness, Metallic, AO);
 
-	float NdotL = dot(Normal, -DLightDirection);
+	color = pow(color, 1.0f / 2.2);
+
 	float4 shadowDepth = input.ShadowDepth;
 
 	float2 shadowTexCoord = shadowDepth.xy / shadowDepth.w;
@@ -262,8 +254,6 @@ PS_Output AlbedoNormalMain(VS_Normal_Output input)
 	{
 		color *= 0.5f;
 	}
-
-	color = pow(color, 1.0f / 2.2f);
 
 	output.screen = float4(color, Alpha);
 	output.depth = input.Position.z;
@@ -284,50 +274,51 @@ PS_Output WithoutAOMain(VS_Normal_Output input)
 	float3 T = input.Tangent;
 	T = normalize(T - dot(T, N) * N);
 	float3 B = cross(N, T);
+	B = normalize(B - dot(B, N) * N - B * dot(B, T) * T);
 
-	float3x3 TSpace = { T, B, N };
+	float3x3 TSpace = float3x3(T, B, N);
 
 	N = NormalMap.Sample(Sampler, input.TexCoord).xyz;
+	N = N * 2.0f - 1.0f;
 
-	const float3 ViewVector = normalize( ViewPosition - input.WorldPos );
-	const float3 Normal = normalize( mul( N.xyz, TSpace ) );
+	const float3 ViewVector = normalize(ViewPosition - input.WorldPos);
+	const float3 Normal = normalize(mul(N.xyz, TSpace));
 	const float metallic = MetallicMap.Sample(Sampler, input.TexCoord).r;
 	const float roughness = RoughnessMap.Sample(Sampler, input.TexCoord).r;
 	const float AO = 1.0f;
-	const float3 AlbedoColor = DiffuseMap.Sample( Sampler, input.TexCoord ).xyz;
+	const float3 AlbedoColor = pow(DiffuseMap.Sample(Sampler, input.TexCoord).xyz, 2.2f);
 
-	float3 LightColor[21];
-	float3 LightDirection[21];
+	float3 lightColor[21];
+	float3 lightDirection[21];
 
-	LightColor[0] = DLightColor.xyz;
-	LightDirection[0] = -DLightDirection;
+	lightColor[0].xyz = DLightColor.xyz;
+	lightDirection[0].xyz = -DLightDirection.xyz;
 
+	[unroll]
 	for (int i = 0; i < 20; i++)
 	{
+		int j = i + 1;
+
 		float3 pLightDirection = PointLights[i].PLightPosition.xyz - input.WorldPos;
 		float distance = length(pLightDirection);
 
-		LightColor[i + 1] = 0;
-		LightDirection[i + 1] = 0;
+		lightColor[j] = 0;
+		lightDirection[j] = 0;
 
-		if (distance < PointLights[i].PLightIntensity)
+		if (distance < PointLights[i].PLightRange)
 		{
-			LightDirection[i + 1] = normalize(pLightDirection);
+			lightDirection[j] = normalize(pLightDirection);
 
-			float NDotL = dot(Normal, LightDirection[i]);
+			float intensity = (1.0f - (distance / PointLights[i].PLightRange)) * PointLights[i].PLightIntensity;
 
-			if (NDotL > 0.0f)
-			{
-				float intensity = 1.0f - (distance / PointLights[i].PLightIntensity);
-
-				LightColor[i + 1] = PointLights[i].PLightColor.xyz * intensity;
-			}
+			lightColor[j] = PointLights[i].PLightColor.xyz * intensity;
 		}
 	}
 
-	float3 color = LightSurface( ViewVector, Normal, 21, LightColor, LightDirection, AlbedoColor, roughness, metallic, AO );
+	float3 color = LightSurface(ViewVector, Normal, 21, lightColor, lightDirection, AlbedoColor, roughness, metallic, AO);
 
-	float NdotL = dot(Normal, -DLightDirection);
+	color = pow(color, 1.0f / 2.2);
+
 	float4 shadowDepth = input.ShadowDepth;
 
 	float2 shadowTexCoord = shadowDepth.xy / shadowDepth.w;
@@ -339,8 +330,6 @@ PS_Output WithoutAOMain(VS_Normal_Output input)
 	{
 		color *= 0.5f;
 	}
-
-	color = pow(color, 1.0f / 2.2f);
 
 	output.screen = float4(color, Alpha);
 	output.depth = input.Position.z;
@@ -361,17 +350,19 @@ PS_Output AllTextureMain(VS_Normal_Output input)
 	float3 T = input.Tangent;
 	T = normalize(T - dot(T, N) * N);
 	float3 B = cross(N, T);
+	B = normalize(B - dot(B, N) * N - B * dot(B, T) * T);
 
-	float3x3 TSpace = { T, B, N };
+	float3x3 TSpace = float3x3(T, B, N);
 
 	N = NormalMap.Sample(Sampler, input.TexCoord).xyz;
+	N = N * 2.0f - 1.0f;
 
-	const float3 ViewVector = normalize( ViewPosition - input.WorldPos );
-	const float3 Normal = normalize( mul( N.xyz, TSpace ) );
+	const float3 ViewVector = normalize(ViewPosition - input.WorldPos);
+	const float3 Normal = normalize(mul(N.xyz, TSpace));
 	const float metallic = MetallicMap.Sample(Sampler, input.TexCoord).r;
 	const float roughness = RoughnessMap.Sample(Sampler, input.TexCoord).r;
 	const float AO = AOMap.Sample(Sampler, input.TexCoord).r;
-	const float3 AlbedoColor = pow( DiffuseMap.Sample( Sampler, input.TexCoord ).xyz, 2.2f );
+	const float3 AlbedoColor = pow(DiffuseMap.Sample(Sampler, input.TexCoord).xyz, 2.2f);
 
 	float3 lightColor[21];
 	float3 lightDirection[21];
@@ -390,22 +381,19 @@ PS_Output AllTextureMain(VS_Normal_Output input)
 		lightColor[j] = 0;
 		lightDirection[j] = 0;
 
-		if (distance < PointLights[i].PLightIntensity)
+		if (distance < PointLights[i].PLightRange)
 		{
 			lightDirection[j] = normalize(pLightDirection);
 
-			float NDotL = dot(Normal, lightDirection[i]);
+			float intensity = (1.0f - (distance / PointLights[i].PLightRange)) * PointLights[i].PLightIntensity;
 
-			if (NDotL > 0.0f)
-			{
-				float intensity = 1.0f - (distance / PointLights[i].PLightIntensity);
-
-				lightColor[j] = PointLights[i].PLightColor.xyz * intensity;
-			}
+			lightColor[j] = PointLights[i].PLightColor.xyz * intensity;
 		}
 	}
 
-	float3 color = LightSurface( ViewVector, Normal, 21, lightColor, lightDirection, AlbedoColor, roughness, metallic, AO );
+	float3 color = LightSurface(ViewVector, Normal, 21, lightColor, lightDirection, AlbedoColor, roughness, metallic, AO);
+
+	color = pow(color, 1.0f / 2.2);
 
 	float4 shadowDepth = input.ShadowDepth;
 
@@ -418,8 +406,6 @@ PS_Output AllTextureMain(VS_Normal_Output input)
 	{
 		color *= 0.5f;
 	}
-
-	color = pow( color, 1.0f / 2.2f );
 
 	output.screen = float4(color, Alpha);
 	output.depth = input.Position.z;

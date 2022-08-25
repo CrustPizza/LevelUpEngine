@@ -52,7 +52,7 @@ namespace GraphicsEngineSpace
 
 		virtual ButtonState GetButtonState();
 
-		void Render(GraphicsEngineBase* engine);
+		void Render(GraphicsEngineBase* engine, float tick) override;
 
 		friend Canvas;
 	};

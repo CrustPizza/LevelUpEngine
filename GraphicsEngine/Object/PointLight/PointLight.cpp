@@ -15,7 +15,8 @@ namespace GraphicsEngineSpace
 	int paramIndex = 0;
 
 	PointLight::PointLight()
-		: intensity(10.0f)
+		: intensity(1.0f)
+		, range(10.0f)
 	{
 		
 	}
@@ -38,6 +39,7 @@ namespace GraphicsEngineSpace
 		cb.color = color;
 		cb.specularPower = specularPower;
 		cb.intensity = intensity;
+		cb.range = range;
 
 		lightParamBuffer->SetUpBuffer(slot, &cb, type);
 	}
@@ -65,6 +67,7 @@ namespace GraphicsEngineSpace
 		parameters[paramIndex].color = color;
 		parameters[paramIndex].specularPower = specularPower;
 		parameters[paramIndex].intensity = intensity;
+		parameters[paramIndex].range = range;
 
 		paramIndex++;
 	}

@@ -29,5 +29,6 @@ namespace DX11
 
 		bool DrawTextColor(const std::string& text, Vector color, Vector position, float rotation, Vector scale) override;
 		bool DrawTextColor(const std::wstring& text, Vector color, Vector position, float rotation, Vector scale) override;
+		void SetLineSpacing(float size) override;
 	};
 }

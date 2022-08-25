@@ -747,7 +747,7 @@ namespace GraphicsEngineSpace
 
 		if (constantBuffer == nullptr)
 		{
-			constantBuffer = CreateConstantBuffer("DirectionalLightCB", USAGE::DEFAULT, 0, sizeof(Vector) * 4);
+			constantBuffer = CreateConstantBuffer("DirectionalLightCB", USAGE::DEFAULT, 0, sizeof(Vector) * 5);
 
 			if (constantBuffer == nullptr)
 			{
@@ -790,16 +790,17 @@ namespace GraphicsEngineSpace
 			}
 		}
 
-		if (resourceManager->AddLight(name, newLight) != true)
-		{
-			delete newLight;
+		std::string bufferName = name;
+		int ID = 1;
 
-			return nullptr;
+		while (resourceManager->AddLight(bufferName, newLight) != true)
+		{
+			bufferName = name + std::to_string(ID++);
 		}
 
 		newLight->SetBuffer(constantBuffer);
 
-		return dynamic_cast<PointLight*>(resourceManager->GetLight(name));
+		return dynamic_cast<PointLight*>(resourceManager->GetLight(bufferName));
 	}
 
 	Canvas* Factory::CreateCanvas(const std::string& name, float width, float height)

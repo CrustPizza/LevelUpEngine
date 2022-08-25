@@ -67,7 +67,7 @@ namespace GraphicsEngineSpace
 		back.bottom = y + height;
 	}
 
-	void ProgressBar::Render(GraphicsEngineBase* engine)
+	void ProgressBar::Render(GraphicsEngineBase* engine, float tick)
 	{
 		if (isEnable != true || engine == nullptr)
 			return;

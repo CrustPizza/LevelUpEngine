@@ -46,4 +46,12 @@ namespace DX11
 
 		return true;
 	}
+
+	void D3DFont::SetLineSpacing(float size)
+	{
+		if (spriteBatch == nullptr || spriteFont == nullptr)
+			return;
+		
+		spriteFont->SetLineSpacing(size);
+	}
 }

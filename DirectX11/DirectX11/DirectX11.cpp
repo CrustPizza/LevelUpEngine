@@ -628,6 +628,8 @@ namespace DX11
 
 	void DirectX11::EndShadowRender()
 	{
+		//(*blur)(shadowDepthBuffer, 4.0f);
+
 		ID3D11RenderTargetView* mrt[] =
 		{
 			backScreen->GetRenderTargetView(),
@@ -676,8 +678,8 @@ namespace DX11
 		normalBuffer->ClearRenderTargetView(deviceContext, depthView, DirectX::Colors::Black);
 		worldPosBuffer->ClearRenderTargetView(deviceContext, depthView, DirectX::Colors::Black);
 		tangentNormalBuffer->ClearRenderTargetView(deviceContext, depthView, DirectX::Colors::Black);
-		deviceContext->OMSetRenderTargets(1, &renderTargetView, depthView);
 		deviceContext->ClearRenderTargetView(renderTargetView, DirectX::Colors::Black);
+
 		deviceContext->OMSetDepthStencilState(depthState, 0);
 
 		ID3D11RenderTargetView* mrt[] =
@@ -837,6 +839,16 @@ namespace DX11
 
 		spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, nullptr, nullptr, depthState);
 		spriteBatch->Draw(tangentNormalSRV, RECT{ static_cast<long>(viewPort.Width * 0.8f), static_cast<long>(viewPort.Height * 0.8f), static_cast<long>(viewPort.Width), static_cast<long>(viewPort.Height) });
+		spriteBatch->End();
+
+		annotation->EndEvent();
+
+		annotation->BeginEvent(L"Tangent Normal Buffer");
+
+		auto shadowDepthSRV = shadowDepthBuffer->GetShaderResourceView();
+
+		spriteBatch->Begin(DirectX::SpriteSortMode_Deferred, nullptr, nullptr, depthState);
+		spriteBatch->Draw(shadowDepthSRV, RECT{ static_cast<long>(viewPort.Width * 0.6f), static_cast<long>(viewPort.Height * 0.8f), static_cast<long>(viewPort.Width * 0.8f), static_cast<long>(viewPort.Height) });
 		spriteBatch->End();
 
 		annotation->EndEvent();

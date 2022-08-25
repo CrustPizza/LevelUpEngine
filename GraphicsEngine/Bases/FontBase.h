@@ -24,5 +24,6 @@ namespace GraphicsEngineSpace
 
 		virtual bool DrawTextColor(const std::string& text, Vector color, Vector position, float rotation = 0.0f, Vector scale = { 1.0f, 1.0f }) abstract;
 		virtual bool DrawTextColor(const std::wstring& text, Vector color, Vector position, float rotation = 0.0f, Vector scale = { 1.0f, 1.0f }) abstract;
+		virtual void SetLineSpacing(float size) abstract;
 	};
 }

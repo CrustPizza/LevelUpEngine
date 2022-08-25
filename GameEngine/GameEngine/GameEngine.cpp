@@ -212,31 +212,39 @@ namespace GameEngineSpace
 		vertexShader = resourceManager->GetShader("SkinningModelVS");
 		BufferBase* boneBuffer = resourceManager->GetBuffer("BoneMatrixCB");
 
-		ModelBase* pigModel = graphicsFactory->CreateModelFromASEFile("Boss", "Resources/Model/Boss.ase");
-		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_idle.ase", "Idle");
-		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_attack1.ase", "Attack1");
-		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_attack2.ase", "Attack2");
-		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_attack3.ase", "Attack3");
-		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_badak.ase", "Badak");
-		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_count.ase", "Count");
-		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_death.ase", "Death");
-		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_doljin_start.ase", "DoljinStart");
-		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_doljin_run.ase", "DoljinRun");
-		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_jump1.ase", "Jump1");
-		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_jump2.ase", "Jump2");
-		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_pohyo.ase", "Pohyo");
-		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_run.ase", "Run");
-		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_stun.ase", "Stun");
-		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_tanmak.ase", "Tanmak");
-		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_attack_11.ase", "Attack11");
-		pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_doljin.ase", "Doljin");
+		ModelBase* pigModel = graphicsFactory->CreateModelFromASEFile("Skeleton", "Resources/Model/Skeleton_idle.ase");
+		pigModel = graphicsFactory->CreateAnimationFromASEFile("Skeleton", "Resources/Model/Skeleton_idle.ase", "Idle");
+		pigModel = graphicsFactory->CreateAnimationFromASEFile("Skeleton", "Resources/Model/Skeleton_attack.ase", "Attack");
+		pigModel = graphicsFactory->CreateAnimationFromASEFile("Skeleton", "Resources/Model/Skeleton_hit.ase", "Hit");
+		pigModel = graphicsFactory->CreateAnimationFromASEFile("Skeleton", "Resources/Model/Skeleton_run.ase", "Run");
+		pigModel = graphicsFactory->CreateAnimationFromASEFile("Skeleton", "Resources/Model/Skeleton_death.ase", "Death");
+		
+		//ModelBase* pigModel = graphicsFactory->CreateModelFromASEFile("Boss", "Resources/Model/Boss.ase");
+		//pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_idle.ase", "Idle");
+		//pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_attack1.ase", "Attack1");
+		//pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_attack2.ase", "Attack2");
+		//pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_attack3.ase", "Attack3");
+		//pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_badak.ase", "Badak");
+		//pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_count.ase", "Count");
+		//pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_death.ase", "Death");
+		//pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_doljin_start.ase", "DoljinStart");
+		//pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_doljin_run.ase", "DoljinRun");
+		//pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_jump1.ase", "Jump1");
+		//pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_jump2.ase", "Jump2");
+		//pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_pohyo.ase", "Pohyo");
+		//pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_run.ase", "Run");
+		//pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_stun.ase", "Stun");
+		//pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_tanmak.ase", "Tanmak");
+		//pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_attack_11.ase", "Attack11");
+		//pigModel = graphicsFactory->CreateAnimationFromASEFile("Boss", "Resources/Model/Boss_doljin.ase", "Doljin");
+
+		//TextureBase* bossRoughness = graphicsFactory->CreateTexture("BossRoughness", "Resources/Texture/boss_Roughness.png");
+		//TextureBase* bossAO = graphicsFactory->CreateTexture("BossAO", "Resources/Texture/boss_Mixed_AO.png");
+		//pigModel->SetRoughnessMap(bossRoughness);
+		//pigModel->SetAmbientOcclusionMap(bossAO);
+
 		//ModelBase* pigIdleAnimation = graphicsFactory->CreateAnimationFromASEFile("ASEPig", "Resources/Model/babypig_walk_6x.ASE", "Walk");
-
-		TextureBase* bossRoughness = graphicsFactory->CreateTexture("BossRoughness", "Resources/Texture/boss_Roughness.png");
-		TextureBase* bossAO = graphicsFactory->CreateTexture("BossAO", "Resources/Texture/boss_Mixed_AO.png");
-		pigModel->SetRoughnessMap(bossRoughness);
-		pigModel->SetAmbientOcclusionMap(bossAO);
-
+		
 		pig = new Pig;
 		//pig->Init(graphicsFactory, pigModel, vertexShdaer, pixelShader, matrixBuffer, boneBuffer, materialBuffer);
 		pig->Init(graphicsFactory, pigModel);
@@ -250,16 +258,21 @@ namespace GameEngineSpace
 			pigs[i]->AddForce(Vector::UnitX * VectorReplicate(i * 40));
 		}
 
-		pigs[0]->SetAnimKey("Pohyo");
-		pigs[1]->SetAnimKey("Run");
-		pigs[2]->SetAnimKey("Stun");
-		pigs[3]->SetAnimKey("Tanmak");
-		pigs[4]->SetAnimKey("Count");
-		pigs[5]->SetAnimKey("Death");
-		pigs[6]->SetAnimKey("DoljinStart");
-		pigs[7]->SetAnimKey("DoljinRun");
-		pigs[8]->SetAnimKey("Jump1");
-		pigs[9]->SetAnimKey("Jump2");
+		pigs[0]->SetAnimKey("Attack");
+		pigs[1]->SetAnimKey("Hit");
+		pigs[2]->SetAnimKey("Run");
+		pigs[3]->SetAnimKey("Death");
+		
+		//pigs[0]->SetAnimKey("Pohyo");
+		//pigs[1]->SetAnimKey("Run");
+		//pigs[2]->SetAnimKey("Stun");
+		//pigs[3]->SetAnimKey("Tanmak");
+		//pigs[4]->SetAnimKey("Count");
+		//pigs[5]->SetAnimKey("Death");
+		//pigs[6]->SetAnimKey("DoljinStart");
+		//pigs[7]->SetAnimKey("DoljinRun");
+		//pigs[8]->SetAnimKey("Jump1");
+		//pigs[9]->SetAnimKey("Jump2");
 
 		ModelBase* heraclesModel = graphicsFactory->CreateModelFromASEFile("Heracles", "Resources/Model/Heracles_attack3.ase");
 		heraclesModel = graphicsFactory->CreateAnimationFromASEFile("Heracles", "Resources/Model/Heracles_attack1.ase", "Attack1");

@@ -74,7 +74,7 @@ namespace GraphicsEngineSpace
 	public:
 		virtual ~UIBase() = default;
 
-		virtual void Render(GraphicsEngineBase* engine) abstract;
+		virtual void Render(GraphicsEngineBase* engine, float tick = 0.0f) abstract;
 
 		void SetAnchor(Location anchor)
 		{

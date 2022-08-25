@@ -97,6 +97,7 @@
     <ClCompile Include="Object\SpriteAnimation\SpriteAnimation.cpp" />
     <ClCompile Include="Object\ProgressBar\ProgressBar.cpp" />
     <ClCompile Include="Object\ButtonUI\ButtonUI.cpp" />
+    <ClCompile Include="Object\SpriteAnimationUI\SpriteAnimationUI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GraphicsEngineFramework.h" />
@@ -213,6 +214,7 @@
     <ClInclude Include="Object\ButtonUI\ButtonUI.h" />
     <ClInclude Include="Define\GraphicsTopology.h" />
     <ClInclude Include="Bases\FontBase.h" />
+    <ClInclude Include="Object\SpriteAnimationUI\SpriteAnimationUI.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />

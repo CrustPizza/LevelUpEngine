@@ -49,7 +49,7 @@ namespace GraphicsEngineSpace
 		virtual void SetBackBarTexCoord(float x, float y, float width, float height);
 
 	protected:
-		void Render(GraphicsEngineBase* engine);
+		void Render(GraphicsEngineBase* engine, float tick) override;
 
 		friend Canvas;
 	};

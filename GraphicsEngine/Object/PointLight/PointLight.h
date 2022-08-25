@@ -24,7 +24,8 @@ namespace GraphicsEngineSpace
 			Vector color;
 			float specularPower;
 			float intensity;
-			float padding[2];
+			float range;
+			float padding;
 		};
 
 		static PointLight* instance;
@@ -32,6 +33,7 @@ namespace GraphicsEngineSpace
 
 	public:
 		float intensity;
+		float range;
 
 	public:
 		PointLight();

@@ -57,7 +57,7 @@ namespace GraphicsEngineSpace
             newUIName = name + std::to_string(ID++);
         }
 
-        Canvas* newCanvas = new Canvas(width, height);
+        Canvas* newCanvas = new Canvas(1920, 1080);
 
         newCanvas->SetName(newUIName);
         newCanvas->SetParent(this);
@@ -133,6 +133,28 @@ namespace GraphicsEngineSpace
         return progressBarList[newUIName];
     }
 
+    SpriteAnimationUI* Canvas::CreateSpriteAnimationUI(const std::string& name)
+    {
+        std::string newUIName = name;
+        int ID = 1;
+
+        while (SpriteAnimationUIList.find(newUIName) != SpriteAnimationUIList.end())
+        {
+            newUIName = name + std::to_string(ID++);
+        }
+
+        SpriteAnimationUI* newSpriteAnimation = new SpriteAnimationUI;
+
+        newSpriteAnimation->SetName(newUIName);
+        newSpriteAnimation->SetParent(this);
+        newSpriteAnimation->SetWidth(this->width / 4);
+        newSpriteAnimation->SetHeight(this->height / 4);
+
+        SpriteAnimationUIList[newUIName] = newSpriteAnimation;
+
+        return SpriteAnimationUIList[newUIName];
+    }
+
     TextUI* Canvas::GetTextUI(const std::string& name)
     {
         auto result = textUIList.find(name);
@@ -183,6 +205,16 @@ namespace GraphicsEngineSpace
         return result->second;
     }
 
+    SpriteAnimationUI* Canvas::GetSpriteAnimationUI(const std::string& name)
+    {
+        auto result = SpriteAnimationUIList.find(name);
+
+        if (result == SpriteAnimationUIList.end())
+            return nullptr;
+
+        return result->second;
+    }
+
     ButtonUI* Canvas::CollidedButtonWithMouse(float mouseX, float mouseY, bool isClicked)
     {
         ButtonUI* collidedButton = FindCollidedButton(mouseX, mouseY, isClicked);
@@ -219,7 +251,7 @@ namespace GraphicsEngineSpace
         }
     }
 
-    void Canvas::Render(GraphicsEngineBase* engine)
+    void Canvas::Render(GraphicsEngineBase* engine, float tick)
     {
         if (isEnable != true || engine == nullptr)
             return;
@@ -229,7 +261,7 @@ namespace GraphicsEngineSpace
         for (auto* iter : child)
         {
             if (iter != nullptr)
-                iter->Render(engine);
+                iter->Render(engine, tick);
         }
 
         engine->GraphicsDebugEndEvent();
@@ -290,15 +322,18 @@ namespace GraphicsEngineSpace
             if (iter.second == nullptr || iter.second->isEnable != true)
                 continue;
 
-            ButtonUI* tempButton = iter.second->CollidedButtonWithMouse(mouseX, mouseY, isClicked);
+            ButtonUI* tempButton = iter.second->FindCollidedButton(mouseX, mouseY, isClicked);
 
             if (tempButton == nullptr)
                 continue;
 
             if (tempButton->GetScreenPosition().z <= minZ)
             {
-                minZ = tempButton->GetScreenPosition().z;
+                if (collidedButton != nullptr)
+                    collidedButton->SetButtonState(ButtonState::DEFAULT);
+
                 collidedButton = tempButton;
+                minZ = tempButton->GetScreenPosition().z;
             }
         }
 
@@ -331,6 +366,9 @@ namespace GraphicsEngineSpace
 
             if (buttonScreenPosition.z <= minZ)
             {
+                if (collidedButton != nullptr)
+                    collidedButton->SetButtonState(ButtonState::DEFAULT);
+
                 collidedButton = iter.second;
                 minZ = buttonScreenPosition.z;
             }

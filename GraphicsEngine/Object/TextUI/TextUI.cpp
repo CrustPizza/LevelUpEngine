@@ -69,7 +69,7 @@ namespace GraphicsEngineSpace
 		return ret;
 	}
 
-	void TextUI::Render(GraphicsEngineBase* engine)
+	void TextUI::Render(GraphicsEngineBase* engine, float tick)
 	{
 		if (isEnable != true || engine == nullptr)
 			return;

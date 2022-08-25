@@ -14,3 +14,6 @@
 
 /* Engine */
 #include "GraphicsEngine/GraphicsEngine.h"
+
+/* Canvas */
+#include "Object/Canvas/Canvas.h"

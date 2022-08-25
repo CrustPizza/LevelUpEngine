@@ -7,6 +7,7 @@
 *********************************/
 
 #include "ButtonUI.h"
+#include <Windows.h>
 
 namespace GraphicsEngineSpace
 {
@@ -79,7 +80,7 @@ namespace GraphicsEngineSpace
 		return buttonState;
 	}
 
-	void ButtonUI::Render(GraphicsEngineBase* engine)
+	void ButtonUI::Render(GraphicsEngineBase* engine, float tick)
 	{
 		if (isEnable != true || engine == nullptr)
 			return;

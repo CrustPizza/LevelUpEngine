@@ -22,10 +22,12 @@ namespace GraphicsEngineSpace
 			Vector	ambient;
 			Vector	color;
 			float	specularPower;
+			float   intensity;
 		};
 
 	public:
 		Vector rotation;
+		float intensity;
 
 	public:
 		DirectionalLight();

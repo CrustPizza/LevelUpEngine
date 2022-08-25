@@ -12,6 +12,7 @@ namespace GraphicsEngineSpace
 {
 	DirectionalLight::DirectionalLight()
 		: rotation{}
+		, intensity(1.0f)
 	{
 
 	}
@@ -34,6 +35,7 @@ namespace GraphicsEngineSpace
 		cb.ambient = ambient;
 		cb.color = color;
 		cb.specularPower = specularPower;
+		cb.intensity = intensity;
 
 		lightParamBuffer->SetUpBuffer(slot, &cb, type);
 	}

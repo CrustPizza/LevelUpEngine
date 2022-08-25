@@ -37,7 +37,7 @@ namespace GraphicsEngineSpace
 		virtual std::string GetText();
 
 	protected:
-		void Render(GraphicsEngineBase* engine);
+		void Render(GraphicsEngineBase* engine, float tick) override;
 
 		friend Canvas;
 	};

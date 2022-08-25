@@ -431,7 +431,7 @@ namespace GraphicsEngineSpace
 		newPBRModel->GetPrefab()->AddOnceBuffer(psParamBufferOption);
 
 		/* Vertex Buffer */
-		CreateSkinnedNormalVB(factory, newPBRModel->GetPrefab());
+		CreateNormalVB(factory, newPBRModel->GetPrefab());
 
 		return newPBRModel;
 	}
@@ -535,7 +535,7 @@ namespace GraphicsEngineSpace
 		newPBRModel->GetPrefab()->AddOnceBuffer(psParamBufferOption);
 
 		/* Vertex Buffer */
-		CreateSkinnedNormalVB(factory, newPBRModel->GetPrefab());
+		CreateNormalVB(factory, newPBRModel->GetPrefab());
 
 		return newPBRModel;
 	}

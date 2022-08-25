@@ -59,6 +59,7 @@
     <ClInclude Include="Bases\ShaderBase.h" />
     <ClInclude Include="Object\TextUI\TextUI.h" />
     <ClInclude Include="Object\SpriteAnimation\SpriteAnimation.h" />
+    <ClInclude Include="Object\SpriteAnimationUI\SpriteAnimationUI.h" />
     <ClInclude Include="Transform\Transform.h" />
     <ClInclude Include="Object\TextureUI\TextureUI.h" />
   </ItemGroup>
@@ -78,6 +79,7 @@
     <ClCompile Include="ResourceManager\ResourceManager.cpp" />
     <ClCompile Include="Object\TextUI\TextUI.cpp" />
     <ClCompile Include="Object\SpriteAnimation\SpriteAnimation.cpp" />
+    <ClCompile Include="Object\SpriteAnimationUI\SpriteAnimationUI.cpp" />
     <ClCompile Include="Transform\Transform.cpp" />
     <ClCompile Include="Object\TextureUI\TextureUI.cpp" />
   </ItemGroup>

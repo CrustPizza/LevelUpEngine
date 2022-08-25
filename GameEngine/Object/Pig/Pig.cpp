@@ -28,10 +28,10 @@ namespace GameEngineSpace
 	{
 		static int ID = 0;
 
-		pbrModel = factory->CreateAllTextureModel("PigPBR_" + std::to_string(ID++), model);
+		pbrModel = factory->CreateSkinningAlbedoModel("PigPBR_" + std::to_string(ID++), model);
 		pbrModel->SetAlpha(1.0f);
-		pbrModel->SetMetallic(0.5f);
-		pbrModel->SetRoughness(0.0f);
+		pbrModel->SetMetallic(0.0f);
+		pbrModel->SetRoughness(0.7f);
 
 		prefab = pbrModel->GetPrefab();
 		prefab->SetAnimationKey("Idle");

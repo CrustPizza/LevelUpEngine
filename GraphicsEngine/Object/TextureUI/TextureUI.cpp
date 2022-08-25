@@ -31,7 +31,7 @@ namespace GraphicsEngineSpace
 		return texture;
 	}
 
-	void TextureUI::Render(GraphicsEngineBase* engine)
+	void TextureUI::Render(GraphicsEngineBase* engine, float tick)
 	{
 		if (isEnable != true || engine == nullptr)
 			return;

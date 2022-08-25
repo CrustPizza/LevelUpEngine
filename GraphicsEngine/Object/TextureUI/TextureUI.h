@@ -29,7 +29,7 @@ namespace GraphicsEngineSpace
 		virtual TextureBase* GetTexture();
 
 	protected:
-		void Render(GraphicsEngineBase* engine);
+		void Render(GraphicsEngineBase* engine, float tick) override;
 
 		friend Canvas;
 	};

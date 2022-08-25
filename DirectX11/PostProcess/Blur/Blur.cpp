@@ -64,6 +64,7 @@ namespace DX11
 
 		downSampler = new DownSampling(deviceContext);
 		downSampler->Init(factory, device, format, spriteBatch);
+		downSampler->SetThreshold(0.0f);
 
 		combine = new Combine(deviceContext);
 		combine->Init(factory, device, format, spriteBatch);

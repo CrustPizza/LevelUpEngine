@@ -635,7 +635,7 @@ namespace GraphicsEngineSpace
 				sum += vertex.vertices[i].weights[j + 12];
 			}
 
-			if (sum > 1.0f)
+			if (sum != 1.0f)
 			{
 				for (int j = 0; j < 4; j++)
 				{

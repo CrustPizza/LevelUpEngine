@@ -214,7 +214,14 @@ namespace GraphicsEngineSpace
 
 	bool GraphicsEngine::DrawTextColor(std::string& text, Vector color, Vector position, float rotation, Vector scale)
 	{
-		return resourceManager->GetFont(fontName)->DrawTextColor(text, color, position, rotation, scale);
+		FontBase* font = resourceManager->GetFont(fontName);
+
+		if (font == nullptr)
+			return false;
+
+		font->SetLineSpacing(scale.x * 32.0f);
+
+		return font->DrawTextColor(text, color, position, rotation, scale);
 	}
 
 	bool GraphicsEngine::DrawTextColor(const std::string& fontName, std::string& text, Vector color, Vector position, float rotation, Vector scale)
@@ -223,6 +230,8 @@ namespace GraphicsEngineSpace
 
 		if (font == nullptr)
 			return false;
+
+		font->SetLineSpacing(scale.x * 32.0f);
 
 		return font->DrawTextColor(text, color, position, rotation, scale);
 	}
@@ -233,6 +242,8 @@ namespace GraphicsEngineSpace
 
 		if (font == nullptr)
 			return false;
+
+		font->SetLineSpacing(scale.x * 32.0f);
 
 		return font->DrawTextColor(text, color, position, rotation, scale);
 	}
@@ -332,7 +343,7 @@ namespace GraphicsEngineSpace
 			Vector position = Vector::Backward * MatrixRotationFromVector(dLight->rotation);
 			position *= 50.0f;
 
-			Matrix lightProjection = OrthographicOffCenterMatrix(position.x - 400, position.x + 400, position.y - 400, position.y + 400, position.z - 400, position.z + 400);
+			Matrix lightProjection = OrthographicOffCenterMatrix(position.x - 400, position.x + 400, position.y - 400, position.y + 400, position.z, position.z + 800);
 			//Matrix lightProjection = OrthographicMatrix(300, 300, -300, 300.0f);
 
 			Matrix lightViewProjection = ViewMatrix(position, dLight->rotation) * lightProjection;
